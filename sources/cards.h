@@ -10,26 +10,26 @@ public:
             int money,
             int position_delta,
             int position_to,
-            int amount_of_jail_cards,
+            int amount_of_jail_cards
     );
 
-    ~Card();
+    ~Card() = default;
 
-    std::string get_name();
+    std::string get_name() const;
 
-    int change_money();
+    int change_money() const;
 
-    int change_position_on_delta();
+    int change_position_on_delta() const;
 
-    int change_position_to();
+    int change_position_to() const;
 
-    bool change_jail_status();
+    bool change_jail_status() const;
 
 private:
     std::string name;
 
     int money;
-    int position;
+    int position_delta;
     int position_to;
     int amount_of_jail_cards;
 
