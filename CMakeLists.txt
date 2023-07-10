@@ -14,7 +14,7 @@ find_package(Qt5 COMPONENTS
         REQUIRED)
 
 add_executable(
-        sort_visualization_qt5
+        monopoly
         main.cpp
 )
 
