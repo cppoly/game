@@ -16,7 +16,7 @@ find_package(Qt5 COMPONENTS
 add_executable(
         monopoly
         main.cpp
-)
+        qt/mainwindow.cpp qt/mainwindow.h qt/mainwindow.ui)
 
 target_link_libraries(
         monopoly
