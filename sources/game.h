@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "player.h"
+#include "field.h"
 
 class Game {
 public:
@@ -22,6 +23,8 @@ private:
     int jail_price;
 
     int seconds_per_turn;
+
+    std::vector<Field> game_fields;
 
     std::vector<Player> players;
 };

@@ -2,28 +2,41 @@
 
 #include <vector>
 #include <string>
-
+#include "field.h"
 
 class Player {
 public:
-    Player();
+    Player(
+            std::string color,
+            std::string name,
+            int money,
+            int position,
+            int amount_of_jail_cards
+    );
 
-    ~Player();
+    ~Player() = default;
 
-    void change_money(int delta);
+    int get_money() const;
 
-    void change_position(int delta);
+    int get_position() const;
 
-    void get_position();
+    int get_amount_of_jail_cards() const;
 
-    void change_jail_cards(int delta);
+    void set_money(int money);
 
-    void change_jail_status(bool status);
+    void set_position(int position);
+
+    void set_amount_of_jail_cards(int amount_of_jail_cards);
+
+    void add_street(Field &field);
+
+    void remove_street(Field &field);
+
+    void mortgage_street(Field &field);
 
 private:
     std::string color;
     std::string name;
-
     int money;
     int position;
     int amount_of_jail_cards;

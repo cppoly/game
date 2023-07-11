@@ -36,6 +36,10 @@ public:
 
     ~Street() override = default;
 
+    int get_price() const;
+
+    int get_rent() const;
+
     void buy(Player &player);
 
     void sell(Player &player);
@@ -52,7 +56,7 @@ private:
     int hotel_price;
     int mortgage_price;
 
-
+    int amount_of_houses = 0;
 };
 
 

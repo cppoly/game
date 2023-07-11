@@ -32,8 +32,6 @@ private:
     int position_delta;
     int position_to;
     int amount_of_jail_cards;
-
-
 };
 
 
