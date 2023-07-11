@@ -11,6 +11,10 @@ public:
 };
 
 
+const int mortgage_percent = 10;
+
+const int sell_percent = 50;
+
 class Start : public Field {
 public:
     Start(int money_for_visit_start);
@@ -22,8 +26,41 @@ private:
     int money_for_visit_start;
 };
 
+class ProfitableField : public Field {
+public:
+    ProfitableField(
+            std::string name,
+            int price,
+            std::vector<int> rent,
+            int mortgage_price
+    );
 
-class Street : public Field {
+    ~ProfitableField() = default;
+
+    std::string get_name() const;
+
+    int get_price() const;
+
+    int get_mortgage_price() const;
+
+    int get_redemption_price() const;
+
+    std::vector<int> get_rent_vector() const;
+
+    void buy(Player &player);
+
+    void mortgage(Player &player);
+
+private:
+    std::string name;
+    int price;
+    std::vector<int> rent;
+
+    int mortgage_price;
+    bool is_mortgaged = false;
+};
+
+class Street : public ProfitableField {
 public:
     Street(
             std::string name,
@@ -36,73 +73,61 @@ public:
 
     ~Street() override = default;
 
-    int get_price() const;
-
     int get_rent() const;
 
-    void buy(Player &player);
+    int get_house_price() const;
 
-    void sell(Player &player);
+    int get_hotel_price() const;
 
-    void build_house(Player &player);
+    int get_amount_of_houses() const;
 
-    void build_hotel(Player &player);
+    void build(Player &player);
+
+    void sell_house(Player &player);
 
 private:
+    void build_house(Player &player) const;
+
+    void build_hotel(Player &player) const;
+
     std::string name;
     int price;
     std::vector<int> rent;
+
     int house_price;
     int hotel_price;
-    int mortgage_price;
-
     int amount_of_houses = 0;
+
+    int mortgage_price;
+    bool is_mortgaged = false;
 };
 
 
-class Station : public Field {
+class Station : public ProfitableField {
 public:
-    Station(
-            std::string name,
-            int price,
-            std::vector<int> rent,
-            int mortgage_price
-    );
-
-    ~Station() override = default;
-
-    void buy(Player &player);
-
-    void sell(Player &player);
+    int get_rent(int amount_of_stations) const;
 
 private:
     std::string name;
     int price;
     std::vector<int> rent;
+
     int mortgage_price;
+    bool is_mortgaged = false;
 };
 
 
-class Utility : public Field {
+class Utility : public ProfitableField {
 public:
-    Utility(
-            std::string name,
-            int price,
-            std::vector<int> rent,
-            int mortgage_price
-    );
-
-    ~Utility() override = default;
-
-    void buy(Player &player);
-
-    void sell(Player &player);
+    int get_rent(int amount_of_utilities) const;
 
 private:
     std::string name;
     int price;
     std::vector<int> rent;
+
     int mortgage_price;
+    bool is_mortgaged = false;
 };
 
 class Jail : public Field {
@@ -110,6 +135,10 @@ public:
     Jail(int price);
 
     ~Jail() override = default;
+
+    int get_price() const;
+
+    void visit(Player &player);
 
 private:
     std::string name = "Тюрьма";

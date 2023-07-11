@@ -28,7 +28,7 @@ public:
 
     void set_amount_of_jail_cards(int amount_of_jail_cards);
 
-    void add_street(Field &field);
+    void add_field(ProfitableField &field);
 
     void remove_street(Field &field);
 
