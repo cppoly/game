@@ -29,10 +29,16 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE "include" "lib")
 
 set(SFML_STATIC_LIBRARIES TRUE)
-set(SFML_DIR C:/SFML/lib/cmake/SFML)
+
+if (WIN32)
+    set(SFML_DIR C:/SFML/lib/cmake/SFML)
+    include_directories(C:/SFML/include/SFML)
+endif ()
+if (WIN64)
+    set(SFML_DIR C:/SFML/lib/cmake/SFML)
+    include_directories(C:/SFML/include/SFML)
+endif ()
+
 find_package(SFML COMPONENTS system window graphics audio network REQUIRED)
-
-include_directories(C:/SFML/include/SFML)
-
 target_link_libraries(monopoly sfml-system sfml-window sfml-graphics sfml-audio)
 
