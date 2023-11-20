@@ -43,7 +43,7 @@ void ProfitableField::buy(Player &player) {
             return;
         }
         player.set_money(player.get_money() - price);
-        player.add_field(&*this);
+        player.add_field(*this);
     }
 }
 
@@ -59,20 +59,10 @@ void ProfitableField::mortgage(Player &player) {
 
 Start::Start(int money_for_visit_start) : money_for_visit_start(money_for_visit_start) {}
 
-Street::Street(
-        std::string name,
-        int price,
-        std::vector<int> rent,
-        int house_price,
-        int hotel_price,
-        int mortgage_price
-) :
-        name(std::move(name)),
-        price(price),
-        rent(std::move(rent)),
-        house_price(house_price),
-        hotel_price(hotel_price),
-        mortgage_price(mortgage_price) {}
+Street::Street(std::string name1, int price1, std::vector<int> rent1, int mortgagePrice, std::string name,
+               int price, std::vector<int> rent, int house_price, int hotel_price, int mortgage_price) :
+        ProfitableField(name1, price1, rent1, mortgagePrice), name(std::move(name)), price(price),
+        rent(std::move(rent)), house_price(house_price), hotel_price(hotel_price), mortgage_price(mortgage_price) {}
 
 
 int Street::get_rent() const {

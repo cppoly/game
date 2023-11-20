@@ -5,9 +5,11 @@
 #include "cards.h"
 #include "player.h"
 
+class Player;
+
 class Field {
 public:
-    virtual ~Field() = 0;
+    virtual ~Field() = default;
 };
 
 
@@ -62,14 +64,8 @@ private:
 
 class Street : public ProfitableField {
 public:
-    Street(
-            std::string name,
-            int price,
-            std::vector<int> rent,
-            int house_price,
-            int hotel_price,
-            int mortgage_price
-    );
+    Street(std::string name1, int price1, std::vector<int> rent1, int mortgagePrice, std::string name,
+           int price, std::vector<int> rent, int house_price, int hotel_price, int mortgage_price);
 
     ~Street() override = default;
 

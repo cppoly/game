@@ -4,16 +4,40 @@
 #include "player.h"
 #include "field.h"
 
+struct GameMove {
+    int player_id;
+    int number_on_dice1;
+    int number_on_dice2;
+    int cur_position;
+};
+
 class Game {
 public:
-    Game();
+    Game(
+        int money_for_game_start,
+        int money_for_win,
+        int money_per_loop,
+        int bonus_for_visit_start,
 
-    ~Game();
+        bool is_free_parking,
+        int jail_price,
+        int seconds_per_turn,
+        std::vector<Player> players
+    );
+
+    ~Game() = default;
 
     void run();
 
+    GameMove player_move();
+
+    int next_turn();
+
 private:
-    int money_for_game_start:;
+    void feel_game_fields();
+    static int number_on_dice();
+
+    int money_for_game_start;
     int money_for_win;
     int money_per_loop;
 
@@ -23,6 +47,9 @@ private:
     int jail_price;
 
     int seconds_per_turn;
+
+    int cur_position;
+
 
     std::vector<Field> game_fields;
 

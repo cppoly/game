@@ -4,6 +4,9 @@
 #include <string>
 #include "field.h"
 
+class ProfitableField;
+class Field;
+
 class Player {
 public:
     Player(
@@ -34,10 +37,14 @@ public:
 
     void mortgage_street(Field &field);
 
+    void increment_position(int number_on_dice);
+
 private:
     std::string color;
     std::string name;
     int money;
     int position;
     int amount_of_jail_cards;
+
+    std::vector<Field *> fields;
 };
