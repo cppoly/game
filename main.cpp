@@ -5,53 +5,12 @@
 #include "sources/player.h"
 #include "sources/game.h"
 
-//class Figure {
-//public:
-//    Figure(std::string &filePath) : file_path(filePath) {
-//
-//    }
-//
-//    std::pair<float, float> getPosition() {
-//        return {this->positionX, this->positionY};
-//    }
-//
-//    std::string getFilePath() {
-//        return this->file_path;
-//    }
-//
-//    int getPositionField() {
-//        return this->positionField;
-//    }
-//
-//    void stepRight(int countStep) {
-//        this->positionX = this->positionX * countStep;
-//    }
-//
-//    void setIsActive() {
-//        this->isActive = !this->isActive;
-//    }
-//
-//    void setPosition(float x, float y) {
-//        this->positionX = x;
-//        this->positionY = y;
-//    }
-//
-//private:
-//    bool isActive = false;
-//    float positionX = 900;
-//    float positionY = 850;
-//    std::string file_path;
-//    int positionField = 1;
-//};
-
 int main() {
     sf::RenderWindow window(sf::VideoMode({1024, 1024}), "Monopoly");
 
     std::vector<sf::Texture> playersTexture(3);
     std::vector<sf::Sprite> playersSprite;
     std::vector<Player> players;
-
-
 
     for (int i = 0; i < playersTexture.size(); i++) {
         if (!playersTexture[i].loadFromFile("assets/Player" + std::to_string(i+1) + ".png")) {
