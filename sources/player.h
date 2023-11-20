@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include "field.h"
+#include <SFML/Graphics.hpp>
 
 class ProfitableField;
 class Field;
@@ -10,7 +11,7 @@ class Field;
 class Player {
 public:
     Player(
-            std::string color,
+            sf::Sprite sprite,
             std::string name,
             int money,
             int position,
@@ -22,6 +23,8 @@ public:
     int get_money() const;
 
     int get_position() const;
+
+    sf::Sprite get_sprite() const;
 
     int get_amount_of_jail_cards() const;
 
@@ -40,7 +43,7 @@ public:
     void increment_position(int number_on_dice);
 
 private:
-    std::string color;
+    sf::Sprite sprite;
     std::string name;
     int money;
     int position;

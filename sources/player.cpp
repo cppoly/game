@@ -1,13 +1,13 @@
 #include "player.h"
 
 Player::Player(
-        std::string color,
+        sf::Sprite sprite,
         std::string name,
         int money,
         int position,
         int amount_of_jail_cards
 ) :
-        color(std::move(color)),
+        sprite(std::move(sprite)),
         name(std::move(name)),
         money(money),
         position(position),
@@ -23,9 +23,14 @@ int Player::get_position() const {
     return position;
 }
 
+sf::Sprite Player::get_sprite() const {
+    return sprite;
+}
+
 int Player::get_amount_of_jail_cards() const {
     return amount_of_jail_cards;
 }
+
 
 void Player::set_money(int money) {
     Player::money = money;
