@@ -32,7 +32,18 @@ int main() {
     buttonStartGameSprite.setTextureRect(sf::IntRect(0, 0, 400, 175));
     buttonStartGameSprite.setPosition((window.getSize().x / 2.f) - 200, (window.getSize().y / 2.f) - 82.5);
 
-    bool isActive = true;
+    bool isActiveMainScreen = true;
+    bool isActiveSettings = false;
+
+    // Settings
+
+    sf::Texture settingsTexture;
+    if (!settingsTexture.loadFromFile("assets/sprite/Settings.png")) {
+        return EXIT_FAILURE;
+    }
+    sf::Sprite settingsSprite(settingsTexture);
+
+
     // Players
 
     std::vector<sf::Texture> playersTexture(3);
@@ -83,7 +94,8 @@ int main() {
                     if (buttonStartGameSprite.getGlobalBounds().contains(
                             window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
                         buttonStartGameSprite.setTextureRect(sf::IntRect(400 * 1, 0, 400, 175));
-                        isActive = false;
+                        isActiveMainScreen = false;
+                        isActiveSettings = true;
                     }
                 }
             } else if (event.type == sf::Event::MouseMoved) {
@@ -100,9 +112,12 @@ int main() {
         }
 
         window.clear();
-        if (isActive) {
+        if (isActiveMainScreen) {
             window.draw(mainScreenSprite);
             window.draw(buttonStartGameSprite);
+        } else if (isActiveSettings) {
+            window.clear();
+            window.draw(settingsSprite);
         }
         window.display();
     }
