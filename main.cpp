@@ -6,14 +6,41 @@
 #include "sources/game.h"
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode({1024, 1024}), "Monopoly");
+    sf::RenderWindow window(sf::VideoMode({1024, 1024}), "Monopoly", sf::Style::Fullscreen);
+
+    sf::Font font;
+    if (!font.loadFromFile("assets/fonts/Minecraft.otf")) {
+        return EXIT_FAILURE;
+    }
+
+    //Main Screen
+
+    int currentFrame = 0;
+    sf::Texture mainScreenTexture;
+    if (!mainScreenTexture.loadFromFile("assets/sprite/Main.png")) {
+        return EXIT_FAILURE;
+    }
+
+    sf::Sprite mainScreenSprite(mainScreenTexture);
+
+    sf::Texture buttonStartGameTexture;
+    if (!buttonStartGameTexture.loadFromFile("assets/sprite/buttonStartGame.png")) {
+        return EXIT_FAILURE;
+    }
+
+    sf::Sprite buttonStartGameSprite(buttonStartGameTexture);
+    buttonStartGameSprite.setTextureRect(sf::IntRect(0, 0, 400, 175));
+    buttonStartGameSprite.setPosition((window.getSize().x / 2.f) - 200, (window.getSize().y / 2.f) - 82.5);
+
+    bool isActive = true;
+    // Players
 
     std::vector<sf::Texture> playersTexture(3);
     std::vector<sf::Sprite> playersSprite;
     std::vector<Player> players;
 
     for (int i = 0; i < playersTexture.size(); i++) {
-        if (!playersTexture[i].loadFromFile("assets/Player" + std::to_string(i + 1) + ".png")) {
+        if (!playersTexture[i].loadFromFile("assets/sprite/Player" + std::to_string(i + 1) + ".png")) {
             return EXIT_FAILURE;
         }
         sf::Sprite sprite1(playersTexture[i]);
@@ -38,50 +65,47 @@ int main() {
     sf::View view1;
     view1.reset(sf::FloatRect(724.f, 724.f, 300.f, 300.f));
 
+
     while (window.isOpen()) {
         sf::Event event;
-        sf::Texture texture;
-        if (!texture.loadFromFile("assets/playing_field-Recovered.png")) {
-            return EXIT_FAILURE;
-        }
-
-        sf::Sprite sprite(texture);
-
-        for (int i = 0; i < playersSprite.size(); i++) {
-            sf::Vector2f position;
-            if (players[i].get_position() % 10 == 1) {
-                sf::Vector2f p(930 + players[i].get_position() * 10, 850);
-                position = p;
-
-                playersSprite[i].setPosition(930, 850);
-            } else {
-                playersSprite[i].setPosition(100, 100);
-            }
-//            playersSprite[i].set
-        }
-        players[0].get_sprite().setPosition(500, 500);
-
-//        player1Sprite.setPosition(player1.getPosition().first, player1.getPosition().second);
-//
-//        player2Sprite.setPosition(930, 850);
-
-
-//        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-//            player1.setPosition(player1.getPosition().first - 70, 850);
-//            view1.move(-50.f, 0);
-//        }
 
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
-                window.close();
+            switch (event.type) {
+                case (sf::Event::Closed):
+                    window.close();
+                case (sf::Event::KeyPressed):
+                    if (event.key.code == sf::Keyboard::Escape) window.close();
+                default:
+                    break;
+            }
+            if (event.type == sf::Event::MouseButtonPressed) {
+                if (event.mouseButton.button == sf::Mouse::Left) {
+                    if (buttonStartGameSprite.getGlobalBounds().contains(
+                            window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+                        buttonStartGameSprite.setTextureRect(sf::IntRect(400 * 1, 0, 400, 175));
+                        isActive = false;
+                    }
+                }
+            } else if (event.type == sf::Event::MouseMoved) {
+                if (buttonStartGameSprite.getGlobalBounds().contains(
+                        window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+                    buttonStartGameSprite.setTextureRect(sf::IntRect(400 * 2, 0, 400, 175));
+                } else {
+                    buttonStartGameSprite.setTextureRect(sf::IntRect(0, 0, 400, 175));
+                }
+            } else {
+                buttonStartGameSprite.setTextureRect(sf::IntRect(0, 0, 400, 175));
+
             }
         }
-        window.draw(sprite);
-        for (int i = 0; i < playersSprite.size(); i++) {
-            window.draw(playersSprite[i]);
+
+        window.clear();
+        if (isActive) {
+            window.draw(mainScreenSprite);
+            window.draw(buttonStartGameSprite);
         }
-//        window.setView(view1);
         window.display();
     }
+
     return 0;
 }
