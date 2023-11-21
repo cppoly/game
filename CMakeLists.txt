@@ -13,7 +13,7 @@ set(
         ${source_h}
         ${interface_cpp}
         ${interface_h}
-        interface/button.hpp interface/button.cpp)
+        interface/button/button.hpp interface/button/button.cpp interface/input/input.hpp interface/input/input.cpp)
 set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
