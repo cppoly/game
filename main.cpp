@@ -13,7 +13,7 @@ int main() {
     std::vector<Player> players;
 
     for (int i = 0; i < playersTexture.size(); i++) {
-        if (!playersTexture[i].loadFromFile("assets/Player" + std::to_string(i+1) + ".png")) {
+        if (!playersTexture[i].loadFromFile("assets/Player" + std::to_string(i + 1) + ".png")) {
             return EXIT_FAILURE;
         }
         sf::Sprite sprite1(playersTexture[i]);
@@ -50,10 +50,10 @@ int main() {
         for (int i = 0; i < playersSprite.size(); i++) {
             sf::Vector2f position;
             if (players[i].get_position() % 10 == 1) {
-                sf::Vector2f p(930 + players[i].get_position() * 10 ,850);
+                sf::Vector2f p(930 + players[i].get_position() * 10, 850);
                 position = p;
 
-                playersSprite[i].setPosition(930 ,850);
+                playersSprite[i].setPosition(930, 850);
             } else {
                 playersSprite[i].setPosition(100, 100);
             }
@@ -71,8 +71,7 @@ int main() {
 //            view1.move(-50.f, 0);
 //        }
 
-        while (window.pollEvent(event))  {
-
+        while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
                 window.close();
             }

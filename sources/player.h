@@ -3,9 +3,11 @@
 #include <vector>
 #include <string>
 #include "field.h"
+#include "settings.h"
 #include <SFML/Graphics.hpp>
 
 class ProfitableField;
+
 class Field;
 
 class Player {
@@ -45,6 +47,9 @@ public:
 private:
     sf::Sprite sprite;
     std::string name;
+
+    GameSettings &settings = GameSettings::getInstance();
+
     int money;
     int position;
     int amount_of_jail_cards;

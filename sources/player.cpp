@@ -31,7 +31,6 @@ int Player::get_amount_of_jail_cards() const {
     return amount_of_jail_cards;
 }
 
-
 void Player::set_money(int money) {
     Player::money = money;
 }
@@ -75,6 +74,12 @@ void Player::increment_position(int number_on_dice) {
     position += number_on_dice;
     if (position >= 40) {
         position -= 40;
-        money += 200;
+        money += settings.get_money_per_loop();
+    }
+    if (position == 0) {
+        money += settings.get_bonus_for_visit_start();
+    }
+    if (position == 30) {
+        position = 10;
     }
 }

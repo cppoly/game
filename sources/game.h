@@ -3,6 +3,7 @@
 #include <vector>
 #include "player.h"
 #include "field.h"
+#include "settings.h"
 
 struct GameMove {
     int player_id;
@@ -36,6 +37,8 @@ public:
 private:
     void feel_game_fields();
     static int number_on_dice();
+
+    GameSettings &settings = GameSettings::getInstance();
 
     int money_for_game_start;
     int money_for_win;
