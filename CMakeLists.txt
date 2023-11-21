@@ -5,6 +5,8 @@ file(GLOB source_cpp sources/*.cpp)
 file(GLOB source_h sources/*.h)
 file(GLOB interface_cpp interface/*.cpp)
 file(GLOB interface_h interface/*.h)
+file(GLOB interface_components_cpp interface/*/*.cpp)
+file(GLOB interface_components_hpp interface/*/*.hpp)
 
 
 set(
@@ -13,7 +15,9 @@ set(
         ${source_h}
         ${interface_cpp}
         ${interface_h}
-        interface/button/button.hpp interface/button/button.cpp interface/input/input.hpp interface/input/input.cpp)
+        ${interface_components_cpp}
+        ${interface_components_hpp}
+)
 set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
