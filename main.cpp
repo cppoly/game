@@ -33,7 +33,7 @@ int main() {
 //    Player player2(file_path2, "Max", 1500, 1, 0);
 //    Player player3(file_path3, "Evgeny", 1500, 1, 0);
 
-    Game game(1500, -1, 200, 0, true, 50, 0, players);
+//    Game game(1500, -1, 200, 0, true, 50, 0, players);
 
     sf::View view1;
     view1.reset(sf::FloatRect(724.f, 724.f, 300.f, 300.f));
