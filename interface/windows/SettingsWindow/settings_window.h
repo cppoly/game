@@ -3,8 +3,8 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
-#include "../input/input.hpp"
-#include "../../sources/game.h"
+#include "../../input/input.hpp"
+#include "../../../sources/game.h"
 
 class SettingsWindow {
 public:
@@ -12,7 +12,7 @@ public:
 
     void draw(sf::RenderWindow &window);
 
-    void handleEvent(sf::Event &event, sf::RenderWindow &window);
+    bool handleEvent(sf::Event &event, sf::RenderWindow &window);
 
     Game getGame() const;
 
@@ -73,7 +73,6 @@ private:
     sdx::TextBox textBox6 = sdx::TextBox(400, 40, 900, 310 + 5 * 100, 2);
 
     bool isActiveCheckbox = false;
-    bool isApplySettings = false;
 
     sf::Clock animationClock;
 

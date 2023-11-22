@@ -7,7 +7,8 @@ file(GLOB source_h sources/*.h)
 file(GLOB interface_cpp interface/*.cpp)
 file(GLOB interface_h interface/*.h)
 file(GLOB interface_components_cpp interface/*/*.cpp)
-
+file(GLOB interface_windows_cpp interface/windows/*/*.cpp)
+file(GLOB interface_windows_h interface/windows/*/*.h)
 
 set(
         SOURCES
@@ -17,7 +18,10 @@ set(
         ${interface_h}
         ${interface_components_cpp}
         ${interface_components_hpp}
+        ${interface_windows_cpp}
+        ${interface_windows_h}
 )
+
 set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
