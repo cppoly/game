@@ -1,23 +1,19 @@
-#include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
-#include <vector>
-#include "sources/player.h"
-#include "sources/game.h"
-#include "interface/input/input.hpp"
 #include "interface/windows/SettingsWindow/settings_window.h"
 #include "interface/windows/MainWindow/main_window.h"
 #include "interface/windows/CharactersWindow/character_window.h"
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode({1024, 1024}), "Monopoly", sf::Style::Fullscreen);
+    sf::RenderWindow window(sf::VideoMode({1024, 1024}), "Monopoly", sf::Style::Default);
 
 
     bool isActiveMainScreen = true;
     bool isActiveSettings = false;
     bool isActiveCharacter = false;
 
-    //Main Screen
+    // Main Screen
+
     auto mainWindow = MainWindow(window);
 
     // Settings
@@ -29,16 +25,12 @@ int main() {
     auto characterWindow = CharacterWindow(window);
 
     while (window.isOpen()) {
-        sf::Event event;
+        sf::Event event{};
 
         while (window.pollEvent(event)) {
-            switch (event.type) {
-                case (sf::Event::Closed):
-                    window.close();
-                case (sf::Event::KeyPressed):
-                    if (event.key.code == sf::Keyboard::Escape) window.close();
-                default:
-                    break;
+            if (event.type == sf::Event::Closed or sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))  {
+                window.close();
+                break;
             }
 
             if (mainWindow.handleEvent(event, window)) {
