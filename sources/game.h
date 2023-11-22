@@ -17,6 +17,8 @@ struct GameMove {
 
 class Game {
 public:
+    Game() = default;
+
     Game(
         int money_for_game_start,
         int money_for_win,
