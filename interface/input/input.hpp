@@ -30,20 +30,24 @@ namespace sdx {
             sf::Font font;
             sf::Text text;
         public:
-            Text(sf::String, float, float); //constructior, first parameter is text string, second is x position, third y position.
+            Text(sf::String, float,
+                 float); //constructior, first parameter is text string, second is x position, third y position.
             sf::Text get(); //returns the drawable sf::Text class
             void setText(sf::String); //update the text
             void setPosition(float, float); //update text position
             void setSize(unsigned int); //update text size
         };
+
         TextBox();  //constructor
-        TextBox(float, float, float, float, float); //first two parameter for size, second two for position and the last one for thickness.
+        TextBox(float, float, float, float,
+                float); //first two parameter for size, second two for position and the last one for thickness.
         void draw(sf::RenderWindow &);  //it'll go to the main event loop, after event handler, it draws in the window.
-        void handleEvent(sf::Event &); //handles text input and press enter evernt. place it inside pollEvent loop inside the main event loop.
+        void handleEvent(
+                sf::Event &); //handles text input and press enter evernt. place it inside pollEvent loop inside the main event loop.
         sf::String getCurrentText();  //get what is written in the text box right now
         sf::String getInput();  //updates last text after pressing enter.
     public:
-        void setSize(float,float);  //update box size first parameter for x, second for y.
+        void setSize(float, float);  //update box size first parameter for x, second for y.
         void setPosition(float, float); //update (x,y) position of top-left corner
         void setBorder(float);  //update border thickness.
     private:
