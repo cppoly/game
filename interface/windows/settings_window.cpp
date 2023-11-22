@@ -47,46 +47,28 @@ SettingsWindow::SettingsWindow(sf::RenderWindow &window) {
     set_text(settings5, font1, settings5Name, 40, sf::Color::Black, sf::Text::Bold, 240, 300 + 4 * 100);
     set_text(settings6, font1, settings6Name, 40, sf::Color::Black, sf::Text::Bold, 240, 300 + 5 * 100);
     set_text(settings7, font1, settings7Name, 40, sf::Color::Black, sf::Text::Bold, 240, 340 + 6 * 100);
-
-    text1.setSize(5);
-
 }
 
 void SettingsWindow::draw(sf::RenderWindow &window) {
 //    window.clear();
 
     if (!isApplySettings) {
+
         text1.setText(textBox1.getInput());
-
         text2.setText(textBox2.getInput());
-
         text3.setText(textBox3.getInput());
-
         text4.setText(textBox4.getInput());
-
         text5.setText(textBox5.getInput());
-
         text6.setText(textBox6.getInput());
 
         window.draw(settingsSprite);
 
         textBox1.draw(window);
-        window.draw(text1.get());
-
         textBox2.draw(window);
-        window.draw(text2.get());
-
         textBox3.draw(window);
-        window.draw(text3.get());
-
         textBox4.draw(window);
-        window.draw(text4.get());
-
         textBox5.draw(window);
-        window.draw(text5.get());
-
         textBox6.draw(window);
-        window.draw(text6.get());
 
         window.draw(titleSettingsPage);
         window.draw(settings1);
@@ -97,7 +79,7 @@ void SettingsWindow::draw(sf::RenderWindow &window) {
         window.draw(settings6);
         window.draw(settings7);
         window.draw(checkboxSprite);
-        window.draw(text1.get());
+//        window.draw(text1.get());
         window.draw(buttonApplySprite);
     } else {
         window.draw(settingsSprite);
