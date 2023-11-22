@@ -12,6 +12,7 @@
 int main() {
     sf::RenderWindow window(sf::VideoMode({1024, 1024}), "Monopoly", sf::Style::Fullscreen);
 
+
     bool isActiveMainScreen = true;
     bool isActiveSettings = false;
 
@@ -74,7 +75,7 @@ int main() {
                 isActiveMainScreen = false;
                 isActiveSettings = true;
             }
-            settingsWindow.handleEvent(event);
+            settingsWindow.handleEvent(event, window);
         }
 
         if (isActiveMainScreen) {
