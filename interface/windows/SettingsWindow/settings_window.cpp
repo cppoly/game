@@ -50,40 +50,34 @@ SettingsWindow::SettingsWindow(sf::RenderWindow &window) {
 }
 
 void SettingsWindow::draw(sf::RenderWindow &window) {
-//    window.clear();
+    window.clear();
 
-    if (!isApplySettings) {
+    text1.setText(textBox1.getInput());
+    text2.setText(textBox2.getInput());
+    text3.setText(textBox3.getInput());
+    text4.setText(textBox4.getInput());
+    text5.setText(textBox5.getInput());
+    text6.setText(textBox6.getInput());
 
-        text1.setText(textBox1.getInput());
-        text2.setText(textBox2.getInput());
-        text3.setText(textBox3.getInput());
-        text4.setText(textBox4.getInput());
-        text5.setText(textBox5.getInput());
-        text6.setText(textBox6.getInput());
+    window.draw(settingsSprite);
 
-        window.draw(settingsSprite);
+    textBox1.draw(window);
+    textBox2.draw(window);
+    textBox3.draw(window);
+    textBox4.draw(window);
+    textBox5.draw(window);
+    textBox6.draw(window);
 
-        textBox1.draw(window);
-        textBox2.draw(window);
-        textBox3.draw(window);
-        textBox4.draw(window);
-        textBox5.draw(window);
-        textBox6.draw(window);
-
-        window.draw(titleSettingsPage);
-        window.draw(settings1);
-        window.draw(settings2);
-        window.draw(settings3);
-        window.draw(settings4);
-        window.draw(settings5);
-        window.draw(settings6);
-        window.draw(settings7);
-        window.draw(checkboxSprite);
-//        window.draw(text1.get());
-        window.draw(buttonApplySprite);
-    } else {
-        window.draw(settingsSprite);
-    }
+    window.draw(titleSettingsPage);
+    window.draw(settings1);
+    window.draw(settings2);
+    window.draw(settings3);
+    window.draw(settings4);
+    window.draw(settings5);
+    window.draw(settings6);
+    window.draw(settings7);
+    window.draw(checkboxSprite);
+    window.draw(buttonApplySprite);
 }
 
 bool SettingsWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
@@ -102,18 +96,29 @@ bool SettingsWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
 
             if (buttonApplySprite.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
                 buttonApplySprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
-                isApplySettings = true;
 
 
-                money_for_game_start = std::string(textBox1.getInput()).size() != 0 ? std::stoi(std::string(textBox1.getInput())) : money_for_game_start;
-                money_for_win = std::string(textBox2.getInput()).size() != 0 ? std::stoi(std::string(textBox2.getInput())) : money_for_win;
-                money_per_loop = std::string(textBox3.getInput()).size() != 0 ? std::stoi(std::string(textBox3.getInput())) : money_per_loop;
-                bonus_for_visit_start = std::string(textBox4.getInput()).size() != 0 ? std::stoi(std::string(textBox4.getInput())) : bonus_for_visit_start;
-                jail_price = std::string(textBox5.getInput()).size() != 0 ? std::stoi(std::string(textBox5.getInput())) : jail_price;
-                seconds_per_turn = std::string(textBox6.getInput()).size() != 0 ? std::stoi(std::string(textBox6.getInput())) : seconds_per_turn;
+                money_for_game_start =
+                        std::string(textBox1.getInput()).size() != 0 ? std::stoi(std::string(textBox1.getInput()))
+                                                                     : money_for_game_start;
+                money_for_win =
+                        std::string(textBox2.getInput()).size() != 0 ? std::stoi(std::string(textBox2.getInput()))
+                                                                     : money_for_win;
+                money_per_loop =
+                        std::string(textBox3.getInput()).size() != 0 ? std::stoi(std::string(textBox3.getInput()))
+                                                                     : money_per_loop;
+                bonus_for_visit_start =
+                        std::string(textBox4.getInput()).size() != 0 ? std::stoi(std::string(textBox4.getInput()))
+                                                                     : bonus_for_visit_start;
+                jail_price = std::string(textBox5.getInput()).size() != 0 ? std::stoi(std::string(textBox5.getInput()))
+                                                                          : jail_price;
+                seconds_per_turn =
+                        std::string(textBox6.getInput()).size() != 0 ? std::stoi(std::string(textBox6.getInput()))
+                                                                     : seconds_per_turn;
 
 
-                game = Game(money_for_game_start, money_for_win, money_per_loop, bonus_for_visit_start, isActiveCheckbox, jail_price, seconds_per_turn);
+                game = Game(money_for_game_start, money_for_win, money_per_loop, bonus_for_visit_start,
+                            isActiveCheckbox, jail_price, seconds_per_turn);
                 return true;
             }
         }

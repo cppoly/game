@@ -12,8 +12,8 @@ MainWindow::MainWindow(sf::RenderWindow &window) {
     }
 
     buttonStartGameSprite = sf::Sprite(buttonStartGameTexture);
-    buttonStartGameSprite.setTextureRect(sf::IntRect(0, 0, 400, 175));
-    buttonStartGameSprite.setPosition((window.getSize().x / 2.f) - 200, (window.getSize().y / 2.f) - 82.5);
+    buttonStartGameSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
+    buttonStartGameSprite.setPosition((window.getSize().x / 2.f) - 180, (window.getSize().y / 2.f));
 
 }
 
@@ -28,19 +28,19 @@ bool MainWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
         if (event.mouseButton.button == sf::Mouse::Left) {
             if (buttonStartGameSprite.getGlobalBounds().contains(
                     window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-                buttonStartGameSprite.setTextureRect(sf::IntRect(400 * 1, 0, 400, 175));
+                buttonStartGameSprite.setTextureRect(sf::IntRect(360 * 1, 0, 360, 109));
                 return true;
             }
         }
     } else if (event.type == sf::Event::MouseMoved) {
         if (buttonStartGameSprite.getGlobalBounds().contains(
                 window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-            buttonStartGameSprite.setTextureRect(sf::IntRect(400 * 2, 0, 400, 175));
+            buttonStartGameSprite.setTextureRect(sf::IntRect(360 * 2, 0, 360, 109));
         } else {
-            buttonStartGameSprite.setTextureRect(sf::IntRect(0, 0, 400, 175));
+            buttonStartGameSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
         }
     } else {
-        buttonStartGameSprite.setTextureRect(sf::IntRect(0, 0, 400, 175));
+        buttonStartGameSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
     }
     return false;
 }

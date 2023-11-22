@@ -75,6 +75,8 @@ int main() {
             } else if (settingsWindow.handleEvent(event, window)) {
                 isActiveSettings = false;
                 isActiveCharacter = true;
+            } else if (characterWindow.handleEvent(event, window)) {
+                isActiveSettings = false;
             }
         }
 
@@ -82,6 +84,8 @@ int main() {
             mainWindow.draw(window);
         } else if (isActiveSettings) {
             settingsWindow.draw(window);
+        } else if (isActiveCharacter) {
+            characterWindow.draw(window);
         }
         window.display();
     }

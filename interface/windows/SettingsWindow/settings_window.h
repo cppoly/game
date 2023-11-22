@@ -73,7 +73,6 @@ private:
     sdx::TextBox textBox6 = sdx::TextBox(400, 40, 900, 310 + 5 * 100, 2);
 
     bool isActiveCheckbox = false;
-    bool isApplySettings = false;
 
     sf::Clock animationClock;
 
