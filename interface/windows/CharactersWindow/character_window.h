@@ -21,7 +21,7 @@ private:
     sf::Texture backgroundTexture;
     sf::Sprite backgroundSprite;
 
-    std::string title = "Chose players";
+    std::string title = "Choose players";
 
     sf::Text titleChoseCharacterPage;
     sf::Font font1;
@@ -48,6 +48,10 @@ private:
     sf::Sprite player4Sprite;
     sf::Sprite player5Sprite;
     sf::Sprite player6Sprite;
+
+//    sf::Texture activePlayerTexture;
+    sf::Sprite activePlayerSprite;
+
 
     std::vector<sf::Texture> playersTexture;
     std::vector<sf::Sprite> playersSprite;

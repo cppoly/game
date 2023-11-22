@@ -1,7 +1,7 @@
 #include "character_window.h"
 
 void set_text(sf::Text &text, sf::Font &font, std::string &str, int size, sf::Color color,
-                              sf::Text::Style style, float x, float y) {
+              sf::Text::Style style, float x, float y) {
     text.setFont(font);
     text.setString(str);
     text.setCharacterSize(size);
@@ -11,20 +11,19 @@ void set_text(sf::Text &text, sf::Font &font, std::string &str, int size, sf::Co
 }
 
 CharacterWindow::CharacterWindow(sf::RenderWindow &window) {
-    playersTexture.push_back(player1Texture);
-    playersTexture.push_back(player2Texture);
-    playersTexture.push_back(player3Texture);
-    playersTexture.push_back(player4Texture);
-    playersTexture.push_back(player5Texture);
-    playersTexture.push_back(player6Texture);
 
-    playersSprite.push_back(player1Sprite);
-    playersSprite.push_back(player2Sprite);
-    playersSprite.push_back(player3Sprite);
-    playersSprite.push_back(player4Sprite);
-    playersSprite.push_back(player5Sprite);
-    playersSprite.push_back(player6Sprite);
+    playersTexture = std::vector<sf::Texture>{player1Texture, player2Texture, player3Texture,
+                                              player4Texture, player5Texture, player6Texture};
 
+    playersSprite = std::vector<sf::Sprite>{player1Sprite, player2Sprite, player3Sprite,
+                                            player4Sprite, player5Sprite, player6Sprite};
+
+
+    for (int i = 0; i < 6; i++) {
+        if (!playersTexture[i].loadFromFile("assets/sprite/Player" + std::to_string(i+1) + ".png")) {
+            throw std::runtime_error("Can't load players texture");
+        }
+    }
 
     if (!backgroundTexture.loadFromFile("assets/sprite/Settings.png") ||
         !buttonAddPlayerTexture.loadFromFile("assets/sprite/buttonAddPlayer.png") ||
@@ -35,7 +34,8 @@ CharacterWindow::CharacterWindow(sf::RenderWindow &window) {
     }
 
 
-    set_text(titleChoseCharacterPage, font1, title, 90, sf::Color::White, sf::Text::Bold, (window.getSize().x / 2.f) - 350,
+    set_text(titleChoseCharacterPage, font1, title, 90, sf::Color::White, sf::Text::Bold,
+             (window.getSize().x / 2.f) - 350,
              100);
     backgroundSprite.setTexture(backgroundTexture);
 
@@ -49,8 +49,14 @@ CharacterWindow::CharacterWindow(sf::RenderWindow &window) {
 
     chosePlayerSprite.setTexture(chosePlayerTexture);
     chosePlayerSprite.setPosition((window.getSize().x / 2.f) - 250, 200);
-}
 
+    for (int i = 0; i < playersSprite.size(); i++) {
+        playersSprite[i].setTexture(playersTexture[i]);
+        playersSprite[i].setPosition(760 + 71 * i, 750);
+    }
+
+    activePlayerSprite.setPosition(100, 100);
+}
 
 void CharacterWindow::draw(sf::RenderWindow &window) {
     window.clear();
@@ -59,6 +65,10 @@ void CharacterWindow::draw(sf::RenderWindow &window) {
     window.draw(buttonStartGameSprite);
     window.draw(chosePlayerSprite);
     window.draw(titleChoseCharacterPage);
+    for (int i = 0; i < 6; i++) {
+        window.draw(playersSprite[i]);
+    }
+    window.draw(activePlayerSprite);
 }
 
 bool CharacterWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
@@ -70,15 +80,23 @@ bool CharacterWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
             } else if (buttonAddPlayerSprite.getGlobalBounds().contains(
                     window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
                 buttonAddPlayerSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
+            } else {
+                for (int i = 0; i < 6; i++) {
+                    if (playersSprite[i].getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+                        activePlayerSprite.setTexture(playersTexture[i]);
+
+                    }
+                }
             }
         }
+
     } else if (event.type == sf::Event::MouseMoved) {
         if (buttonStartGameSprite.getGlobalBounds().contains(
                 window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
             buttonStartGameSprite.setTextureRect(sf::IntRect(360 * 2, 0, 360, 109));
         } else if (buttonAddPlayerSprite.getGlobalBounds().contains(
                 window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-            buttonAddPlayerSprite.setTextureRect(sf::IntRect(360*2, 0, 360, 109));
+            buttonAddPlayerSprite.setTextureRect(sf::IntRect(360 * 2, 0, 360, 109));
         } else {
             buttonAddPlayerSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
             buttonStartGameSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
