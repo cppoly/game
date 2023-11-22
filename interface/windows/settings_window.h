@@ -12,7 +12,11 @@ public:
     void draw(sf::RenderWindow &window);
 
     void handleEvent(sf::Event &event, sf::RenderWindow &window);
+
+    Game& getGame() const;
+
 private:
+    Game game;
 
     void set_text(sf::Text& text, sf::Font& font, std::string& str, int size, sf::Color color, sf::Text::Style style, float x, float y);
 

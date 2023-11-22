@@ -119,15 +119,14 @@ void SettingsWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
             if (buttonApplySprite.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
                 buttonApplySprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
                 isApplySettings = true;
-                std::string s = textBox1.getInput();
-                int a = std::stoi(s);
-                Game game(std::stoi(std::string(textBox1.getInput())),
-                          std::stoi(std::string(textBox2.getInput())),
-                          std::stoi(std::string(textBox3.getInput())),
-                          std::stoi(std::string(textBox4.getInput())),
-                          isActiveCheckbox,
-                          std::stoi(std::string(textBox5.getInput())),
-                          std::stoi(std::string(textBox6.getInput())));
+                Game gameData(std::stoi(std::string(textBox1.getInput())),
+                              std::stoi(std::string(textBox2.getInput())),
+                              std::stoi(std::string(textBox3.getInput())),
+                              std::stoi(std::string(textBox4.getInput())),
+                              isActiveCheckbox,
+                              std::stoi(std::string(textBox5.getInput())),
+                              std::stoi(std::string(textBox6.getInput())));
+                game = gameData;
 
             }
         }
@@ -148,4 +147,8 @@ void SettingsWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
     textBox4.handleEvent(event);
     textBox5.handleEvent(event);
     textBox6.handleEvent(event);
+}
+
+Game &SettingsWindow::getGame() const {
+    return this->game;
 }
