@@ -5,7 +5,7 @@
 #include "interface/windows/CharactersWindow/character_window.h"
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode({1024, 1024}), "Monopoly", sf::Style::Default);
+    sf::RenderWindow window(sf::VideoMode({1024, 1024}), "Monopoly", sf::Style::Fullscreen);
 
 
     bool isActiveMainScreen = true;
