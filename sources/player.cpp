@@ -83,3 +83,18 @@ void Player::increment_position(int number_on_dice) {
         position = 10;
     }
 }
+
+
+Player &Player::operator=(const Player &other) {
+    if (this == &other) {
+        return *this;
+    }
+    sprite = other.sprite;
+    name = other.name;
+    money = other.money;
+    position = other.position;
+    amount_of_jail_cards = other.amount_of_jail_cards;
+    fields = other.fields;
+    settings = GameSettings::getInstance();
+    return *this;
+}

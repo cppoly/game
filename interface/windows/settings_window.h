@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include "../input/input.hpp"
-
+#include "../../sources/game.h"
 
 class SettingsWindow {
 public:

@@ -95,11 +95,11 @@ int Game::next_turn() {
 }
 
 Game& Game::operator=(const Game &other) {
-    return {other.settings.get_money_for_game_start(),
-                other.settings.get_money_for_win(),
-                other.settings.get_money_per_loop(),
-                other.settings.get_bonus_for_visit_start(),
-                other.settings.get_is_free_parking(),
-                other.settings.get_jail_price(),
-                other.settings.get_seconds_per_turn()};
+    if (this == &other) {
+        return *this;
+    }
+    cur_player_id = other.cur_player_id;
+    game_fields = other.game_fields;
+    players = other.players;
+    return *this;
 }

@@ -44,6 +44,8 @@ public:
 
     void increment_position(int number_on_dice);
 
+    Player &operator=(const Player &other);
+
 private:
     sf::Sprite sprite;
     std::string name;
