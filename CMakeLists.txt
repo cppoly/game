@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.24)
-project(monopoly)
+set(PROJECT_NAME monopoly)
+project(${PROJECT_NAME} VERSION 1.0.0 LANGUAGES CXX)
 
 file(GLOB source_cpp sources/*.cpp)
 file(GLOB source_h sources/*.h)
@@ -23,7 +24,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(
-        monopoly
+        ${PROJECT_NAME}
         ${SOURCES}
         main.cpp
 )
@@ -42,5 +43,5 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 endif()
 
 find_package(SFML COMPONENTS system window graphics audio network REQUIRED)
-target_link_libraries(monopoly sfml-system sfml-window sfml-graphics sfml-audio)
+target_link_libraries(${PROJECT_NAME} sfml-system sfml-window sfml-graphics sfml-audio)
 
