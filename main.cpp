@@ -28,34 +28,6 @@ int main() {
 
     auto characterWindow = CharacterWindow(window);
 
-    // Players
-
-    std::vector<sf::Texture> playersTexture(3);
-    std::vector<sf::Sprite> playersSprite;
-    std::vector<Player> players;
-
-
-
-    for (int i = 0; i < playersTexture.size(); i++) {
-        if (!playersTexture[i].loadFromFile("assets/sprite/Player" + std::to_string(i + 1) + ".png")) {
-            return EXIT_FAILURE;
-        }
-        sf::Sprite sprite1(playersTexture[i]);
-        if (i == 2) {
-            Player player(sprite1, "Alyona", 1500, 11, 0);
-            players.push_back(player);
-            playersSprite.push_back(sprite1);
-            continue;
-        }
-        Player player(sprite1, "Alyona", 1500, 1, 0);
-        players.push_back(player);
-        playersSprite.push_back(sprite1);
-
-    }
-
-//    sf::View view1;
-//    view1.reset(sf::FloatRect(724.f, 724.f, 300.f, 300.f));
-
     while (window.isOpen()) {
         sf::Event event;
 
