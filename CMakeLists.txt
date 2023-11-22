@@ -7,7 +7,6 @@ file(GLOB source_h sources/*.h)
 file(GLOB interface_cpp interface/*.cpp)
 file(GLOB interface_h interface/*.h)
 file(GLOB interface_components_cpp interface/*/*.cpp)
-file(GLOB interface_components_hpp interface/*/*.hpp)
 
 
 set(
