@@ -33,14 +33,14 @@ public:
 private:
     GameSettings();
 
-    int money_for_game_start;
-    int money_for_win;
-    int money_per_loop;
+    int money_for_game_start{};
+    int money_for_win{};
+    int money_per_loop{};
 
-    int bonus_for_visit_start;
+    int bonus_for_visit_start{};
 
-    bool is_free_parking;
-    int jail_price;
+    bool is_free_parking{};
+    int jail_price{};
 
-    int seconds_per_turn;
+    int seconds_per_turn{};
 };

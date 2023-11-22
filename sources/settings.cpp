@@ -5,7 +5,7 @@ GameSettings &GameSettings::getInstance() {
     return instance;
 }
 
-GameSettings::GameSettings() {}
+GameSettings::GameSettings() = default;
 
 void GameSettings::set_parameters(
         int moneyForGameStart,
