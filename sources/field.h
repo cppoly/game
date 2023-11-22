@@ -30,6 +30,7 @@ private:
 
 class ProfitableField : public Field {
 public:
+    ProfitableField() = default;
     ProfitableField(
             std::string name,
             int price,

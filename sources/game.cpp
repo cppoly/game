@@ -70,16 +70,35 @@ void Game::feel_game_fields() {
 }
 
 void Game::start_game() {
+    is_game_started = true;
+
     srand(time(nullptr));
+    auto rd = std::random_device {};
+    auto rng = std::default_random_engine { rd() };
+    std::shuffle(std::begin(players), std::end(players), rng);
     cur_player_id = 0;
 }
 
 GameMove Game::player_move() {
-    Player cur_player = players[cur_player_id];
+    if (!is_game_started) {
+        throw std::runtime_error("Game is not started");
+    }
+
     int dice1 = number_on_dice();
     int dice2 = number_on_dice();
+    Player cur_player = players[cur_player_id];
+    GameMove return_obj;
+    return_obj.player_id = cur_player_id;
+    return_obj.old_position = cur_player.get_position();
+    return_obj.number_on_dice1 = dice1;
+    return_obj.number_on_dice2 = dice2;
     cur_player.increment_position(dice1 + dice2);
-    GameMove return_obj{cur_player_id, dice1, dice2, cur_player.get_position()};
+    return_obj.new_position = cur_player.get_position();
+
+    if (dice1 != dice2) {
+        is_player_do_move = true;
+    }
+
     return return_obj;
 }
 
@@ -88,9 +107,15 @@ int Game::number_on_dice() {
 }
 
 int Game::next_turn() {
-    // TODO: make it
-    cur_player_id++;
-    cur_player_id %= (int) players.size();
+    if (!is_game_started) {
+        throw std::runtime_error("Game is not started");
+    }
+
+    if (is_player_do_move) {
+        cur_player_id++;
+        cur_player_id %= (int) players.size();
+        is_player_do_move = false;
+    }
     return cur_player_id;
 }
 
@@ -101,5 +126,9 @@ Game& Game::operator=(const Game &other) {
     cur_player_id = other.cur_player_id;
     game_fields = other.game_fields;
     players = other.players;
+    settings = GameSettings::getInstance();
+    is_game_started = other.is_game_started;
+    is_player_do_move = other.is_player_do_move;
+
     return *this;
 }
