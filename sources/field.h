@@ -64,8 +64,7 @@ private:
 
 class Street : public ProfitableField {
 public:
-    Street(std::string name1, int price1, std::vector<int> rent1, int mortgagePrice, std::string name,
-           int price, std::vector<int> rent, int house_price, int hotel_price, int mortgage_price);
+    Street(std::string name, int price, std::vector<int> rent, int house_price, int hotel_price, int mortgage_price);
 
     ~Street() override = default;
 
@@ -101,6 +100,7 @@ private:
 
 class Station : public ProfitableField {
 public:
+    Station(std::string name, int price, std::vector<int> rent, int mortgage_price);
     int get_rent(int amount_of_stations) const;
 
 private:
@@ -115,6 +115,7 @@ private:
 
 class Utility : public ProfitableField {
 public:
+    Utility(std::string name, int price, std::vector<int> rent, int mortgage_price);
     int get_rent(int amount_of_utilities) const;
 
 private:
@@ -197,6 +198,7 @@ class Tax : public Field {
 public:
     Tax(int price);
 
+    int get_price() const;
     ~Tax() override = default;
 
 private:

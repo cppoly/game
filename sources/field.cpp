@@ -59,9 +59,9 @@ void ProfitableField::mortgage(Player &player) {
 
 Start::Start(int money_for_visit_start) : money_for_visit_start(money_for_visit_start) {}
 
-Street::Street(std::string name1, int price1, std::vector<int> rent1, int mortgagePrice, std::string name,
-               int price, std::vector<int> rent, int house_price, int hotel_price, int mortgage_price) :
-        ProfitableField(name1, price1, rent1, mortgagePrice), name(std::move(name)), price(price),
+Street::Street(std::string name, int price, std::vector<int> rent, int house_price, int hotel_price, int mortgage_price)
+        :
+        ProfitableField(name, price, rent, mortgage_price), name(std::move(name)), price(price),
         rent(std::move(rent)), house_price(house_price), hotel_price(hotel_price), mortgage_price(mortgage_price) {}
 
 
@@ -122,3 +122,33 @@ int Station::get_rent(int amount_of_stations) const {
 int Utility::get_rent(int amount_of_utilities) const {
     return rent[amount_of_utilities];
 }
+
+Station::Station(std::string name, int price, std::vector<int> rent, int mortgage_price) :
+        ProfitableField(name, price, rent, mortgage_price), name(std::move(name)), price(price),
+        rent(std::move(rent)), mortgage_price(mortgage_price) {}
+
+Utility::Utility(std::string name, int price, std::vector<int> rent, int mortgage_price) :
+        ProfitableField(name, price, rent, mortgage_price), name(std::move(name)), price(price),
+        rent(std::move(rent)), mortgage_price(mortgage_price) {}
+
+Tax::Tax(int tax) : price(tax) {}
+
+int Tax::get_price() const {
+    return price;
+}
+
+Jail::Jail(int price) : price(price) {}
+
+int Jail::get_price() const {
+    return price;
+}
+
+
+// todo: do it
+CommunityChest::CommunityChest() = default;
+
+Chance::Chance() = default;
+
+Parking::Parking() = default;
+
+GoToJail::GoToJail() = default;
