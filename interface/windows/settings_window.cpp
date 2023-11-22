@@ -53,7 +53,7 @@ SettingsWindow::SettingsWindow(sf::RenderWindow &window) {
 }
 
 void SettingsWindow::draw(sf::RenderWindow &window) {
-    window.clear();
+//    window.clear();
 
     if (!isApplySettings) {
         text1.setText(textBox1.getInput());
@@ -97,6 +97,7 @@ void SettingsWindow::draw(sf::RenderWindow &window) {
         window.draw(settings6);
         window.draw(settings7);
         window.draw(checkboxSprite);
+        window.draw(text1.get());
         window.draw(buttonApplySprite);
     } else {
         window.draw(settingsSprite);
@@ -104,6 +105,7 @@ void SettingsWindow::draw(sf::RenderWindow &window) {
 }
 
 void SettingsWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
+
     if (event.type == sf::Event::MouseButtonPressed) {
         if (event.mouseButton.button == sf::Mouse::Left) {
             if (checkboxSprite.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
@@ -119,15 +121,17 @@ void SettingsWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
             if (buttonApplySprite.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
                 buttonApplySprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
                 isApplySettings = true;
-                Game gameData(std::stoi(std::string(textBox1.getInput())),
-                              std::stoi(std::string(textBox2.getInput())),
-                              std::stoi(std::string(textBox3.getInput())),
-                              std::stoi(std::string(textBox4.getInput())),
-                              isActiveCheckbox,
-                              std::stoi(std::string(textBox5.getInput())),
-                              std::stoi(std::string(textBox6.getInput())));
-                game = gameData;
 
+
+                money_for_game_start = std::string(textBox1.getInput()).size() != 0 ? std::stoi(std::string(textBox1.getInput())) : money_for_game_start;
+                money_for_win = std::string(textBox2.getInput()).size() != 0 ? std::stoi(std::string(textBox2.getInput())) : money_for_win;
+                money_per_loop = std::string(textBox3.getInput()).size() != 0 ? std::stoi(std::string(textBox3.getInput())) : money_per_loop;
+                bonus_for_visit_start = std::string(textBox4.getInput()).size() != 0 ? std::stoi(std::string(textBox4.getInput())) : bonus_for_visit_start;
+                jail_price = std::string(textBox5.getInput()).size() != 0 ? std::stoi(std::string(textBox5.getInput())) : jail_price;
+                seconds_per_turn = std::string(textBox6.getInput()).size() != 0 ? std::stoi(std::string(textBox6.getInput())) : seconds_per_turn;
+
+
+                game = Game(money_for_game_start, money_for_win, money_per_loop, bonus_for_visit_start, isActiveCheckbox, jail_price, seconds_per_turn);
             }
         }
     } else if (event.type == sf::Event::MouseMoved) {
@@ -149,6 +153,6 @@ void SettingsWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
     textBox6.handleEvent(event);
 }
 
-Game &SettingsWindow::getGame() const {
-    return this->game;
+Game SettingsWindow::getGame() const {
+    return game;
 }

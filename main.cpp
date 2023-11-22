@@ -23,13 +23,6 @@ int main() {
 
     auto settingsWindow = SettingsWindow(window);
 
-    int money_for_game_start = 1500;
-    int money_for_win = 0;
-    int money_per_loop = 200;
-    int bonus_for_visit_start = 0;
-    bool is_free_parking = true;
-    int jail_price = 50;
-    int seconds_per_turn = 0;
 
 
     // Players
@@ -37,6 +30,8 @@ int main() {
     std::vector<sf::Texture> playersTexture(3);
     std::vector<sf::Sprite> playersSprite;
     std::vector<Player> players;
+
+
 
     for (int i = 0; i < playersTexture.size(); i++) {
         if (!playersTexture[i].loadFromFile("assets/sprite/Player" + std::to_string(i + 1) + ".png")) {

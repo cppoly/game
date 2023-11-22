@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include "../input/input.hpp"
@@ -13,10 +14,18 @@ public:
 
     void handleEvent(sf::Event &event, sf::RenderWindow &window);
 
-    Game& getGame() const;
+    Game getGame() const;
 
 private:
     Game game;
+
+    int money_for_game_start = 1500;
+    int money_for_win = 0;
+    int money_per_loop = 200;
+    int bonus_for_visit_start = 0;
+    bool is_free_parking = true;
+    int jail_price = 50;
+    int seconds_per_turn = 0;
 
     void set_text(sf::Text& text, sf::Font& font, std::string& str, int size, sf::Color color, sf::Text::Style style, float x, float y);
 
@@ -49,12 +58,12 @@ private:
     std::string settings6Name = "Seconds per turn:";
     std::string settings7Name = "Parking is free?";
 
-    sdx::TextBox::Text text1 = sdx::TextBox::Text("", 0, 0);
-    sdx::TextBox::Text text2 = sdx::TextBox::Text("", 0, 0);
-    sdx::TextBox::Text text3 = sdx::TextBox::Text("", 0, 0);
-    sdx::TextBox::Text text4 = sdx::TextBox::Text("", 0, 0);
-    sdx::TextBox::Text text5 = sdx::TextBox::Text("", 0, 0);
-    sdx::TextBox::Text text6 = sdx::TextBox::Text("", 0, 0);
+    sdx::TextBox::Text text1 = sdx::TextBox::Text("", 100, 100);
+    sdx::TextBox::Text text2 = sdx::TextBox::Text("", 100, 100);
+    sdx::TextBox::Text text3 = sdx::TextBox::Text("", 100, 100);
+    sdx::TextBox::Text text4 = sdx::TextBox::Text("", 100, 100);
+    sdx::TextBox::Text text5 = sdx::TextBox::Text("", 100, 100);
+    sdx::TextBox::Text text6 = sdx::TextBox::Text("", 100, 100);
 
     sdx::TextBox textBox1 = sdx::TextBox(400, 40, 900, 310 + 0 * 100, 2);
     sdx::TextBox textBox2 = sdx::TextBox(400, 40, 900, 310 + 1 * 100, 2);
