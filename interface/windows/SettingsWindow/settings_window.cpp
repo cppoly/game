@@ -1,5 +1,5 @@
 #include "settings_window.h"
-#include "../../sources/game.h"
+#include "../../../sources/game.h"
 
 void SettingsWindow::set_text(sf::Text &text, sf::Font &font, std::string &str, int size, sf::Color color,
                               sf::Text::Style style, float x, float y) {
@@ -86,7 +86,7 @@ void SettingsWindow::draw(sf::RenderWindow &window) {
     }
 }
 
-void SettingsWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
+bool SettingsWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
 
     if (event.type == sf::Event::MouseButtonPressed) {
         if (event.mouseButton.button == sf::Mouse::Left) {
@@ -114,6 +114,7 @@ void SettingsWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
 
 
                 game = Game(money_for_game_start, money_for_win, money_per_loop, bonus_for_visit_start, isActiveCheckbox, jail_price, seconds_per_turn);
+                return true;
             }
         }
     } else if (event.type == sf::Event::MouseMoved) {
@@ -133,6 +134,7 @@ void SettingsWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
     textBox4.handleEvent(event);
     textBox5.handleEvent(event);
     textBox6.handleEvent(event);
+    return false;
 }
 
 Game SettingsWindow::getGame() const {
