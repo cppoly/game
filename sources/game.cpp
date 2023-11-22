@@ -93,3 +93,13 @@ int Game::next_turn() {
     cur_player_id %= (int) players.size();
     return cur_player_id;
 }
+
+Game& Game::operator=(const Game &other) {
+    return {other.settings.get_money_for_game_start(),
+                other.settings.get_money_for_win(),
+                other.settings.get_money_per_loop(),
+                other.settings.get_bonus_for_visit_start(),
+                other.settings.get_is_free_parking(),
+                other.settings.get_jail_price(),
+                other.settings.get_seconds_per_turn()};
+}
