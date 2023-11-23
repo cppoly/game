@@ -19,8 +19,10 @@ CharacterWindow::CharacterWindow(sf::RenderWindow &window) {
     playersSprite = std::vector<sf::Sprite>{player1Sprite, player2Sprite, player3Sprite,
                                             player4Sprite, player5Sprite, player6Sprite};
 
-    playersDisableTexture = std::vector<sf::Texture>{player1DisableTexture, player2DisableTexture, player3DisableTexture,
-                                                    player4DisableTexture, player5DisableTexture, player6DisableTexture};
+    playersDisableTexture = std::vector<sf::Texture>{player1DisableTexture, player2DisableTexture,
+                                                     player3DisableTexture,
+                                                     player4DisableTexture, player5DisableTexture,
+                                                     player6DisableTexture};
 
     playersMediumTexture = std::vector<sf::Texture>{player1MediumTexture, player2MediumTexture, player3MediumTexture,
                                                     player4MediumTexture, player5MediumTexture, player6MediumTexture};
@@ -29,19 +31,22 @@ CharacterWindow::CharacterWindow(sf::RenderWindow &window) {
                                                   player4MediumSprite, player5MediumSprite, player6MediumSprite};
 
     for (int i = 0; i < 6; i++) {
-        if (!playersTexture[i].loadFromFile("assets/sprite/Player" + std::to_string(i+1) + ".png") ||
-            !playersMediumTexture[i].loadFromFile("assets/sprite/MediumPlayer/Player" + std::to_string(i + 1) + ".png") ||
-            !playersDisableTexture[i].loadFromFile("assets/sprite/DisactivePlayer/Player" +std::to_string(i + 1) + ".png")) {
+        if (!playersTexture[i].loadFromFile("assets/sprite/Players/Player" + std::to_string(i + 1) + ".png") ||
+            !playersMediumTexture[i].loadFromFile(
+                    "assets/sprite/MediumPlayer/Player" + std::to_string(i + 1) + ".png") ||
+            !playersDisableTexture[i].loadFromFile(
+                    "assets/sprite/DisactivePlayer/Player" + std::to_string(i + 1) + ".png")) {
             throw std::runtime_error("Can't load players texture");
         }
     }
 
 
-    if (!backgroundTexture.loadFromFile("assets/sprite/Settings.png") ||
-        !buttonAddPlayerTexture.loadFromFile("assets/sprite/buttonAddPlayer.png") ||
-        !buttonStartGameTexture.loadFromFile("assets/sprite/buttonStartGame.png") ||
+    if (!backgroundTexture.loadFromFile("assets/sprite/BackgroundImage/Settings.png") ||
+        !buttonAddPlayerTexture.loadFromFile("assets/sprite/Buttons/buttonAddPlayer.png") ||
+        !buttonStartGameTexture.loadFromFile("assets/sprite/Buttons/buttonStartGame.png") ||
         !chosePlayerTexture.loadFromFile("assets/sprite/ChosePlayerCard.png") ||
         !font1.loadFromFile("assets/fonts/Bionicle.ttf") ||
+        !font2.loadFromFile("assets/fonts/Minecraft.otf") ||
         !playersLargeTexture.loadFromFile("assets/sprite/LargePlayer/Players.png")) {
         throw std::runtime_error("Can't load texture in Character Window");
     }
@@ -82,7 +87,7 @@ CharacterWindow::CharacterWindow(sf::RenderWindow &window) {
 
     // Input
 
-    input.setPosition((window.getSize().x/2.f) - 150, 330);
+    input.setPosition((window.getSize().x / 2.f) - 150, 330);
     input.setSize(300, 40);
     input.setBorder(2);
 }
@@ -117,19 +122,26 @@ bool CharacterWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
             if (buttonStartGameSprite.getGlobalBounds().contains(
                     window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
                 buttonStartGameSprite.setTextureRect(sf::IntRect(360 * 1, 0, 360, 109));
+                if (playersCount >= 2) {
+                    return true;
+                }
             } else if (buttonAddPlayerSprite.getGlobalBounds().contains(
                     window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
 
                 if (isActiveSelectCharacterMode) {
                     buttonAddPlayerSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));\
-                    sf::Text namePlayer = std::string(input.getInput()).size() != 0 ? sf::Text(input.getInput(), font1, 20) : sf::Text(sf::String("Player" + std::to_string(addedPlayersSprite.size()+1)), font1, 20);
-
+                    sf::Text namePlayer =
+                            std::string(input.getInput()).size() != 0 ? sf::Text(input.getInput(), font2 , 25)
+                                                                      : sf::Text(
+                                    sf::String("Player" + std::to_string(addedPlayersSprite.size() + 1)), font2, 25);
+                    namePlayer.setFillColor(sf::Color::Black);
                     if (playersCount % 2 == 0) {
-                        playersMediumSprite[indexActivePlayer].setPosition(260, 250 + playersCount * 100);
-                        namePlayer.setPosition(260, 220 + playersCount * 100);
+                        playersMediumSprite[indexActivePlayer].setPosition(260, 250 + playersCount * 120);
+                        namePlayer.setPosition(270, 250 + playersCount * 120);
                     } else {
-                        playersMediumSprite[indexActivePlayer].setPosition(window.getSize().x- 260 - 175, 250 + (playersCount - 1) * 100);
-                        namePlayer.setPosition(window.getSize().x- 260 - 175, 220 + (playersCount - 1) * 100);
+                        playersMediumSprite[indexActivePlayer].setPosition(window.getSize().x - 260 - 175,
+                                                                           250 + (playersCount - 1) * 120);
+                        namePlayer.setPosition(window.getSize().x - 270 - 153, 250 + (playersCount - 1) * 120);
                     }
                     addedPlayersSprite.push_back(playersMediumSprite[indexActivePlayer]);
 
@@ -137,21 +149,18 @@ bool CharacterWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
 
                     addedPlayerNameText.push_back(namePlayer);
 
-                    std::cout << std::string(input.getInput()).size();
-                    std::cout << (std::string(input.getInput()));
-
                     isActiveSelectCharacterMode = false;
                     playersCount++;
                     disabledPlayersIndex.push_back(indexActivePlayer);
                     input.clear();
-//                    name.setText(sf::String("9"));
-//                    input = sdx::TextBox();
                 }
 
             } else {
                 for (int i = 0; i < 6; i++) {
-                    if (playersSprite[i].getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-                        if (std::find(disabledPlayersIndex.begin(), disabledPlayersIndex.end(), i) == std::end(disabledPlayersIndex)) {
+                    if (playersSprite[i].getGlobalBounds().contains(
+                            window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+                        if (std::find(disabledPlayersIndex.begin(), disabledPlayersIndex.end(), i) ==
+                            std::end(disabledPlayersIndex)) {
                             activePlayerSprite = sf::Sprite(playersLargeTexture);
                             activePlayerSprite.setTextureRect(sf::IntRect(350 * i, 0, 350, 400));
                             activePlayerSprite.setPosition((window.getSize().x / 2.f) - 175, 310);

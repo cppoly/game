@@ -16,15 +16,15 @@ SettingsWindow::SettingsWindow(sf::RenderWindow &window) {
         throw std::runtime_error("Can't load fonts");
     }
 
-    if (!settingsTexture.loadFromFile("assets/sprite/Settings.png")) {
+    if (!settingsTexture.loadFromFile("assets/sprite/BackgroundImage/Settings.png")) {
         throw std::runtime_error("Can't load settings texture");
     }
 
-    if (!checkboxTexture.loadFromFile("assets/sprite/Checkbox.png")) {
+    if (!checkboxTexture.loadFromFile("assets/sprite/Buttons/Checkbox.png")) {
         throw std::runtime_error("Can't load checkbox texture");
     }
 
-    if (!buttonApplyTexture.loadFromFile("assets/sprite/buttonApplySettings.png")) {
+    if (!buttonApplyTexture.loadFromFile("assets/sprite/Buttons/buttonApplySettings.png")) {
         throw std::runtime_error("Can't load button Apply Settings texture");
     }
 

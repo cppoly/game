@@ -3,6 +3,7 @@
 #include "interface/windows/SettingsWindow/settings_window.h"
 #include "interface/windows/MainWindow/main_window.h"
 #include "interface/windows/CharactersWindow/character_window.h"
+#include "interface/windows/GameWindow/game_window.h"
 
 int main() {
     sf::RenderWindow window(sf::VideoMode({1024, 1024}), "Monopoly", sf::Style::Fullscreen);
@@ -11,6 +12,7 @@ int main() {
     bool isActiveMainScreen = true;
     bool isActiveSettings = false;
     bool isActiveCharacter = false;
+    bool isActiveGame = false;
 
     // Main Screen
 
@@ -23,6 +25,10 @@ int main() {
     // Character
 
     auto characterWindow = CharacterWindow(window);
+
+    // Game
+
+    auto gameWindow = GameWindow(window);
 
     while (window.isOpen()) {
         sf::Event event{};
@@ -40,7 +46,8 @@ int main() {
                 isActiveSettings = false;
                 isActiveCharacter = true;
             } else if (characterWindow.handleEvent(event, window)) {
-                isActiveSettings = false;
+                isActiveCharacter = false;
+                isActiveGame = true;
             }
         }
 
@@ -50,6 +57,8 @@ int main() {
             settingsWindow.draw(window);
         } else if (isActiveCharacter) {
             characterWindow.draw(window);
+        } else if (isActiveGame) {
+            gameWindow.draw(window);
         }
         window.display();
     }

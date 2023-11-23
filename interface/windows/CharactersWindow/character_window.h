@@ -33,6 +33,7 @@ private:
 
     sf::Text titleChoseCharacterPage;
     sf::Font font1;
+    sf::Font font2;
 
     sf::Texture buttonAddPlayerTexture;
     sf::Sprite buttonAddPlayerSprite;

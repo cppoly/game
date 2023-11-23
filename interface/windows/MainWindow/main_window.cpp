@@ -1,13 +1,13 @@
 #include "main_window.h"
 
 MainWindow::MainWindow(sf::RenderWindow &window) {
-    if (!mainScreenTexture.loadFromFile("assets/sprite/Main.png")) {
+    if (!mainScreenTexture.loadFromFile("assets/sprite/BackgroundImage/Main.png")) {
         throw std::runtime_error("Can't load main screen texture");
     }
 
     mainScreenSprite = sf::Sprite(mainScreenTexture);
 
-    if (!buttonStartGameTexture.loadFromFile("assets/sprite/buttonStartGame.png")) {
+    if (!buttonStartGameTexture.loadFromFile("assets/sprite/Buttons/buttonStartGame.png")) {
         throw std::runtime_error("Can't load button start game texture");
     }
 
