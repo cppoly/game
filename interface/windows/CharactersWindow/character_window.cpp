@@ -60,18 +60,18 @@ CharacterWindow::CharacterWindow(sf::RenderWindow &window) {
 
     buttonAddPlayerSprite = sf::Sprite(buttonAddPlayerTexture);
     buttonAddPlayerSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
-    buttonAddPlayerSprite.setPosition((window.getSize().x / 2.f) - 400 - buttonAddPlayerSprite.getLocalBounds().getSize().x, window.getSize().y-30-buttonAddPlayerSprite.getLocalBounds().getSize().y);
+    buttonAddPlayerSprite.setPosition((window.getSize().x / 2.f) - 450 - buttonAddPlayerSprite.getLocalBounds().getSize().x, window.getSize().y-30-buttonAddPlayerSprite.getLocalBounds().getSize().y);
 
     buttonStartGameSprite = sf::Sprite(buttonStartGameTexture);
     buttonStartGameSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
-    buttonStartGameSprite.setPosition((window.getSize().x / 2.f) + 400 , window.getSize().y-30-buttonAddPlayerSprite.getLocalBounds().getSize().y);
+    buttonStartGameSprite.setPosition((window.getSize().x / 2.f) + 450 , window.getSize().y-30-buttonAddPlayerSprite.getLocalBounds().getSize().y);
 
     chosePlayerSprite.setTexture(chosePlayerTexture);
     chosePlayerSprite.setPosition((window.getSize().x / 2.f) - 250, window.getSize().y - chosePlayerSprite.getLocalBounds().getSize().y - 150);
 
     for (int i = 0; i < playersSprite.size(); i++) {
         playersSprite[i].setTexture(playersTexture[i]);
-        playersSprite[i].setPosition((window.getSize().x / 2.f) - chosePlayerSprite.getLocalBounds().width / 2.f + 40 + 71 * i, 750);
+        playersSprite[i].setPosition((window.getSize().x / 2.f) - chosePlayerSprite.getLocalBounds().width / 2.f + 50 + 71 * i, window.getSize().y - 290);
         playersMediumSprite[i].setTexture(playersMediumTexture[i]);
 
     }
@@ -84,9 +84,11 @@ CharacterWindow::CharacterWindow(sf::RenderWindow &window) {
 
     // Input
 
-    input.setPosition((window.getSize().x / 2.f) - 150, 330);
+    input.setPosition((window.getSize().x / 2.f) - 150, 360);
     input.setSize(300, 40);
     input.setBorder(2);
+
+//    game = game1;
 }
 
 void CharacterWindow::draw(sf::RenderWindow &window) {
@@ -120,13 +122,16 @@ bool CharacterWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
                     window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
                 buttonStartGameSprite.setTextureRect(sf::IntRect(360 * 1, 0, 360, 109));
                 if (playersCount >= 2) {
+                    for (int i = 0; i < addedPlayersSprite.size(); i++) {
+                        game.add_player(players[i], std::string(addedPlayerNameText[i].getString()));
+                    }
                     return true;
                 }
             } else if (buttonAddPlayerSprite.getGlobalBounds().contains(
                     window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
 
                 if (isActiveSelectCharacterMode) {
-                    buttonAddPlayerSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));\
+                    buttonAddPlayerSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
                     sf::Text namePlayer =
                             std::string(input.getInput()).size() != 0 ? sf::Text(input.getInput(), font2 , 25)
                                                                       : sf::Text(
@@ -141,6 +146,7 @@ bool CharacterWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
                         namePlayer.setPosition(window.getSize().x - 270 - 153, 250 + (playersCount - 1) * 120);
                     }
                     addedPlayersSprite.push_back(playersMediumSprite[indexActivePlayer]);
+                    players.push_back(playersSprite[indexActivePlayer]);
 
                     playersSprite[indexActivePlayer].setTexture(playersDisableTexture[indexActivePlayer]);
 
@@ -190,3 +196,10 @@ bool CharacterWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
 
 }
 
+void CharacterWindow::setGame(Game& game1) {
+    game = game1;
+}
+
+Game& CharacterWindow::getGame() {
+    return game;
+}

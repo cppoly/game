@@ -33,11 +33,11 @@ SettingsWindow::SettingsWindow(sf::RenderWindow &window) {
 
     checkboxSprite = sf::Sprite(checkboxTexture);
     checkboxSprite.setTextureRect(sf::Rect(0, 0, 52, 49));
-    checkboxSprite.setPosition(800, window.getSize().y / 100.f * 80.f);
+    checkboxSprite.setPosition(800,  window.getSize().y / 100.f * 85.f);
 
     buttonApplySprite = sf::Sprite(buttonApplyTexture);
     buttonApplySprite.setTextureRect(sf::Rect(0, 0, 360, 109));
-    buttonApplySprite.setPosition(800, window.getSize().y / 100.f * 90.f);
+    buttonApplySprite.setPosition(window.getSize().x - buttonApplySprite.getLocalBounds().getSize().x - 50, window.getSize().y / 100.f * 85.f);
 
     set_text(titleSettingsPage, font2, title, 64, sf::Color::White, sf::Text::Bold,
              (window.getSize().x / 2.f) - 32 * title.size() / 2.f,
@@ -45,34 +45,33 @@ SettingsWindow::SettingsWindow(sf::RenderWindow &window) {
              );
     set_text(settings1, font1, settings1Name, 32, sf::Color::Black, sf::Text::Bold,
              240,
-             window.getSize().y / 100.f * 20.f
+             window.getSize().y / 100.f * 25.f
              );
     set_text(settings2, font1, settings2Name, 32, sf::Color::Black, sf::Text::Bold,
              240,
-             window.getSize().y / 100.f * 30.f
+             window.getSize().y / 100.f * 35.f
              );
     set_text(settings3, font1, settings3Name, 32, sf::Color::Black, sf::Text::Bold,
              240,
-             window.getSize().y / 100.f * 40.f
+             window.getSize().y / 100.f * 45.f
              );
     set_text(settings4, font1, settings4Name, 32, sf::Color::Black, sf::Text::Bold,
              240,
-             window.getSize().y / 100.f * 50.f
+             window.getSize().y / 100.f * 55.f
              );
     set_text(settings5, font1, settings5Name, 32, sf::Color::Black, sf::Text::Bold,
              240,
-             window.getSize().y / 100.f * 60.f
+             window.getSize().y / 100.f * 65.f
              );
     set_text(settings6, font1, settings6Name, 32, sf::Color::Black, sf::Text::Bold,
              240,
-             window.getSize().y / 100.f * 70.f
+             window.getSize().y / 100.f * 75.f
              );
     set_text(settings7, font1, settings7Name, 32, sf::Color::Black, sf::Text::Bold,
              240,
-             window.getSize().y / 100.f * 80.f
+             window.getSize().y / 100.f * 85.f
              );
 
-    //400, 40, 900, 310 + 0 * 100, 2
     textBox1.setSize(400, 40);
     textBox2.setSize(400, 40);
     textBox3.setSize(400, 40);
@@ -80,12 +79,12 @@ SettingsWindow::SettingsWindow(sf::RenderWindow &window) {
     textBox5.setSize(400, 40);
     textBox6.setSize(400, 40);
 
-    textBox1.setPosition(1000, window.getSize().y / 100.f * 20.f);
-    textBox2.setPosition(1000, window.getSize().y / 100.f * 30.f);
-    textBox3.setPosition(1000, window.getSize().y / 100.f * 40.f);
-    textBox4.setPosition(1000, window.getSize().y / 100.f * 50.f);
-    textBox5.setPosition(1000, window.getSize().y / 100.f * 60.f);
-    textBox6.setPosition(1000, window.getSize().y / 100.f * 70.f);
+    textBox1.setPosition(800, window.getSize().y / 100.f * 25.f);
+    textBox2.setPosition(800, window.getSize().y / 100.f * 35.f);
+    textBox3.setPosition(800, window.getSize().y / 100.f * 45.f);
+    textBox4.setPosition(800, window.getSize().y / 100.f * 55.f);
+    textBox5.setPosition(800, window.getSize().y / 100.f * 65.f);
+    textBox6.setPosition(800, window.getSize().y / 100.f * 75.f);
 }
 
 void SettingsWindow::draw(sf::RenderWindow &window) {

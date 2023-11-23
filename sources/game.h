@@ -60,6 +60,7 @@ public:
     Game &operator=(const Game &other);
 
 
+
 private:
     void feel_game_fields();
 

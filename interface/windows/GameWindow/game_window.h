@@ -3,6 +3,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <iostream>
+#include "../../../sources/game.h"
+#include <vector>
 
 class GameWindow {
 public:
@@ -12,8 +14,15 @@ public:
 
     bool handleEvent(sf::Event &event, sf::RenderWindow &window);
 
+    void setGame(Game& game1);
+
+
 private:
     sf::Texture backgroundImageTexture;
     sf::Sprite backgroundImageSprite;
+
+    std::vector<sf::Sprite> players;
+
+    Game game;
 };
 
