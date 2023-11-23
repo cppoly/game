@@ -1,7 +1,7 @@
 #include "main_window.h"
 
 MainWindow::MainWindow(sf::RenderWindow &window) {
-    if (!mainScreenTexture.loadFromFile("assets/sprite/BackgroundImage/Main.png")) {
+    if (!mainScreenTexture.loadFromFile("assets/sprite/BackgroundImage/Main.png", sf::IntRect(0, 0, window.getSize().x, window.getSize().y))) {
         throw std::runtime_error("Can't load main screen texture");
     }
 
