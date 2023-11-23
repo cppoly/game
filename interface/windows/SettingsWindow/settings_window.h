@@ -65,12 +65,12 @@ private:
     sdx::TextBox::Text text5 = sdx::TextBox::Text("", 100, 100);
     sdx::TextBox::Text text6 = sdx::TextBox::Text("", 100, 100);
 
-    sdx::TextBox textBox1 = sdx::TextBox(400, 40, 900, 310 + 0 * 100, 2);
-    sdx::TextBox textBox2 = sdx::TextBox(400, 40, 900, 310 + 1 * 100, 2);
-    sdx::TextBox textBox3 = sdx::TextBox(400, 40, 900, 310 + 2 * 100, 2);
-    sdx::TextBox textBox4 = sdx::TextBox(400, 40, 900, 310 + 3 * 100, 2);
-    sdx::TextBox textBox5 = sdx::TextBox(400, 40, 900, 310 + 4 * 100, 2);
-    sdx::TextBox textBox6 = sdx::TextBox(400, 40, 900, 310 + 5 * 100, 2);
+    sdx::TextBox textBox1;
+    sdx::TextBox textBox2;
+    sdx::TextBox textBox3;
+    sdx::TextBox textBox4;
+    sdx::TextBox textBox5;
+    sdx::TextBox textBox6;
 
     bool isActiveCheckbox = false;
 
