@@ -81,6 +81,7 @@ public:
 
     void give_up();
 
+
 private:
     void feel_game_fields();
 

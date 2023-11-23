@@ -4,6 +4,7 @@
 #include "interface/windows/MainWindow/main_window.h"
 #include "interface/windows/CharactersWindow/character_window.h"
 #include "interface/windows/GameWindow/game_window.h"
+#include "sources/game.h"
 
 int main() {
     sf::RenderWindow window(
@@ -28,6 +29,7 @@ int main() {
 
     auto settingsWindow = SettingsWindow(window);
 
+
     // Character
 
     auto characterWindow = CharacterWindow(window);
@@ -51,9 +53,13 @@ int main() {
             } else if (settingsWindow.handleEvent(event, window)) {
                 isActiveSettings = false;
                 isActiveCharacter = true;
+                Game game1 = settingsWindow.getGame();
+                characterWindow.setGame(game1);
             } else if (characterWindow.handleEvent(event, window)) {
                 isActiveCharacter = false;
                 isActiveGame = true;
+                Game game2 = characterWindow.getGame();
+                gameWindow.setGame(game2);
             }
         }
 

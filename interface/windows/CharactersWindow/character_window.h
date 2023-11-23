@@ -6,6 +6,7 @@
 #include "../../../sources/game.h"
 #include <vector>
 #include "../../input/input.hpp"
+#include "../../../sources/game.h"
 
 #define MAX_PLAYERS_COUNT 6
 
@@ -17,11 +18,17 @@ public:
 
     bool handleEvent(sf::Event &event, sf::RenderWindow &window);
 
+    void setGame(Game& game1);
+
+    Game& getGame();
+
 private:
+    Game game;
+
     int playersCount = 0;
     bool isActiveSelectCharacterMode = false;
-    bool isAddedPlayer = false;
     int indexActivePlayer = 0;
+    std::vector<sf::Sprite> players;
     std::vector<int> disabledPlayersIndex;
     std::vector<sf::Text> addedPlayerNameText;
 
@@ -44,6 +51,7 @@ private:
     sf::Texture chosePlayerTexture;
     sf::Sprite chosePlayerSprite;
 
+    // Players
     sf::Texture player1Texture;
     sf::Texture player2Texture;
     sf::Texture player3Texture;
