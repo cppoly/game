@@ -29,7 +29,8 @@ CharacterWindow::CharacterWindow(sf::RenderWindow &window) {
         !buttonAddPlayerTexture.loadFromFile("assets/sprite/buttonAddPlayer.png") ||
         !buttonStartGameTexture.loadFromFile("assets/sprite/buttonStartGame.png") ||
         !chosePlayerTexture.loadFromFile("assets/sprite/ChosePlayerCard.png") ||
-        !font1.loadFromFile("assets/fonts/Bionicle.ttf")) {
+        !font1.loadFromFile("assets/fonts/Bionicle.ttf") ||
+        !player1LargeTexture.loadFromFile("assets/sprite/LargePlayer/Player1.png")) {
         throw std::runtime_error("Can't load texture in Character Window");
     }
 
@@ -54,6 +55,9 @@ CharacterWindow::CharacterWindow(sf::RenderWindow &window) {
         playersSprite[i].setTexture(playersTexture[i]);
         playersSprite[i].setPosition(760 + 71 * i, 750);
     }
+
+    player1LargeSprite = sf::Sprite(player1LargeTexture);
+    player1LargeSprite.setPosition(500, 500);
 
     activePlayerSprite.setPosition(100, 100);
 }
@@ -83,7 +87,7 @@ bool CharacterWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
             } else {
                 for (int i = 0; i < 6; i++) {
                     if (playersSprite[i].getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-                        activePlayerSprite.setTexture(playersTexture[i]);
+                        activePlayerSprite.setTexture(player1LargeTexture);
 
                     }
                 }

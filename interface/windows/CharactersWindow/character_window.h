@@ -42,6 +42,8 @@ private:
     sf::Texture player5Texture;
     sf::Texture player6Texture;
 
+    sf::Texture player1LargeTexture;
+
     sf::Sprite player1Sprite;
     sf::Sprite player2Sprite;
     sf::Sprite player3Sprite;
@@ -49,6 +51,7 @@ private:
     sf::Sprite player5Sprite;
     sf::Sprite player6Sprite;
 
+    sf::Sprite player1LargeSprite;
 //    sf::Texture activePlayerTexture;
     sf::Sprite activePlayerSprite;
 
