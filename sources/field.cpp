@@ -5,12 +5,14 @@ ProfitableField::ProfitableField(
         std::string name,
         int price,
         std::vector<int> rent,
-        int mortgage_price
+        int mortgage_price,
+        int type
 ) :
         name(std::move(name)),
         price(price),
         rent(std::move(rent)),
-        mortgage_price(mortgage_price) {}
+        mortgage_price(mortgage_price),
+        type(type) {}
 
 std::string ProfitableField::get_name() const {
     return name;
@@ -59,10 +61,10 @@ void ProfitableField::mortgage(Player &player) {
 
 Start::Start(int money_for_visit_start) : money_for_visit_start(money_for_visit_start) {}
 
-Street::Street(std::string name, int price, std::vector<int> rent, int house_price, int hotel_price, int mortgage_price)
+Street::Street(std::string name, int price, std::vector<int> rent, int house_price, int hotel_price, int mortgage_price, int type)
         :
-        ProfitableField(name, price, rent, mortgage_price), name(std::move(name)), price(price),
-        rent(std::move(rent)), house_price(house_price), hotel_price(hotel_price), mortgage_price(mortgage_price) {}
+        ProfitableField(name, price, rent, mortgage_price, type), name(std::move(name)), price(price),
+        rent(std::move(rent)), house_price(house_price), hotel_price(hotel_price), mortgage_price(mortgage_price), type(type) {}
 
 
 int Street::get_rent() const {
@@ -123,13 +125,13 @@ int Utility::get_rent(int amount_of_utilities) const {
     return rent[amount_of_utilities];
 }
 
-Station::Station(std::string name, int price, std::vector<int> rent, int mortgage_price) :
-        ProfitableField(name, price, rent, mortgage_price), name(std::move(name)), price(price),
-        rent(std::move(rent)), mortgage_price(mortgage_price) {}
+Station::Station(std::string name, int price, std::vector<int> rent, int mortgage_price, int type) :
+        ProfitableField(name, price, rent, mortgage_price, type), name(std::move(name)), price(price),
+        rent(std::move(rent)), mortgage_price(mortgage_price), type(type) {}
 
-Utility::Utility(std::string name, int price, std::vector<int> rent, int mortgage_price) :
-        ProfitableField(name, price, rent, mortgage_price), name(std::move(name)), price(price),
-        rent(std::move(rent)), mortgage_price(mortgage_price) {}
+Utility::Utility(std::string name, int price, std::vector<int> rent, int mortgage_price, int type) :
+        ProfitableField(name, price, rent, mortgage_price, type), name(std::move(name)), price(price),
+        rent(std::move(rent)), mortgage_price(mortgage_price), type(type) {}
 
 Tax::Tax(int tax) : price(tax) {}
 

@@ -35,7 +35,8 @@ public:
             std::string name,
             int price,
             std::vector<int> rent,
-            int mortgage_price
+            int mortgage_price,
+            int type
     );
 
     ~ProfitableField() = default;
@@ -61,11 +62,12 @@ private:
 
     int mortgage_price;
     bool is_mortgaged = false;
+    int type;
 };
 
 class Street : public ProfitableField {
 public:
-    Street(std::string name, int price, std::vector<int> rent, int house_price, int hotel_price, int mortgage_price);
+    Street(std::string name, int price, std::vector<int> rent, int house_price, int hotel_price, int mortgage_price, int type);
 
     ~Street() override = default;
 
@@ -96,12 +98,13 @@ private:
 
     int mortgage_price;
     bool is_mortgaged = false;
+    int type;
 };
 
 
 class Station : public ProfitableField {
 public:
-    Station(std::string name, int price, std::vector<int> rent, int mortgage_price);
+    Station(std::string name, int price, std::vector<int> rent, int mortgage_price, int type);
     int get_rent(int amount_of_stations) const;
 
 private:
@@ -111,12 +114,13 @@ private:
 
     int mortgage_price;
     bool is_mortgaged = false;
+    int type;
 };
 
 
 class Utility : public ProfitableField {
 public:
-    Utility(std::string name, int price, std::vector<int> rent, int mortgage_price);
+    Utility(std::string name, int price, std::vector<int> rent, int mortgage_price, int type);
     int get_rent(int amount_of_utilities) const;
 
 private:
@@ -126,6 +130,7 @@ private:
 
     int mortgage_price;
     bool is_mortgaged = false;
+    int type;
 };
 
 class Jail : public Field {
