@@ -46,6 +46,7 @@ namespace sdx {
                 sf::Event &); //handles text input and press enter evernt. place it inside pollEvent loop inside the main event loop.
         sf::String getCurrentText();  //get what is written in the text box right now
         sf::String getInput();  //updates last text after pressing enter.
+        void clear();
     public:
         void setSize(float, float);  //update box size first parameter for x, second for y.
         void setPosition(float, float); //update (x,y) position of top-left corner

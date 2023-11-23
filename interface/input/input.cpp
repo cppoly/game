@@ -107,6 +107,13 @@ namespace sdx {
 
     sf::String TextBox::getInput() { return txtInp; }
 
+    void TextBox::clear() {
+        time = sf::Time::Zero;
+        getPinp = "";
+        txtInp = "";
+        focusChar = 0;
+    }
+
     void TextBox::handleEvent(sf::Event &event) {
         if (event.type == sf::Event::TextEntered && focus) {
             if ((inpText.get().findCharacterPos(focusChar).x + 1.2 * textSize) < (width + posX) &&
@@ -133,6 +140,7 @@ namespace sdx {
             }
             if (event.key.code == sf::Keyboard::Enter) {
                 if (getPinp.getSize() > 0) txtInp = getPinp;
+
             } else if (event.key.code == sf::Keyboard::Left) {
                 if (focusChar > 0) { focusChar--; }
             } else if (event.key.code == sf::Keyboard::Right) {
@@ -142,8 +150,9 @@ namespace sdx {
         if (event.type == sf::Event::MouseButtonPressed) {
             if (event.mouseButton.button == sf::Mouse::Left) {
                 if (getPinp.getSize() > 0) {
-                    if (charWidth == 0) charWidth = inpText.get().findCharacterPos(1).x -
-                                                    inpText.get().findCharacterPos(0).x;
+                    if (charWidth == 0)
+                        charWidth = inpText.get().findCharacterPos(1).x -
+                                    inpText.get().findCharacterPos(0).x;
                     unsigned int temp = (unsigned int) ((event.mouseButton.x - posX) / charWidth);
                     if (temp > getPinp.getSize()) focusChar = getPinp.getSize();
                     else focusChar = temp;
