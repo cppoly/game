@@ -49,7 +49,7 @@ public:
 
     void add_player(sf::Sprite sprite, std::string name);
 
-    std::vector<Player> get_players() const;
+    const std::vector<Player> get_players() const;
 
     void start_game();
 
@@ -59,6 +59,27 @@ public:
 
     Game &operator=(const Game &other);
 
+    int get_cur_player_id() const;
+
+    bool pay_player(int player_id, int amount);
+
+    bool pay_bank(int amount);
+
+    bool go_to_jail();
+
+    Card draw_card();
+
+    bool buy_field();
+
+    bool set_field_on_auction();
+
+    bool mortgage_field(int field_id);
+
+    bool build_house(int field_id);
+
+    bool sell_house(int field_id);
+
+    void give_up();
 
 private:
     void feel_game_fields();
@@ -73,5 +94,7 @@ private:
     std::vector<Player> players;
 
     bool is_game_started = false;
+
+    bool is_player_roll_dice = false;
     bool is_player_do_move = false;
 };

@@ -22,7 +22,7 @@ void Game::add_player(sf::Sprite sprite, std::string name) {
     players.push_back(player);
 }
 
-std::vector<Player> Game::get_players() const {
+const std::vector<Player> Game::get_players() const {
     return players;
 }
 
@@ -73,8 +73,8 @@ void Game::start_game() {
     is_game_started = true;
 
     srand(time(nullptr));
-    auto rd = std::random_device {};
-    auto rng = std::default_random_engine { rd() };
+    auto rd = std::random_device{};
+    auto rng = std::default_random_engine{rd()};
     std::shuffle(std::begin(players), std::end(players), rng);
     cur_player_id = 0;
 }
@@ -82,6 +82,9 @@ void Game::start_game() {
 GameMove Game::player_move() {
     if (!is_game_started) {
         throw std::runtime_error("Game is not started");
+    }
+    if (is_player_roll_dice) {
+        throw std::runtime_error("Player already roll dice");
     }
 
     int dice1 = number_on_dice();
@@ -95,8 +98,9 @@ GameMove Game::player_move() {
     cur_player.increment_position(dice1 + dice2);
     return_obj.new_position = cur_player.get_position();
 
+
     if (dice1 != dice2) {
-        is_player_do_move = true;
+        is_player_roll_dice = true;
     }
 
     return return_obj;
@@ -119,7 +123,7 @@ int Game::next_turn() {
     return cur_player_id;
 }
 
-Game& Game::operator=(const Game &other) {
+Game &Game::operator=(const Game &other) {
     if (this == &other) {
         return *this;
     }
@@ -132,3 +136,57 @@ Game& Game::operator=(const Game &other) {
 
     return *this;
 }
+
+int Game::get_cur_player_id() const {
+    return cur_player_id;
+}
+
+void Game::give_up() {
+    if (!is_game_started) {
+        throw std::runtime_error("Game is not started");
+    }
+    players.erase(players.begin() + cur_player_id);
+    cur_player_id %= (int) players.size();
+}
+
+
+bool Game::pay_player(int player_id, int amount) {
+    if (!is_game_started) {
+        throw std::runtime_error("Game is not started");
+    }
+    if (player_id < 0 || player_id >= (int) players.size()) {
+        throw std::runtime_error("Invalid player id");
+    }
+    if (amount < 0) {
+        throw std::runtime_error("Invalid amount");
+    }
+    if (players[cur_player_id].get_money() < amount) {
+        return false;
+    }
+    players[cur_player_id].set_money(players[cur_player_id].get_money() - amount);
+    players[player_id].set_money(players[player_id].get_money() + amount);
+    return true;
+}
+
+bool Game::pay_bank(int amount) {
+    if (!is_game_started) {
+        throw std::runtime_error("Game is not started");
+    }
+    if (amount < 0) {
+        throw std::runtime_error("Invalid amount");
+    }
+    if (players[cur_player_id].get_money() < amount) {
+        return false;
+    }
+    players[cur_player_id].set_money(players[cur_player_id].get_money() - amount);
+    return true;
+}
+
+bool Game::go_to_jail() {
+    if (!is_game_started) {
+        throw std::runtime_error("Game is not started");
+    }
+    players[cur_player_id].set_position(10);
+    return true;
+}
+
