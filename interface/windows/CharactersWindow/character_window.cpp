@@ -56,27 +56,24 @@ CharacterWindow::CharacterWindow(sf::RenderWindow &window) {
              (window.getSize().x / 2.f) - 350,
              100);
     backgroundSprite.setTexture(backgroundTexture);
+    backgroundSprite.setScale(window.getSize().x / backgroundSprite.getLocalBounds().getSize().x, window.getSize().y / backgroundSprite.getLocalBounds().getSize().y);
 
     buttonAddPlayerSprite = sf::Sprite(buttonAddPlayerTexture);
     buttonAddPlayerSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
-    buttonAddPlayerSprite.setPosition(300, 950);
+    buttonAddPlayerSprite.setPosition((window.getSize().x / 2.f) - 400 - buttonAddPlayerSprite.getLocalBounds().getSize().x, window.getSize().y-30-buttonAddPlayerSprite.getLocalBounds().getSize().y);
 
     buttonStartGameSprite = sf::Sprite(buttonStartGameTexture);
     buttonStartGameSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
-    buttonStartGameSprite.setPosition(window.getSize().x - 660, 950);
+    buttonStartGameSprite.setPosition((window.getSize().x / 2.f) + 400 , window.getSize().y-30-buttonAddPlayerSprite.getLocalBounds().getSize().y);
 
     chosePlayerSprite.setTexture(chosePlayerTexture);
-    chosePlayerSprite.setPosition((window.getSize().x / 2.f) - 250, 200);
+    chosePlayerSprite.setPosition((window.getSize().x / 2.f) - 250, window.getSize().y - chosePlayerSprite.getLocalBounds().getSize().y - 150);
 
     for (int i = 0; i < playersSprite.size(); i++) {
         playersSprite[i].setTexture(playersTexture[i]);
-        playersSprite[i].setPosition(760 + 71 * i, 750);
+        playersSprite[i].setPosition((window.getSize().x / 2.f) - chosePlayerSprite.getLocalBounds().width / 2.f + 40 + 71 * i, 750);
         playersMediumSprite[i].setTexture(playersMediumTexture[i]);
-//        if (i % 2 == 0) {
-//            playersMediumSprite[i].setPosition(260, 250 + i * 100);
-//        } else {
-//            playersMediumSprite[i].setPosition(window.getSize().x- 260 - 175, 250 + (i - 1) * 100);
-//        }
+
     }
 
     player6MediumSprite = sf::Sprite(player6MediumTexture);

@@ -72,7 +72,20 @@ SettingsWindow::SettingsWindow(sf::RenderWindow &window) {
              window.getSize().y / 100.f * 80.f
              );
 
+    //400, 40, 900, 310 + 0 * 100, 2
+    textBox1.setSize(400, 40);
+    textBox2.setSize(400, 40);
+    textBox3.setSize(400, 40);
+    textBox4.setSize(400, 40);
+    textBox5.setSize(400, 40);
+    textBox6.setSize(400, 40);
 
+    textBox1.setPosition(1000, window.getSize().y / 100.f * 20.f);
+    textBox2.setPosition(1000, window.getSize().y / 100.f * 30.f);
+    textBox3.setPosition(1000, window.getSize().y / 100.f * 40.f);
+    textBox4.setPosition(1000, window.getSize().y / 100.f * 50.f);
+    textBox5.setPosition(1000, window.getSize().y / 100.f * 60.f);
+    textBox6.setPosition(1000, window.getSize().y / 100.f * 70.f);
 }
 
 void SettingsWindow::draw(sf::RenderWindow &window) {
