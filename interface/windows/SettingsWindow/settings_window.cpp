@@ -29,6 +29,8 @@ SettingsWindow::SettingsWindow(sf::RenderWindow &window) {
     }
 
     settingsSprite = sf::Sprite(settingsTexture);
+    settingsSprite.setScale(window.getSize().x / settingsSprite.getLocalBounds().width, window.getSize().y / settingsSprite.getLocalBounds().height);
+
 
     checkboxSprite = sf::Sprite(checkboxTexture);
     checkboxSprite.setTextureRect(sf::Rect(0, 0, 52, 49));
@@ -71,12 +73,7 @@ SettingsWindow::SettingsWindow(sf::RenderWindow &window) {
              window.getSize().y / 100.f * 80.f
              );
 
-    textBox1 = sdx::TextBox(400, 40, 900, 310 + 0 * 100, 2);
-    textBox2 = sdx::TextBox(400, 40, 900, 310 + 1 * 100, 2);
-    textBox3 = sdx::TextBox(400, 40, 900, 310 + 2 * 100, 2);
-    textBox4 = sdx::TextBox(400, 40, 900, 310 + 3 * 100, 2);
-    textBox5 = sdx::TextBox(400, 40, 900, 310 + 4 * 100, 2);
-    textBox6 = sdx::TextBox(400, 40, 900, 310 + 5 * 100, 2);
+
 }
 
 void SettingsWindow::draw(sf::RenderWindow &window) {
