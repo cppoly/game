@@ -131,7 +131,7 @@ bool CharacterWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
                     window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
 
                 if (isActiveSelectCharacterMode) {
-                    buttonAddPlayerSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
+                    buttonAddPlayerSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));\
                     sf::Text namePlayer =
                             std::string(input.getInput()).size() != 0 ? sf::Text(input.getInput(), font2 , 25)
                                                                       : sf::Text(

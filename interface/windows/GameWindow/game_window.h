@@ -21,7 +21,6 @@ private:
     sf::Texture backgroundImageTexture;
     sf::Sprite backgroundImageSprite;
 
-    std::vector<sf::Sprite> players;
 
     Game game;
 };
