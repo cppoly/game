@@ -191,3 +191,77 @@ bool Game::go_to_jail() {
     return true;
 }
 
+bool Game::buy_field() {
+    // todo: DO
+    if (!is_game_started) {
+        throw std::runtime_error("Game is not started");
+    }
+    if (is_player_do_move) {
+        throw std::runtime_error("Player already do move");
+    }
+    if (is_player_roll_dice) {
+        throw std::runtime_error("Player already roll dice");
+    }
+    return true;
+}
+
+bool Game::set_field_on_auction() {
+//    todo: DO
+    if (!is_game_started) {
+        throw std::runtime_error("Game is not started");
+    }
+    if (is_player_do_move) {
+        throw std::runtime_error("Player already do move");
+    }
+    if (is_player_roll_dice) {
+        throw std::runtime_error("Player already roll dice");
+    }
+    return true;
+}
+
+bool Game::mortgage_field(int field_id) {
+    // todo: do
+    if (!is_game_started) {
+        throw std::runtime_error("Game is not started");
+    }
+    if (is_player_do_move) {
+        throw std::runtime_error("Player already do move");
+    }
+    if (is_player_roll_dice) {
+        throw std::runtime_error("Player already roll dice");
+    }
+    return true;
+}
+
+bool Game::build_house(int field_id) {
+//    todo: do
+    if (!is_game_started) {
+        throw std::runtime_error("Game is not started");
+    }
+    if (is_player_do_move) {
+        throw std::runtime_error("Player already do move");
+    }
+    if (is_player_roll_dice) {
+        throw std::runtime_error("Player already roll dice");
+    }
+    return true;
+}
+
+bool Game::sell_house(int field_id) {
+    // todo: do
+    if (!is_game_started) {
+        throw std::runtime_error("Game is not started");
+    }
+    if (is_player_do_move) {
+        throw std::runtime_error("Player already do move");
+    }
+    if (is_player_roll_dice) {
+        throw std::runtime_error("Player already roll dice");
+    }
+    return true;
+}
+
+Card Game::draw_card() {
+    // todo: do
+    return Card("Ага", 0, 0, 0, 0);
+}
