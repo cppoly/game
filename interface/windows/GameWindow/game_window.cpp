@@ -10,7 +10,7 @@ GameWindow::GameWindow(sf::RenderWindow &window ) {
 
 
     for (int i = 0; i < game.get_players().size(); i++) {
-        sf::Sprite p = game.get_players().se
+        sf::Sprite p = game.get_players()[i].get_sprite();
         game.get_players()[i].get_sprite().setPosition(0, 0);
     }
 }
