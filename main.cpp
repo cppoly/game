@@ -6,7 +6,7 @@
 #include "interface/windows/GameWindow/game_window.h"
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(), "Monopoly", sf::Style::Fullscreen);
+    sf::RenderWindow window(sf::VideoMode(1918, 1080), "Monopoly", sf::Style::Fullscreen);
 
 
     bool isActiveMainScreen = true;
