@@ -48,6 +48,9 @@ void Player::set_amount_of_jail_cards(int amount_of_jail_cards) {
 }
 
 void Player::add_field(ProfitableField &field) {
+    if (std::find(fields.begin(), fields.end(), &field) != fields.end()) {
+        return;
+    }
     fields.push_back(&field);
 }
 
@@ -82,9 +85,6 @@ void Player::increment_position(int number_on_dice) {
     }
     if (position == 0) {
         money += settings.get_bonus_for_visit_start();
-    }
-    if (position == 30) {
-        position = 10;
     }
 }
 

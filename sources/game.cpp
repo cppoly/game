@@ -90,6 +90,10 @@ GameMove Game::player_move() {
 
     int dice1 = number_on_dice();
     int dice2 = number_on_dice();
+    if (dice1 != dice2) {
+        is_player_roll_dice = true;
+    }
+
     GameMove return_obj;
     return_obj.player_id = cur_player_id;
     return_obj.old_position = players[cur_player_id].get_position();
@@ -98,11 +102,39 @@ GameMove Game::player_move() {
     players[cur_player_id].increment_position(dice1 + dice2);
     return_obj.new_position = players[cur_player_id].get_position();
 
+    auto field = game_fields[players[cur_player_id].get_position()];
+    auto field_type = field.get_type();
+    if (field_type == FieldTypes::START or field_type == FieldTypes::PARKING or field_type == FieldTypes::JAIL) {
+        return_obj.funcs = GameFieldTypes::DO_NOTHING;
+    } else if (field_type == FieldTypes::TAX) {
+        return_obj.funcs = GameFieldTypes::PAY_BANK;
+        return_obj.amount_to_pay = ((Tax &) field).get_price();
+    } else if (field_type == FieldTypes::CHANCE or field_type == FieldTypes::COMMUNITY_CHEST) {
+        return_obj.funcs = GameFieldTypes::DRAW_CARD;
+    } else if (field_type == FieldTypes::GO_TO_JAIL) {
+        return_obj.funcs = GameFieldTypes::GO_TO_JAIL;
+    } else {
+        auto profitable_field = (ProfitableField &) field;
+        if (profitable_field.get_owner() == nullptr) {
+            return_obj.funcs = GameFieldTypes::YOU_CAN_BUY;
+            return_obj.field_to_buy = profitable_field;
+        } else {
+            // user_id find in players
+            int user_id = -1;
+            for (int i = 0; i < (int) players.size(); ++i) {
+                if (players[i].get_name() == profitable_field.get_owner()->get_name()) {
+                    user_id = i;
+                    break;
+                }
+            }
+            if (user_id == -1) {
+                throw std::runtime_error("Invalid user id");
+            }
 
-    if (dice1 != dice2) {
-        is_player_roll_dice = true;
-        // todo: remove it
-        is_player_do_move = true;
+            return_obj.funcs = GameFieldTypes::PAY_PLAYER;
+            return_obj.player_to_pay = user_id;
+            return_obj.amount_to_pay = profitable_field.get_rent();
+        }
     }
 
     return return_obj;

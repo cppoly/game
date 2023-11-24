@@ -35,29 +35,38 @@ std::vector<int> ProfitableField::get_rent_vector() const {
 }
 
 void ProfitableField::buy(Player &player) {
-    if (is_mortgaged) {
-        if (player.get_money() < get_redemption_price()) {
-            return;
-        }
-        player.set_money(player.get_money() - get_redemption_price());
-    } else {
-        if (player.get_money() < price) {
-            return;
-        }
-        player.set_money(player.get_money() - price);
-        player.add_field(*this);
-    }
+    player.add_field(*this);
+    owner = &player;
 }
 
 
-void ProfitableField::mortgage(Player &player) {
+void ProfitableField::mortgage() {
+    if (owner == nullptr) {
+        return;
+    }
     if (is_mortgaged) {
         return;
     }
-    player.set_money(player.get_money() + mortgage_price);
     is_mortgaged = true;
 }
 
+void ProfitableField::unmortgage() {
+    if (owner == nullptr) {
+        return;
+    }
+    if (!is_mortgaged) {
+        return;
+    }
+    is_mortgaged = false;
+}
+
+Player *ProfitableField::get_owner() const {
+    return owner;
+}
+
+int ProfitableField::get_rent() const {
+    return rent[0];
+}
 
 Start::Start(int money_for_visit_start) : money_for_visit_start(money_for_visit_start) {}
 
@@ -68,6 +77,7 @@ Street::Street(std::string name, int price, std::vector<int> rent, int house_pri
 
 
 int Street::get_rent() const {
+    // todo
     return rent[amount_of_houses];
 }
 
@@ -118,10 +128,12 @@ void Street::build_hotel(Player &player) const {
 }
 
 int Station::get_rent(int amount_of_stations) const {
+    // todo
     return rent[amount_of_stations];
 }
 
 int Utility::get_rent(int amount_of_utilities) const {
+    // todo
     return rent[amount_of_utilities];
 }
 
@@ -145,6 +157,49 @@ int Jail::get_price() const {
     return price;
 }
 
+FieldTypes Start::get_type() const {
+    return FieldTypes::START;
+}
+
+FieldTypes Street::get_type() const {
+    return FieldTypes::STREET;
+}
+
+FieldTypes Station::get_type() const {
+    return FieldTypes::STATION;
+}
+
+FieldTypes Utility::get_type() const {
+    return FieldTypes::UTILITY;
+}
+
+FieldTypes Tax::get_type() const {
+    return FieldTypes::TAX;
+}
+
+FieldTypes Jail::get_type() const {
+    return FieldTypes::JAIL;
+}
+
+FieldTypes CommunityChest::get_type() const {
+    return FieldTypes::COMMUNITY_CHEST;
+}
+
+FieldTypes Chance::get_type() const {
+    return FieldTypes::CHANCE;
+}
+
+FieldTypes Parking::get_type() const {
+    return FieldTypes::PARKING;
+}
+
+FieldTypes GoToJail::get_type() const {
+    return FieldTypes::GO_TO_JAIL;
+}
+
+FieldTypes Field::get_type() const {
+    return FieldTypes::START;
+}
 
 // todo: do it
 CommunityChest::CommunityChest() = default;

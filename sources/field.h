@@ -5,12 +5,28 @@
 #include "cards.h"
 #include "player.h"
 
+enum FieldTypes {
+    START,
+    STREET,
+    STATION,
+    UTILITY,
+    JAIL,
+    PARKING,
+    GO_TO_JAIL,
+    CHANCE,
+    COMMUNITY_CHEST,
+    TAX
+};
+
 class Player;
 
 class Field {
 public:
     virtual ~Field() = default;
+
+    virtual FieldTypes get_type() const;
 };
+
 
 
 const int mortgage_percent = 10;
@@ -23,14 +39,18 @@ public:
 
     ~Start() override = default;
 
+    FieldTypes get_type() const override;
+
 private:
     std::string name = "Старт";
     int money_for_visit_start;
+
 };
 
 class ProfitableField : public Field {
 public:
     ProfitableField() = default;
+
     ProfitableField(
             std::string name,
             int price,
@@ -53,7 +73,13 @@ public:
 
     void buy(Player &player);
 
-    void mortgage(Player &player);
+    void mortgage();
+
+    int get_rent() const;
+
+    void unmortgage();
+
+    Player *get_owner() const;
 
 private:
     std::string name;
@@ -63,11 +89,14 @@ private:
     int mortgage_price;
     bool is_mortgaged = false;
     int type;
+
+    Player *owner = nullptr;
 };
 
 class Street : public ProfitableField {
 public:
-    Street(std::string name, int price, std::vector<int> rent, int house_price, int hotel_price, int mortgage_price, int type);
+    Street(std::string name, int price, std::vector<int> rent, int house_price, int hotel_price, int mortgage_price,
+           int type);
 
     ~Street() override = default;
 
@@ -82,6 +111,8 @@ public:
     void build(Player &player);
 
     void sell_house(Player &player);
+
+    FieldTypes get_type() const override;
 
 private:
     void build_house(Player &player) const;
@@ -105,7 +136,10 @@ private:
 class Station : public ProfitableField {
 public:
     Station(std::string name, int price, std::vector<int> rent, int mortgage_price, int type);
+
     int get_rent(int amount_of_stations) const;
+
+    FieldTypes get_type() const override;
 
 private:
     std::string name;
@@ -121,7 +155,10 @@ private:
 class Utility : public ProfitableField {
 public:
     Utility(std::string name, int price, std::vector<int> rent, int mortgage_price, int type);
+
     int get_rent(int amount_of_utilities) const;
+
+    FieldTypes get_type() const override;
 
 private:
     std::string name;
@@ -143,6 +180,8 @@ public:
 
     void visit(Player &player);
 
+    FieldTypes get_type() const override;
+
 private:
     std::string name = "Тюрьма";
     int price;
@@ -154,6 +193,8 @@ public:
     Parking();
 
     ~Parking() override = default;
+
+    FieldTypes get_type() const override;
 
 private:
     std::string name = "Бесплатная парковка";
@@ -167,6 +208,8 @@ public:
 
     ~GoToJail() override = default;
 
+    FieldTypes get_type() const override;
+
 private:
     std::string name = "Иди в тюрьму";
 };
@@ -179,6 +222,8 @@ public:
     ~Chance() override = default;
 
     std::string draw_card(Player &player);
+
+    FieldTypes get_type() const override;
 
 private:
     std::string name = "Шанс";
@@ -194,6 +239,8 @@ public:
 
     std::string draw_card(Player &player);
 
+    FieldTypes get_type() const override;
+
 private:
     std::string name = "Общественная казна";
     std::vector<Card> cards;
@@ -205,7 +252,10 @@ public:
     Tax(int price);
 
     int get_price() const;
+
     ~Tax() override = default;
+
+    FieldTypes get_type() const override;
 
 private:
     std::string name = "Налог";
