@@ -102,6 +102,8 @@ GameMove Game::player_move() {
 
     if (dice1 != dice2) {
         is_player_roll_dice = true;
+        // todo: remove it
+        is_player_do_move = true;
     }
 
     return return_obj;
