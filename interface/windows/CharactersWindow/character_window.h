@@ -18,6 +18,12 @@ public:
 
     bool handleEvent(sf::Event &event, sf::RenderWindow &window);
 
+    bool onStartGame();
+
+    void onAddPlayer(sf::RenderWindow& window);
+
+    void onChooseCharacter(sf::RenderWindow& window);
+
     void setGame(Game& game1);
 
     Game& getGame();

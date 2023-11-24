@@ -14,6 +14,10 @@ public:
 
     bool handleEvent(sf::Event &event, sf::RenderWindow &window);
 
+    void onCheckboxClick();
+
+    void onApplySettings();
+
     Game getGame() const;
 
 private:
@@ -23,12 +27,9 @@ private:
     int money_for_win = 0;
     int money_per_loop = 200;
     int bonus_for_visit_start = 0;
-    bool is_free_parking = true;
     int jail_price = 50;
     int seconds_per_turn = 0;
 
-    void set_text(sf::Text &text, sf::Font &font, std::string &str, int size, sf::Color color, sf::Text::Style style,
-                  float x, float y);
 
     sf::Font font1, font2;
 
@@ -74,7 +75,4 @@ private:
     sdx::TextBox textBox6;
 
     bool isActiveCheckbox = false;
-
-    sf::Clock animationClock;
-
 };

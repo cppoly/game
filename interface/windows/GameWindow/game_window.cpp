@@ -43,6 +43,7 @@ void GameWindow::draw(sf::RenderWindow &window) {
     }
 }
 
+
 void GameWindow::setGame(Game &game1) {
     game = game1;
 }

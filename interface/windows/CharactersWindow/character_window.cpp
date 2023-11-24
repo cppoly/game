@@ -56,22 +56,29 @@ CharacterWindow::CharacterWindow(sf::RenderWindow &window) {
              (window.getSize().x / 2.f) - 350,
              100);
     backgroundSprite.setTexture(backgroundTexture);
-    backgroundSprite.setScale(window.getSize().x / backgroundSprite.getLocalBounds().getSize().x, window.getSize().y / backgroundSprite.getLocalBounds().getSize().y);
+    backgroundSprite.setScale(window.getSize().x / backgroundSprite.getLocalBounds().getSize().x,
+                              window.getSize().y / backgroundSprite.getLocalBounds().getSize().y);
 
     buttonAddPlayerSprite = sf::Sprite(buttonAddPlayerTexture);
     buttonAddPlayerSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
-    buttonAddPlayerSprite.setPosition((window.getSize().x / 2.f) - 450 - buttonAddPlayerSprite.getLocalBounds().getSize().x, window.getSize().y-30-buttonAddPlayerSprite.getLocalBounds().getSize().y);
+    buttonAddPlayerSprite.setPosition(
+            (window.getSize().x / 2.f) - 450 - buttonAddPlayerSprite.getLocalBounds().getSize().x,
+            window.getSize().y - 30 - buttonAddPlayerSprite.getLocalBounds().getSize().y);
 
     buttonStartGameSprite = sf::Sprite(buttonStartGameTexture);
     buttonStartGameSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
-    buttonStartGameSprite.setPosition((window.getSize().x / 2.f) + 450 , window.getSize().y-30-buttonAddPlayerSprite.getLocalBounds().getSize().y);
+    buttonStartGameSprite.setPosition((window.getSize().x / 2.f) + 450,
+                                      window.getSize().y - 30 - buttonAddPlayerSprite.getLocalBounds().getSize().y);
 
     chosePlayerSprite.setTexture(chosePlayerTexture);
-    chosePlayerSprite.setPosition((window.getSize().x / 2.f) - 250, window.getSize().y - chosePlayerSprite.getLocalBounds().getSize().y - 150);
+    chosePlayerSprite.setPosition((window.getSize().x / 2.f) - 250,
+                                  window.getSize().y - chosePlayerSprite.getLocalBounds().getSize().y - 150);
 
     for (int i = 0; i < playersSprite.size(); i++) {
         playersSprite[i].setTexture(playersTexture[i]);
-        playersSprite[i].setPosition((window.getSize().x / 2.f) - chosePlayerSprite.getLocalBounds().width / 2.f + 50 + 71 * i, window.getSize().y - 290);
+        playersSprite[i].setPosition(
+                (window.getSize().x / 2.f) - chosePlayerSprite.getLocalBounds().width / 2.f + 50 + 71 * i,
+                window.getSize().y - 290);
         playersMediumSprite[i].setTexture(playersMediumTexture[i]);
 
     }
@@ -120,62 +127,15 @@ bool CharacterWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
         if (event.mouseButton.button == sf::Mouse::Left) {
             if (buttonStartGameSprite.getGlobalBounds().contains(
                     window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-                buttonStartGameSprite.setTextureRect(sf::IntRect(360 * 1, 0, 360, 109));
-                if (playersCount >= 2) {
-                    for (int i = 0; i < addedPlayersSprite.size(); i++) {
-                        game.add_player(players[i], std::string(addedPlayerNameText[i].getString()));
-                    }
-                    return true;
-                }
+                return onStartGame();
             } else if (buttonAddPlayerSprite.getGlobalBounds().contains(
                     window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-
-                if (isActiveSelectCharacterMode) {
-                    buttonAddPlayerSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));\
-                    sf::Text namePlayer =
-                            std::string(input.getInput()).size() != 0 ? sf::Text(input.getInput(), font2 , 25)
-                                                                      : sf::Text(
-                                    sf::String("Player" + std::to_string(addedPlayersSprite.size() + 1)), font2, 25);
-                    namePlayer.setFillColor(sf::Color::Black);
-                    if (playersCount % 2 == 0) {
-                        playersMediumSprite[indexActivePlayer].setPosition(260, 250 + playersCount * 120);
-                        namePlayer.setPosition(270, 250 + playersCount * 120);
-                    } else {
-                        playersMediumSprite[indexActivePlayer].setPosition(window.getSize().x - 260 - 175,
-                                                                           250 + (playersCount - 1) * 120);
-                        namePlayer.setPosition(window.getSize().x - 270 - 153, 250 + (playersCount - 1) * 120);
-                    }
-                    addedPlayersSprite.push_back(playersMediumSprite[indexActivePlayer]);
-                    players.push_back(playersSprite[indexActivePlayer]);
-
-                    playersSprite[indexActivePlayer].setTexture(playersDisableTexture[indexActivePlayer]);
-
-                    addedPlayerNameText.push_back(namePlayer);
-
-                    isActiveSelectCharacterMode = false;
-                    playersCount++;
-                    disabledPlayersIndex.push_back(indexActivePlayer);
-                    input.clear();
-                }
+                onAddPlayer(window);
 
             } else {
-                for (int i = 0; i < 6; i++) {
-                    if (playersSprite[i].getGlobalBounds().contains(
-                            window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-                        if (std::find(disabledPlayersIndex.begin(), disabledPlayersIndex.end(), i) ==
-                            std::end(disabledPlayersIndex)) {
-                            activePlayerSprite = sf::Sprite(playersLargeTexture);
-                            activePlayerSprite.setTextureRect(sf::IntRect(350 * i, 0, 350, 400));
-                            activePlayerSprite.setPosition((window.getSize().x / 2.f) - 175, 310);
-                            isActiveSelectCharacterMode = true;
-                            indexActivePlayer = i;
-                            break;
-                        }
-                    }
-                }
+                onChooseCharacter(window);
             }
         }
-
     } else if (event.type == sf::Event::MouseMoved) {
         if (buttonStartGameSprite.getGlobalBounds().contains(
                 window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
@@ -193,13 +153,70 @@ bool CharacterWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
     }
     input.handleEvent(event);
     return false;
-
 }
 
-void CharacterWindow::setGame(Game& game1) {
+
+bool CharacterWindow::onStartGame() {
+    buttonStartGameSprite.setTextureRect(sf::IntRect(360 * 1, 0, 360, 109));
+    if (playersCount >= 2) {
+        for (int i = 0; i < addedPlayersSprite.size(); i++) {
+            game.add_player(players[i], std::string(addedPlayerNameText[i].getString()));
+        }
+        return true;
+    }
+    return false;
+}
+
+void CharacterWindow::onAddPlayer(sf::RenderWindow &window) {
+    if (isActiveSelectCharacterMode) {
+        buttonAddPlayerSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));\
+                    sf::Text namePlayer =
+                std::string(input.getInput()).size() != 0 ? sf::Text(input.getInput(), font2, 25)
+                                                          : sf::Text(
+                        sf::String("Player" + std::to_string(addedPlayersSprite.size() + 1)), font2, 25);
+        namePlayer.setFillColor(sf::Color::Black);
+        if (playersCount % 2 == 0) {
+            playersMediumSprite[indexActivePlayer].setPosition(260, 250 + playersCount * 120);
+            namePlayer.setPosition(270, 250 + playersCount * 120);
+        } else {
+            playersMediumSprite[indexActivePlayer].setPosition(window.getSize().x - 260 - 175,
+                                                               250 + (playersCount - 1) * 120);
+            namePlayer.setPosition(window.getSize().x - 270 - 153, 250 + (playersCount - 1) * 120);
+        }
+        addedPlayersSprite.push_back(playersMediumSprite[indexActivePlayer]);
+        players.push_back(playersSprite[indexActivePlayer]);
+
+        playersSprite[indexActivePlayer].setTexture(playersDisableTexture[indexActivePlayer]);
+
+        addedPlayerNameText.push_back(namePlayer);
+
+        isActiveSelectCharacterMode = false;
+        playersCount++;
+        disabledPlayersIndex.push_back(indexActivePlayer);
+        input.clear();
+    }
+}
+
+void CharacterWindow::onChooseCharacter(sf::RenderWindow &window) {
+    for (int i = 0; i < 6; i++) {
+        if (playersSprite[i].getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+            if (std::find(disabledPlayersIndex.begin(), disabledPlayersIndex.end(), i) ==
+                std::end(disabledPlayersIndex)) {
+                activePlayerSprite = sf::Sprite(playersLargeTexture);
+                activePlayerSprite.setTextureRect(sf::IntRect(350 * i, 0, 350, 400));
+                activePlayerSprite.setPosition((window.getSize().x / 2.f) - 175, 310);
+                isActiveSelectCharacterMode = true;
+                indexActivePlayer = i;
+                break;
+            }
+        }
+    }
+}
+
+void CharacterWindow::setGame(Game &game1) {
     game = game1;
 }
 
-Game& CharacterWindow::getGame() {
+Game &CharacterWindow::getGame() {
     return game;
 }

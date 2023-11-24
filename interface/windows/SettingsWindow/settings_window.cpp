@@ -1,14 +1,6 @@
 #include "settings_window.h"
 
-void SettingsWindow::set_text(sf::Text &text, sf::Font &font, std::string &str, int size, sf::Color color,
-                              sf::Text::Style style, float x, float y) {
-    text.setFont(font);
-    text.setString(str);
-    text.setCharacterSize(size);
-    text.setFillColor(color);
-    text.setStyle(style);
-    text.setPosition(x, y);
-}
+#include "../../text/text.h"
 
 SettingsWindow::SettingsWindow(sf::RenderWindow &window) {
     if (!font1.loadFromFile("assets/fonts/big-shot.ttf") || !font2.loadFromFile("assets/fonts/Bionicle.ttf")) {
@@ -28,49 +20,51 @@ SettingsWindow::SettingsWindow(sf::RenderWindow &window) {
     }
 
     settingsSprite = sf::Sprite(settingsTexture);
-    settingsSprite.setScale(window.getSize().x / settingsSprite.getLocalBounds().width, window.getSize().y / settingsSprite.getLocalBounds().height);
+    settingsSprite.setScale(window.getSize().x / settingsSprite.getLocalBounds().width,
+                            window.getSize().y / settingsSprite.getLocalBounds().height);
 
 
     checkboxSprite = sf::Sprite(checkboxTexture);
     checkboxSprite.setTextureRect(sf::Rect(0, 0, 52, 49));
-    checkboxSprite.setPosition(800,  window.getSize().y / 100.f * 85.f);
+    checkboxSprite.setPosition(800, window.getSize().y / 100.f * 85.f);
 
     buttonApplySprite = sf::Sprite(buttonApplyTexture);
     buttonApplySprite.setTextureRect(sf::Rect(0, 0, 360, 109));
-    buttonApplySprite.setPosition(window.getSize().x - buttonApplySprite.getLocalBounds().getSize().x - 50, window.getSize().y / 100.f * 85.f);
+    buttonApplySprite.setPosition(window.getSize().x - buttonApplySprite.getLocalBounds().getSize().x - 50,
+                                  window.getSize().y / 100.f * 85.f);
 
     set_text(titleSettingsPage, font2, title, 64, sf::Color::White, sf::Text::Bold,
              (window.getSize().x / 2.f) - 32 * title.size() / 2.f,
              window.getSize().y / 100.f * 10.f
-             );
+    );
     set_text(settings1, font1, settings1Name, 32, sf::Color::Black, sf::Text::Bold,
              240,
              window.getSize().y / 100.f * 25.f
-             );
+    );
     set_text(settings2, font1, settings2Name, 32, sf::Color::Black, sf::Text::Bold,
              240,
              window.getSize().y / 100.f * 35.f
-             );
+    );
     set_text(settings3, font1, settings3Name, 32, sf::Color::Black, sf::Text::Bold,
              240,
              window.getSize().y / 100.f * 45.f
-             );
+    );
     set_text(settings4, font1, settings4Name, 32, sf::Color::Black, sf::Text::Bold,
              240,
              window.getSize().y / 100.f * 55.f
-             );
+    );
     set_text(settings5, font1, settings5Name, 32, sf::Color::Black, sf::Text::Bold,
              240,
              window.getSize().y / 100.f * 65.f
-             );
+    );
     set_text(settings6, font1, settings6Name, 32, sf::Color::Black, sf::Text::Bold,
              240,
              window.getSize().y / 100.f * 75.f
-             );
+    );
     set_text(settings7, font1, settings7Name, 32, sf::Color::Black, sf::Text::Bold,
              240,
              window.getSize().y / 100.f * 85.f
-             );
+    );
 
     textBox1.setSize(400, 40);
     textBox2.setSize(400, 40);
@@ -119,44 +113,13 @@ void SettingsWindow::draw(sf::RenderWindow &window) {
 }
 
 bool SettingsWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
-
     if (event.type == sf::Event::MouseButtonPressed) {
         if (event.mouseButton.button == sf::Mouse::Left) {
             if (checkboxSprite.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-                if (isActiveCheckbox) {
-                    checkboxSprite.setTextureRect(sf::IntRect(0, 0, 52, 49));
-                    isActiveCheckbox = false;
-                } else {
-                    checkboxSprite.setTextureRect(sf::IntRect(52, 0, 52, 49));
-                    isActiveCheckbox = true;
-                }
+                onCheckboxClick();
             }
-
             if (buttonApplySprite.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-                buttonApplySprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
-
-
-                money_for_game_start =
-                        std::string(textBox1.getInput()).size() != 0 ? std::stoi(std::string(textBox1.getInput()))
-                                                                     : money_for_game_start;
-                money_for_win =
-                        std::string(textBox2.getInput()).size() != 0 ? std::stoi(std::string(textBox2.getInput()))
-                                                                     : money_for_win;
-                money_per_loop =
-                        std::string(textBox3.getInput()).size() != 0 ? std::stoi(std::string(textBox3.getInput()))
-                                                                     : money_per_loop;
-                bonus_for_visit_start =
-                        std::string(textBox4.getInput()).size() != 0 ? std::stoi(std::string(textBox4.getInput()))
-                                                                     : bonus_for_visit_start;
-                jail_price = std::string(textBox5.getInput()).size() != 0 ? std::stoi(std::string(textBox5.getInput()))
-                                                                          : jail_price;
-                seconds_per_turn =
-                        std::string(textBox6.getInput()).size() != 0 ? std::stoi(std::string(textBox6.getInput()))
-                                                                     : seconds_per_turn;
-
-
-                game = Game(money_for_game_start, money_for_win, money_per_loop, bonus_for_visit_start,
-                            isActiveCheckbox, jail_price, seconds_per_turn);
+                onApplySettings();
                 return true;
             }
         }
@@ -180,6 +143,42 @@ bool SettingsWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
     return false;
 }
 
+void SettingsWindow::onCheckboxClick() {
+    if (isActiveCheckbox) {
+        checkboxSprite.setTextureRect(sf::IntRect(0, 0, 52, 49));
+        isActiveCheckbox = false;
+    } else {
+        checkboxSprite.setTextureRect(sf::IntRect(52, 0, 52, 49));
+        isActiveCheckbox = true;
+    }
+}
+
+void SettingsWindow::onApplySettings() {
+    buttonApplySprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
+
+    money_for_game_start =
+            std::string(textBox1.getInput()).size() != 0 ? std::stoi(std::string(textBox1.getInput()))
+                                                         : money_for_game_start;
+    money_for_win =
+            std::string(textBox2.getInput()).size() != 0 ? std::stoi(std::string(textBox2.getInput()))
+                                                         : money_for_win;
+    money_per_loop =
+            std::string(textBox3.getInput()).size() != 0 ? std::stoi(std::string(textBox3.getInput()))
+                                                         : money_per_loop;
+    bonus_for_visit_start =
+            std::string(textBox4.getInput()).size() != 0 ? std::stoi(std::string(textBox4.getInput()))
+                                                         : bonus_for_visit_start;
+    jail_price = std::string(textBox5.getInput()).size() != 0 ? std::stoi(std::string(textBox5.getInput()))
+                                                              : jail_price;
+    seconds_per_turn =
+            std::string(textBox6.getInput()).size() != 0 ? std::stoi(std::string(textBox6.getInput()))
+                                                         : seconds_per_turn;
+
+    game = Game(money_for_game_start, money_for_win, money_per_loop, bonus_for_visit_start,
+                !isActiveCheckbox, jail_price, seconds_per_turn);
+}
+
 Game SettingsWindow::getGame() const {
     return game;
 }
+
