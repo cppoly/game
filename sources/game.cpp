@@ -189,6 +189,7 @@ bool Game::pay_player(int player_id, int amount) {
     if (!is_game_started) {
         throw std::runtime_error("Game is not started");
     }
+
     if (player_id < 0 || player_id >= (int) players.size()) {
         throw std::runtime_error("Invalid player id");
     }
@@ -200,6 +201,10 @@ bool Game::pay_player(int player_id, int amount) {
     }
     players[cur_player_id].set_money(players[cur_player_id].get_money() - amount);
     players[player_id].set_money(players[player_id].get_money() + amount);
+    if (is_player_roll_dice) {
+        is_player_do_move = true;
+    }
+
     return true;
 }
 
@@ -214,6 +219,11 @@ bool Game::pay_bank(int amount) {
         return false;
     }
     players[cur_player_id].set_money(players[cur_player_id].get_money() - amount);
+
+    if (is_player_roll_dice) {
+        is_player_do_move = true;
+    }
+
     return true;
 }
 
@@ -222,38 +232,49 @@ bool Game::go_to_jail() {
         throw std::runtime_error("Game is not started");
     }
     players[cur_player_id].set_position(10);
+
+    if (is_player_roll_dice) {
+        is_player_do_move = true;
+    }
     return true;
 }
 
 bool Game::buy_field() {
-    // todo: DO
     if (!is_game_started) {
         throw std::runtime_error("Game is not started");
     }
     if (is_player_do_move) {
         throw std::runtime_error("Player already do move");
     }
-    if (is_player_roll_dice) {
-        throw std::runtime_error("Player already roll dice");
+
+    auto player = players[cur_player_id];
+    auto field = game_fields[player.get_position()];
+
+    if (field.get_type() != FieldTypes::STREET or field.get_type() != FieldTypes::STATION or field.get_type() != FieldTypes::UTILITY) {
+        throw std::runtime_error("Field is not street");
     }
+    auto profitable_field = (ProfitableField &) field;
+
+    if (profitable_field.get_owner() != nullptr) {
+        throw std::runtime_error("Field already has owner");
+    }
+
+    if (player.get_money() < profitable_field.get_price()) {
+        return false;
+    }
+    profitable_field.buy(player);
+    player.add_field(profitable_field);
+    players[cur_player_id] = player;
+    game_fields[player.get_position()] = dynamic_cast<Field &>(profitable_field);
+
+    if (is_player_roll_dice) {
+        is_player_do_move = true;
+    }
+
     return true;
 }
 
 bool Game::set_field_on_auction() {
-//    todo: DO
-    if (!is_game_started) {
-        throw std::runtime_error("Game is not started");
-    }
-    if (is_player_do_move) {
-        throw std::runtime_error("Player already do move");
-    }
-    if (is_player_roll_dice) {
-        throw std::runtime_error("Player already roll dice");
-    }
-    return true;
-}
-
-bool Game::mortgage_field(int field_id) {
     // todo: do
     if (!is_game_started) {
         throw std::runtime_error("Game is not started");
@@ -261,22 +282,54 @@ bool Game::mortgage_field(int field_id) {
     if (is_player_do_move) {
         throw std::runtime_error("Player already do move");
     }
+
     if (is_player_roll_dice) {
-        throw std::runtime_error("Player already roll dice");
+        is_player_do_move = true;
     }
     return true;
 }
 
-bool Game::build_house(int field_id) {
-//    todo: do
+bool Game::mortgage_field(int field_id) {
     if (!is_game_started) {
         throw std::runtime_error("Game is not started");
     }
-    if (is_player_do_move) {
-        throw std::runtime_error("Player already do move");
+
+    auto player = players[cur_player_id];
+    auto field = game_fields[field_id];
+    if (field.get_type() != FieldTypes::STREET or field.get_type() != FieldTypes::STATION or field.get_type() != FieldTypes::UTILITY) {
+        throw std::runtime_error("Field is not street");
     }
-    if (is_player_roll_dice) {
-        throw std::runtime_error("Player already roll dice");
+    auto profitable_field = (ProfitableField &) field;
+
+    if (profitable_field.get_owner()->get_name() != player.get_name()) {
+        throw std::runtime_error("Player is not owner of this field");
+    }
+    if (profitable_field.get_is_mortgaged()) {
+        throw std::runtime_error("Field is already mortgaged");
+    }
+
+    profitable_field.mortgage();
+    player.set_money(player.get_money() + profitable_field.get_mortgage_price());
+    players[cur_player_id] = player;
+    game_fields[field_id] = dynamic_cast<Field &>(profitable_field);
+    return true;
+}
+
+bool Game::build_house(int field_id) {
+    // todo: do
+    if (!is_game_started) {
+        throw std::runtime_error("Game is not started");
+    }
+
+    auto player = players[cur_player_id];
+    auto field = game_fields[field_id];
+    if (field.get_type() != FieldTypes::STREET) {
+        throw std::runtime_error("Field is not street");
+    }
+    auto profitable_field = (ProfitableField &) field;
+
+    if (profitable_field.get_owner()->get_name() != player.get_name()) {
+        throw std::runtime_error("Player is not owner of this field");
     }
     return true;
 }
@@ -286,16 +339,36 @@ bool Game::sell_house(int field_id) {
     if (!is_game_started) {
         throw std::runtime_error("Game is not started");
     }
-    if (is_player_do_move) {
-        throw std::runtime_error("Player already do move");
+
+    auto player = players[cur_player_id];
+    auto field = game_fields[field_id];
+
+    if (field.get_type() != FieldTypes::STREET) {
+        throw std::runtime_error("Field is not street");
     }
-    if (is_player_roll_dice) {
-        throw std::runtime_error("Player already roll dice");
+
+    auto profitable_field = (Street &) field;
+
+    if (profitable_field.get_owner()->get_name() != player.get_name()) {
+        throw std::runtime_error("Player is not owner of this field");
+    }
+    if (profitable_field.get_amount_of_houses() == 0) {
+        throw std::runtime_error("Field has no houses");
     }
     return true;
 }
 
 Card Game::draw_card() {
     // todo: do
-    return Card("Ага", 0, 0, 0, 0);
+    if (!is_game_started) {
+        throw std::runtime_error("Game is not started");
+    }
+    if (is_player_do_move) {
+        throw std::runtime_error("Player already do move");
+    }
+
+    if (is_player_roll_dice) {
+        is_player_do_move = true;
+    }
+    return {"Ага", 0, 0, 0, 0};
 }

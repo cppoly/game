@@ -59,4 +59,5 @@ private:
     int amount_of_jail_cards;
 
     std::vector<Field *> fields;
+    // todo: is in jail
 };

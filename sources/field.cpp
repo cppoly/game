@@ -64,6 +64,10 @@ Player *ProfitableField::get_owner() const {
     return owner;
 }
 
+bool ProfitableField::get_is_mortgaged() const {
+    return is_mortgaged;
+}
+
 int ProfitableField::get_rent() const {
     return rent[0];
 }

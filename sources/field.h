@@ -28,7 +28,6 @@ public:
 };
 
 
-
 const int mortgage_percent = 10;
 
 const int sell_percent = 50;
@@ -75,9 +74,12 @@ public:
 
     void mortgage();
 
+    void unmortgage();
+
+    bool get_is_mortgaged() const;
+
     int get_rent() const;
 
-    void unmortgage();
 
     Player *get_owner() const;
 
