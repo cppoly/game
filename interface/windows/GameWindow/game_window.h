@@ -21,10 +21,11 @@ public:
 private:
     bool isGameStarted = false;
     bool isRollDice = false;
+
     GameMove player;
     sf::Sprite currPlayerSprite;
     sf::Text currPlayerName;
-
+    sf::Text currPlayerCapacity;
 
 
     sf::Texture backgroundImageTexture;
@@ -38,6 +39,15 @@ private:
 
     sf::Texture rollDiceButtonTexture;
     sf::Sprite rollDiceButtonSprite;
+
+    sf::Texture playerInformationCardTexture;
+    sf::Sprite playerInformationCardSprite;
+
+    sf::Texture dice1Texture;
+    sf::Texture dice2Texture;
+
+    sf::Sprite dice1Sprite;
+    sf::Sprite dice2Sprite;
 
     sf::Font font1;
 
