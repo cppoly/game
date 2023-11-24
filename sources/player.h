@@ -28,6 +28,8 @@ public:
 
     sf::Sprite get_sprite() const;
 
+    std::string get_name() const;
+
     int get_amount_of_jail_cards() const;
 
     void set_money(int money);

@@ -27,6 +27,10 @@ sf::Sprite Player::get_sprite() const {
     return sprite;
 }
 
+std::string Player::get_name() const {
+    return name;
+}
+
 int Player::get_amount_of_jail_cards() const {
     return amount_of_jail_cards;
 }

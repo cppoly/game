@@ -47,22 +47,33 @@ int main() {
                 break;
             }
 
-            if (mainWindow.handleEvent(event, window)) {
-                isActiveMainScreen = false;
-                isActiveSettings = true;
-            } else if (settingsWindow.handleEvent(event, window)) {
-                isActiveSettings = false;
-                isActiveCharacter = true;
-                Game game1 = settingsWindow.getGame();
-                characterWindow.setGame(game1);
-            } else if (characterWindow.handleEvent(event, window)) {
-                isActiveCharacter = false;
-                isActiveGame = true;
-                Game game2 = characterWindow.getGame();
-                gameWindow.setGame(game2);
+            if (isActiveMainScreen) {
+                if (mainWindow.handleEvent(event, window)) {
+                    isActiveMainScreen = false;
+                    isActiveSettings = true;
+                }
+            } else if (isActiveSettings) {
+                if (settingsWindow.handleEvent(event, window)) {
+                    isActiveSettings = false;
+                    isActiveCharacter = true;
+                    Game game = settingsWindow.getGame();
+                    characterWindow.setGame(game);
+                }
+            } else if (isActiveCharacter) {
+                if (characterWindow.handleEvent(event, window)) {
+                    isActiveCharacter = false;
+                    isActiveGame = true;
+                    Game game = characterWindow.getGame();
+                    gameWindow.setGame(game);
+                }
+            } else if (isActiveGame) {
+                if (gameWindow.handleEvent(event, window)) {
+                    isActiveGame = false;
+                }
             }
         }
 
+        window.clear();
         if (isActiveMainScreen) {
             mainWindow.draw(window);
         } else if (isActiveSettings) {

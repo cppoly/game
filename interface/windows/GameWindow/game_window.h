@@ -5,6 +5,7 @@
 #include <iostream>
 #include "../../../sources/game.h"
 #include <vector>
+#include "../../text/text.h"
 
 class GameWindow {
 public:
@@ -18,9 +19,25 @@ public:
 
 
 private:
+    bool isGameStarted = false;
+    GameMove player;
+    sf::Sprite currPlayerSprite;
+    sf::Text currPlayerName;
+
+
     sf::Texture backgroundImageTexture;
     sf::Sprite backgroundImageSprite;
 
+    sf::Texture startGameButtonTexture;
+    sf::Sprite startGameButtonSprite;
+
+    sf::Texture completeTurnTexture;
+    sf::Sprite completeTurnSprite;
+
+    sf::Texture rollDiceButtonTexture;
+    sf::Sprite rollDiceButtonSprite;
+
+    sf::Font font1;
 
     Game game;
 };

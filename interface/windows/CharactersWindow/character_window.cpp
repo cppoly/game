@@ -94,8 +94,6 @@ CharacterWindow::CharacterWindow(sf::RenderWindow &window) {
     input.setPosition((window.getSize().x / 2.f) - 150, 360);
     input.setSize(300, 40);
     input.setBorder(2);
-
-//    game = game1;
 }
 
 void CharacterWindow::draw(sf::RenderWindow &window) {
