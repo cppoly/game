@@ -118,7 +118,10 @@ GameMove Game::player_move() {
         if (profitable_field.get_owner() == nullptr) {
             return_obj.funcs = GameFieldTypes::YOU_CAN_BUY;
             return_obj.field_to_buy = profitable_field;
-        } else {
+        } else if (profitable_field.get_owner()->get_name() == players[cur_player_id].get_name()) {
+            return_obj.funcs = GameFieldTypes::DO_NOTHING;
+        }
+        else {
             // user_id find in players
             int user_id = -1;
             for (int i = 0; i < (int) players.size(); ++i) {
