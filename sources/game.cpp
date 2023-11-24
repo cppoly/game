@@ -122,6 +122,7 @@ int Game::next_turn() {
         cur_player_id++;
         cur_player_id %= (int) players.size();
         is_player_do_move = false;
+        is_player_roll_dice = false;
     }
     return cur_player_id;
 }
