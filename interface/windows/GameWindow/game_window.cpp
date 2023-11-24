@@ -10,26 +10,36 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
                                    window.getSize().y / backgroundImageSprite.getLocalBounds().getSize().y);
 
 
-    for (int i = 0; i < game.get_players().size(); i++) {
-        game.get_players()[i].get_sprite().setPosition(100, i * 100);
-    }
 }
 
 bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
-    game.start_game();
-    for (int i = 0; i < game.get_players().size(); i++) {
-        game.get_players()[i].get_sprite().setPosition(100, i * 100);
-    }
+//    for (int i = 0; i < game.get_players().size(); i++) {
+//        game.get_players()[i].get_sprite().setPosition(100, i * 100);
+//    }
     return false;
 }
 
 void GameWindow::draw(sf::RenderWindow &window) {
     window.clear();
     window.draw(backgroundImageSprite);
-    for (int i = 0; i < game.get_players().size(); i++) {
-        game.get_players()[i].get_sprite().setPosition(100, i * 100);
+    game.start_game();
 
-        window.draw(game.get_players()[i].get_sprite());
+    GameMove player = game.player_move();
+
+    for (int i = 0; i < game.get_players().size(); i++) {
+
+        if (i != game.get_cur_player_id()) {
+            sf::Sprite sprite = game.get_players()[i].get_sprite();
+            sprite.setPosition(1350 + i * 30 - game.get_players()[i].get_position() * 50, 870);
+            window.draw(sprite);
+        } else {
+            sf::Sprite sprite = game.get_players()[i].get_sprite();
+
+            sprite.setPosition(1350 + i * 30 - player.new_position * 50, 870);
+
+            window.draw(sprite);
+        }
+//        window.draw(sprite);
     }
 }
 
