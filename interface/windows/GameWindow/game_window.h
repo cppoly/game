@@ -20,9 +20,11 @@ public:
 
 private:
     bool isGameStarted = false;
+    bool isRollDice = false;
     GameMove player;
     sf::Sprite currPlayerSprite;
     sf::Text currPlayerName;
+
 
 
     sf::Texture backgroundImageTexture;

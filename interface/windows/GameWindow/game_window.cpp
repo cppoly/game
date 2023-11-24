@@ -46,15 +46,18 @@ bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
                     window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
                 completeTurnSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
                 int id = game.next_turn();
-                std::cout << id << game.get_cur_player_id();
-                if (id != game.get_cur_player_id()) {
-                    player = game.player_move();
-                }
+//                std::cout << id << game.get_cur_player_id();
+//                if (id != game.get_cur_player_id()) {
+//                    player = std::fintgame.get_players();
+//                }
+                    isRollDice = false;
+
             } else if (rollDiceButtonSprite.getGlobalBounds().contains(
                     window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
                 rollDiceButtonSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
 
                 player = game.player_move();
+                isRollDice = true;
             }
 
         }
@@ -86,42 +89,42 @@ void GameWindow::draw(sf::RenderWindow &window) {
         window.draw(completeTurnSprite);
         window.draw(rollDiceButtonSprite);
 
-        for (int i = 0; i < game.get_players().size(); i++) {
-            if (i != game.get_cur_player_id()) {
-                sf::Sprite sprite = game.get_players()[i].get_sprite();
-                sprite.setPosition(1350 + i * 30 - game.get_players()[i].get_position() * 50, 870);
-                window.draw(sprite);
-            } else {
+        if (isRollDice) {
+            for (int i = 0; i < game.get_players().size(); i++) {
+                if (i != game.get_cur_player_id()) {
+                    sf::Sprite sprite = game.get_players()[i].get_sprite();
+                    sprite.setPosition(1350 + i * 30 - game.get_players()[i].get_position() * 50, 870);
+                    window.draw(sprite);
+                } else {
 
-                sf::Sprite sprite = game.get_players()[i].get_sprite();
-                std::string s = game.get_players()[i].get_name();
-                set_text(currPlayerName, font1, s, 100, sf::Color::Black, sf::Text::Style::Bold, 1000, 100);
-                sprite.setPosition(1350 + i * 30 - player.new_position * 50, 870);
+                    sf::Sprite sprite = game.get_players()[i].get_sprite();
+                    std::string s = game.get_players()[i].get_name();
+                    set_text(currPlayerName, font1, s, 100, sf::Color::Black, sf::Text::Style::Bold, 1000, 100);
+                    sprite.setPosition(1350 + i * 30 - player.new_position * 50, 870);
 
-                window.draw(currPlayerName);
-                window.draw(sprite);
+                    window.draw(currPlayerName);
+                    window.draw(sprite);
+                }
+            }
+        } else {
+            for (int i = 0; i < game.get_players().size(); i++) {
+                if (i != game.get_cur_player_id()) {
+                    sf::Sprite sprite = game.get_players()[i].get_sprite();
+                    sprite.setPosition(1350 + i * 30 - game.get_players()[i].get_position() * 50, 870);
+                    window.draw(sprite);
+                } else {
+                    sf::Sprite sprite = game.get_players()[i].get_sprite();
+                    std::string s = game.get_players()[i].get_name();
+                    set_text(currPlayerName, font1, s, 100, sf::Color::Black, sf::Text::Style::Bold, 1000, 100);
+                    sprite.setPosition(1350 + i * 30 - game.get_players()[i].get_position() * 50, 870);
+
+                    window.draw(currPlayerName);
+                    window.draw(sprite);
+
+                }
             }
         }
     }
-//    game.start_game();
-
-//    GameMove player = game.player_move();
-//
-//    for (int i = 0; i < game.get_players().size(); i++) {
-//
-//        if (i != game.get_cur_player_id()) {
-//            sf::Sprite sprite = game.get_players()[i].get_sprite();
-//            sprite.setPosition(1350 + i * 30 - game.get_players()[i].get_position() * 50, 870);
-//            window.draw(sprite);
-//        } else {
-//            sf::Sprite sprite = game.get_players()[i].get_sprite();
-//
-//            sprite.setPosition(1350 + i * 30 - player.new_position * 50, 870);
-//
-//            window.draw(sprite);
-//        }
-//        window.draw(sprite);
-//    }
 }
 
 
