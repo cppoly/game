@@ -90,14 +90,13 @@ GameMove Game::player_move() {
 
     int dice1 = number_on_dice();
     int dice2 = number_on_dice();
-    Player cur_player = players[cur_player_id];
     GameMove return_obj;
     return_obj.player_id = cur_player_id;
-    return_obj.old_position = cur_player.get_position();
+    return_obj.old_position = players[cur_player_id].get_position();
     return_obj.number_on_dice1 = dice1;
     return_obj.number_on_dice2 = dice2;
-    cur_player.increment_position(dice1 + dice2);
-    return_obj.new_position = cur_player.get_position();
+    players[cur_player_id].increment_position(dice1 + dice2);
+    return_obj.new_position = players[cur_player_id].get_position();
 
 
     if (dice1 != dice2) {
