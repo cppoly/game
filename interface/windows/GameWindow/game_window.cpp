@@ -45,6 +45,7 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
     auctionButtonSprite = sf::Sprite(auctionButtonTexture);
     auctionButtonSprite.setPosition((window.getSize().x / 2.f) + 450,
             window.getSize().y - 30 - auctionButtonSprite.getLocalBounds().getSize().y);
+
     // Cards
 
     playerInformationCardSprite = sf::Sprite(playerInformationCardTexture);
@@ -58,6 +59,7 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
 
     fieldCardSprite = sf::Sprite(fieldCardTexture);
     fieldCardSprite.setPosition((window.getSize().x / 2.f) - 175, (window.getSize().y / 2.f) - 200);
+    fieldCardSprite.setScale(2.f, 2.f);
 
 }
 
@@ -92,17 +94,23 @@ bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
                         case GameFieldTypes::YOU_CAN_BUY:
                             isActiveBuyMode = true;
                         case GameFieldTypes::PAY_BANK:
-                            isActivePayBankMode = true;
+//                            isActivePayBankMode = true;
+                            game.pay_bank(player.amount_to_pay);
                         case GameFieldTypes::PAY_PLAYER:
-                            isActivePayPlayerMode = true;
+                            game.pay_player(player.player_to_pay, player.amount_to_pay);
                         case GameFieldTypes::DRAW_CARD:
-                            isActiveDrawCardMode = true;
+//                            isActiveDrawCardMode = true;
+                            game.draw_card();
                         case GameFieldTypes::GO_TO_JAIL:
-                            isActiveGoToJail = true;
+//                            isActiveGoToJail = true;
+                            game.go_to_jail();
                         default:
                             isActiveDoNothing = true;
                     }
                 }
+            } else if (buyButtonSprite.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+                game.buy_field();
+                isActiveBuyMode = false;
             }
         }
     } else if (event.type == sf::Event::MouseMoved) {
@@ -185,16 +193,18 @@ void GameWindow::draw(sf::RenderWindow &window) {
 //        } else {
         if (isActiveBuyMode) {
             window.draw(fieldCardSprite);
-            game.buy_field();
-        } else if (isActiveDrawCardMode) {
-            window.draw(fieldCardSprite);
-            game.draw_card();
-        } else if (isActivePayBankMode) {
-            game.pay_bank(player.amount_to_pay);
-        } else if (isActivePayPlayerMode) {
-            game.pay_player(player.player_to_pay, player.amount_to_pay);
-        } else if (isActiveGoToJail) {
-            game.go_to_jail();
+            window.draw(buyButtonSprite);
+            window.draw(auctionButtonSprite);
+//            game.buy_field();
+//        } else if (isActiveDrawCardMode) {
+//            window.draw(fieldCardSprite);
+//            game.draw_card();
+//        } else if (isActivePayBankMode) {
+//            game.pay_bank(player.amount_to_pay);
+//        } else if (isActivePayPlayerMode) {
+//            game.pay_player(player.player_to_pay, player.amount_to_pay);
+//        } else if (isActiveGoToJail) {
+//            game.go_to_jail();
         } else {
             window.draw(completeTurnSprite);
             window.draw(rollDiceButtonSprite);
