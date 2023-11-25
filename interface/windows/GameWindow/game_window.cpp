@@ -88,16 +88,15 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
 }
 
 bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
+    auto point = window.mapPixelToCoords(sf::Mouse::getPosition(window));
     if (event.type == sf::Event::MouseButtonPressed) {
         if (event.mouseButton.button == sf::Mouse::Left) {
-            if (startGameButtonSprite.getGlobalBounds().contains(
-                    window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+            if (startGameButtonSprite.getGlobalBounds().contains(point)) {
                 startGameButtonSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
                 isGameStarted = true;
 
                 game.start_game();
-            } else if (completeTurnSprite.getGlobalBounds().contains(
-                    window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+            } else if (completeTurnSprite.getGlobalBounds().contains(point)) {
                 if (game.get_is_player_roll_dice()) {
                     completeTurnSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
                     int id = game.next_turn();
@@ -108,8 +107,7 @@ bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
                     isActivePayBankMode = false;
                     isActivePayPlayerMode = false;
                 }
-            } else if (rollDiceButtonSprite.getGlobalBounds().contains(
-                    window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+            } else if (rollDiceButtonSprite.getGlobalBounds().contains(point)) {
                 if (!game.get_is_player_roll_dice()) {
                     rollDiceButtonSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
                     player = game.player_move();
@@ -131,18 +129,18 @@ bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
                         isActiveDoNothing = true;
                     }
                 }
-            } else if (buyButtonSprite.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+            } else if (buyButtonSprite.getGlobalBounds().contains(point)) {
                 game.buy_field();
                 isActiveBuyMode = false;
-            } else if (okButtonSprite.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+            } else if (okButtonSprite.getGlobalBounds().contains(point)) {
                 okButtonSprite.setTextureRect({360, 0, 360, 109});
                 // TODO
-            } else if (okButtonSprite.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+            } else if (okButtonSprite.getGlobalBounds().contains(point)) {
 
             }
         }
     } else if (event.type == sf::Event::MouseMoved) {
-        if (startGameButtonSprite.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+        if (startGameButtonSprite.getGlobalBounds().contains(point)) {
             startGameButtonSprite.setTextureRect(sf::IntRect(360 * 2, 0, 360, 109));
         } else if (completeTurnSprite.getGlobalBounds().contains(
                 window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
@@ -152,8 +150,7 @@ bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
                 completeTurnSprite.setTextureRect(sf::IntRect(360 * 3, 0, 360, 109));
 
             }
-        } else if (rollDiceButtonSprite.getGlobalBounds().contains(
-                window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+        } else if (rollDiceButtonSprite.getGlobalBounds().contains(point)) {
             if (!game.get_is_player_roll_dice()) {
                 rollDiceButtonSprite.setTextureRect(sf::IntRect(360 * 2, 0, 360, 109));
             } else {
