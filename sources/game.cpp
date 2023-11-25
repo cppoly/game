@@ -269,7 +269,7 @@ bool Game::buy_field() {
 
     if (field->get_type() != FieldTypes::STREET or field->get_type() != FieldTypes::STATION or
         field->get_type() != FieldTypes::UTILITY) {
-        throw std::runtime_error("Field is not street");
+        throw std::runtime_error("Field is not profitable");
     }
     auto profitable_field = dynamic_cast<ProfitableField *> (field);
 
