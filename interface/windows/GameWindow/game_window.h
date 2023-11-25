@@ -17,20 +17,32 @@ public:
 
     void setGame(Game& game1);
 
+    void drawPlayers(sf::RenderWindow& window);
+
+    void drawPlayer(sf::RenderWindow& window, int currPosition, int numberPlayer);
 
 private:
     bool isGameStarted = false;
     bool isRollDice = false;
+
+    bool isActiveDoNothing = false;
     bool isActiveBuyMode = false;
+    bool isActiveDrawCardMode = false;
+    bool isActivePayPlayerMode = false;
+    bool isActivePayBankMode = false;
+    bool isActiveGoToJail = false;
 
     GameMove player;
-    sf::Sprite currPlayerSprite;
+//    sf::Sprite currPlayerSprite;
     sf::Text currPlayerName;
     sf::Text currPlayerCapacity;
+    sf::Text currAmountJailCards;
 
 
     sf::Texture backgroundImageTexture;
     sf::Sprite backgroundImageSprite;
+
+    // Buttons
 
     sf::Texture startGameButtonTexture;
     sf::Sprite startGameButtonSprite;
@@ -41,10 +53,14 @@ private:
     sf::Texture rollDiceButtonTexture;
     sf::Sprite rollDiceButtonSprite;
 
-    sf::Texture playerInformationCardTexture;
-    sf::Sprite playerInformationCardSprite;
+    sf::Texture buyButtonTexture;
+    sf::Sprite buyButtonSprite;
+
+    sf::Texture auctionButtonTexture;
+    sf::Sprite auctionButtonSprite;
 
     // Dices
+
     sf::Texture dice1Texture;
     sf::Texture dice2Texture;
 
@@ -55,6 +71,9 @@ private:
 
     sf::Texture fieldCardTexture;
     sf::Sprite fieldCardSprite;
+
+    sf::Texture playerInformationCardTexture;
+    sf::Sprite playerInformationCardSprite;
 
     // Fonts
 

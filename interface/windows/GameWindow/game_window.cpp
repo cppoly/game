@@ -5,15 +5,16 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
         !startGameButtonTexture.loadFromFile("assets/sprite/Buttons/buttonStartGame.png") ||
         !completeTurnTexture.loadFromFile("assets/sprite/Buttons/buttonCompleteTurn.png") ||
         !rollDiceButtonTexture.loadFromFile("assets/sprite/Buttons/buttonRollDice.png") ||
+        !buyButtonTexture.loadFromFile("assets/sprite/Buttons/buttonBuy.png") ||
+        !auctionButtonTexture.loadFromFile("assets/sprite/Buttons/buttonAuction.png") ||
         !playerInformationCardTexture.loadFromFile("assets/sprite/playerInformationCard.png") ||
         !dice1Texture.loadFromFile("assets/sprite/DicePack/DiceSprSheetX96.png") ||
         !dice2Texture.loadFromFile("assets/sprite/DicePack/DiceSprSheetX96.png") ||
         !fieldCardTexture.loadFromFile("assets/sprite/fieldCard.png") ||
-        !font1.loadFromFile("assets/fonts/Bionicle.ttf")) {
+        !font1.loadFromFile("assets/fonts/Bionicle.ttf") ||
+        !font2.loadFromFile("assets/fonts/big-shot.ttf")) {
         throw std::runtime_error("Can't load texture for GameWindow");
     }
-
-
 
     // Background
     backgroundImageSprite = sf::Sprite(backgroundImageTexture);
@@ -37,6 +38,13 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
     rollDiceButtonSprite.setPosition(50, 100);
     rollDiceButtonSprite.setScale(0.8f, 0.8f);
 
+    buyButtonSprite = sf::Sprite(buyButtonTexture);
+    buyButtonSprite.setPosition((window.getSize().x / 2.f) - 450 - buyButtonSprite.getLocalBounds().getSize().x,
+                                window.getSize().y - 30 - buyButtonSprite.getLocalBounds().getSize().y);
+
+    auctionButtonSprite = sf::Sprite(auctionButtonTexture);
+    auctionButtonSprite.setPosition((window.getSize().x / 2.f) + 450,
+            window.getSize().y - 30 - auctionButtonSprite.getLocalBounds().getSize().y);
     // Cards
 
     playerInformationCardSprite = sf::Sprite(playerInformationCardTexture);
@@ -68,6 +76,11 @@ bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
                     completeTurnSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
                     int id = game.next_turn();
                     isRollDice = false;
+                    isActiveBuyMode = false;
+                    isActiveDrawCardMode = false;
+                    isActiveGoToJail = false;
+                    isActivePayBankMode = false;
+                    isActivePayPlayerMode = false;
                 }
             } else if (rollDiceButtonSprite.getGlobalBounds().contains(
                     window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
@@ -75,6 +88,20 @@ bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
                     rollDiceButtonSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
                     player = game.player_move();
                     isRollDice = true;
+                    switch (player.funcs) {
+                        case GameFieldTypes::YOU_CAN_BUY:
+                            isActiveBuyMode = true;
+                        case GameFieldTypes::PAY_BANK:
+                            isActivePayBankMode = true;
+                        case GameFieldTypes::PAY_PLAYER:
+                            isActivePayPlayerMode = true;
+                        case GameFieldTypes::DRAW_CARD:
+                            isActiveDrawCardMode = true;
+                        case GameFieldTypes::GO_TO_JAIL:
+                            isActiveGoToJail = true;
+                        default:
+                            isActiveDoNothing = true;
+                    }
                 }
             }
         }
@@ -124,20 +151,26 @@ void GameWindow::draw(sf::RenderWindow &window) {
         window.draw(startGameButtonSprite);
     } else {
         backgroundImageSprite.setColor(sf::Color(255, 255, 255, 255));
-        window.draw(completeTurnSprite);
-        window.draw(rollDiceButtonSprite);
+
         window.draw(playerInformationCardSprite);
-        window.draw(currPlayerSprite);
+//        window.draw(currPlayerSprite);
 
 
+        // Player name
         std::string s = game.get_players()[game.get_cur_player_id()].get_name();
         set_text(currPlayerName, font1, s, 60, sf::Color::Black, sf::Text::Style::Bold, 60, 310);
         window.draw(currPlayerName);
 
+        // Player capacity
         std::string capacity = std::to_string(game.get_players()[game.get_cur_player_id()].get_money()) + "$";
-        set_text(currPlayerCapacity, font1, capacity, 40, sf::Color::Black, sf::Text::Style::Regular, 60,
-                 370);
+        set_text(currPlayerCapacity, font2, capacity, 40, sf::Color::Black, sf::Text::Style::Regular, 60,
+                 400);
         window.draw(currPlayerCapacity);
+
+        // Player jail cards
+        std::string amountJailCards = "Count of jail cards: " + std::to_string(game.get_players()[game.get_cur_player_id()].get_amount_of_jail_cards());
+        set_text(currAmountJailCards, font2, amountJailCards, 20, sf::Color::Black, sf::Text::Style::Regular, 60, 470);
+        window.draw(currAmountJailCards);
 
         if (isRollDice) {
 
@@ -145,59 +178,71 @@ void GameWindow::draw(sf::RenderWindow &window) {
             dice2Sprite.setTextureRect(sf::IntRect(96 * (player.number_on_dice2 - 1), 0, 96, 96));
             window.draw(dice1Sprite);
             window.draw(dice2Sprite);
-
-            if (player.funcs == GameFieldTypes::YOU_CAN_BUY) {
-
-            }
         }
 
-        for (int i = 0; i < game.get_players().size(); i++) {
-            if (i == game.get_cur_player_id() && isRollDice) {
-                sf::Sprite sprite = game.get_players()[i].get_sprite();
-                int currPosition = player.new_position;
-                if (0 <= currPosition && currPosition <= 10) {
-                    if (currPosition == 0) {
-                        sprite.setPosition(1354 + i * 30, 870);
-                    } else if (currPosition == 10) {
-                        sprite.setPosition(552, 870);
-                    } else {
-                        sprite.setPosition(1384 - i * 10 - game.get_players()[i].get_position() * 85, 870);
-                    }
-                } else if (11 <= currPosition && currPosition <= 20) {
-                    sprite.setPosition(562, 870 - i * 10 - (currPosition - 10) * 85);
-                } else if (21 <= currPosition && currPosition <= 30) {
-                    sprite.setPosition(539 + i * 10 + (currPosition - 20) * 85, 80);
-                } else {
-                    sprite.setPosition(1354, 60 + i * 10 + (currPosition - 30) * 85);
-                }
-
-                window.draw(sprite);
-                continue;
-            }
-            sf::Sprite sprite = game.get_players()[i].get_sprite();
-            int currPosition = game.get_players()[i].get_position();
-
-            if (0 <= currPosition && currPosition <= 10) {
-                if (currPosition == 0) {
-                    sprite.setPosition(1354 + i * 30, 870);
-                } else if (currPosition == 10) {
-                    sprite.setPosition(552, 870);
-                } else {
-                    sprite.setPosition(1384 - i * 10 - game.get_players()[i].get_position() * 85, 870);
-                }
-            } else if (11 <= currPosition && currPosition <= 20) {
-                sprite.setPosition(562, 870 - i * 10 - (currPosition - 10) * 85);
-            } else if (21 <= currPosition && currPosition <= 30) {
-                sprite.setPosition(539 + i * 10 + (currPosition - 20) * 85, 80);
-            } else {
-                sprite.setPosition(1354, 60 + i * 10 + (currPosition - 30) * 85);
-            }
-            window.draw(sprite);
+//        if (isActiveBuyMode) {
+//            window.draw(fieldCardSprite);
+//        } else {
+        if (isActiveBuyMode) {
+            window.draw(fieldCardSprite);
+            game.buy_field();
+        } else if (isActiveDrawCardMode) {
+            window.draw(fieldCardSprite);
+            game.draw_card();
+        } else if (isActivePayBankMode) {
+            game.pay_bank(player.amount_to_pay);
+        } else if (isActivePayPlayerMode) {
+            game.pay_player(player.player_to_pay, player.amount_to_pay);
+        } else if (isActiveGoToJail) {
+            game.go_to_jail();
+        } else {
+            window.draw(completeTurnSprite);
+            window.draw(rollDiceButtonSprite);
         }
+
+        drawPlayers(window);
     }
 }
 
 
 void GameWindow::setGame(Game &game1) {
     game = game1;
+}
+
+void GameWindow::drawPlayers(sf::RenderWindow &window) {
+    for (int i = 0; i < game.get_players().size(); i++) {
+        if (i == game.get_cur_player_id() && isRollDice) {
+            drawPlayer(window, player.new_position, i);
+            continue;
+        }
+        drawPlayer(window, game.get_players()[i].get_position(), i);
+    }
+}
+
+void GameWindow::drawPlayer(sf::RenderWindow &window, int currPosition, int i) {
+    sf::Sprite sprite = game.get_players()[i].get_sprite();
+    if (0 <= currPosition && currPosition <= 10) {
+        if (currPosition == 0) {
+            sprite.setPosition(1354 + i * 30, 870);
+        } else if (currPosition == 10) {
+            sprite.setPosition(552, 870);
+        } else {
+            sprite.setPosition(1384 - i * 10 - game.get_players()[i].get_position() * 85, 870);
+        }
+    } else if (11 <= currPosition && currPosition <= 20) {
+        sprite.setOrigin(0, 76);
+        sprite.setRotation(90);
+        sprite.setPosition(562, 963 - i * 10 - (currPosition - 10) * 85);
+
+    } else if (21 <= currPosition && currPosition <= 30) {
+        sprite.setOrigin(42, 76);
+        sprite.setRotation(180);
+        sprite.setPosition(534 + i * 10 + (currPosition - 20) * 85, 140);
+    } else {
+
+        sprite.setOrigin(0, 76);
+        sprite.setRotation(-90);
+        sprite.setPosition(1357, 117 + i * 10 + (currPosition - 30) * 85);
+    }
+    window.draw(sprite);
 }
