@@ -157,6 +157,10 @@ bool Game::get_is_player_roll_dice() const {
     return is_player_roll_dice;
 }
 
+std::vector<Field*> Game::get_fields() const {
+    return game_fields;
+}
+
 int Game::number_on_dice() {
     return rand() % 6 + 1;
 }

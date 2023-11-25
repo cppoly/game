@@ -48,7 +48,7 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
     buyButtonSprite.setScale(0.6f, 0.6f);
 
     auctionButtonSprite = sf::Sprite(auctionButtonTexture);
-    auctionButtonSprite.setPosition((window.getSize().x / 2.f) + 50,window.getSize().y - 150);
+    auctionButtonSprite.setPosition((window.getSize().x / 2.f) + 50, window.getSize().y - 150);
     auctionButtonSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
     auctionButtonSprite.setScale(0.6f, 0.6f);
 
@@ -59,7 +59,7 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
 
     payButtonSprite = sf::Sprite(payButtonTexture);
     payButtonSprite.setPosition((window.getSize().x / 2.f) - 175, (window.getSize().y / 2.f) - 54.5f);
-    payButtonSprite.setTextureRect(sf::IntRect (0, 0, 360, 109));
+    payButtonSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
 
 
     // Cards
@@ -74,7 +74,7 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
     dice2Sprite.setPosition(200, 600);
 
     fieldCardSprite = sf::Sprite(fieldCardTexture);
-    fieldCardSprite.setPosition((window.getSize().x / 2.f) - 64*5, (window.getSize().y / 2.f) - 128*4);
+    fieldCardSprite.setPosition((window.getSize().x / 2.f) - 64 * 5, (window.getSize().y / 2.f) - 128 * 4);
     fieldCardSprite.setScale(5.f, 4.f);
 
     chanceCardSprite = sf::Sprite(chanceCardTexture);
@@ -156,6 +156,10 @@ bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
             } else {
                 rollDiceButtonSprite.setTextureRect(sf::IntRect(360 * 3, 0, 360, 109));
             }
+        } else if (buyButtonSprite.getGlobalBounds().contains(point)) {
+            buyButtonSprite.setTextureRect(sf::IntRect(360 * 2, 0, 360, 109));
+        } else if (auctionButtonSprite.getGlobalBounds().contains(point)) {
+            auctionButtonSprite.setTextureRect(sf::IntRect(360 * 2, 0, 360, 109));
         } else if (game.get_is_player_roll_dice()) {
             completeTurnSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
             rollDiceButtonSprite.setTextureRect(sf::IntRect(360 * 3, 0, 360, 109));
@@ -201,7 +205,8 @@ void GameWindow::draw(sf::RenderWindow &window) {
         window.draw(currPlayerCapacity);
 
         // Player jail cards
-        std::string amountJailCards = "Count of jail cards: " + std::to_string(game.get_players()[game.get_cur_player_id()].get_amount_of_jail_cards());
+        std::string amountJailCards = "Count of jail cards: " + std::to_string(
+                game.get_players()[game.get_cur_player_id()].get_amount_of_jail_cards());
         set_text(currAmountJailCards, font2, amountJailCards, 20, sf::Color::Black, sf::Text::Style::Regular, 60, 470);
         window.draw(currAmountJailCards);
 
@@ -218,6 +223,7 @@ void GameWindow::draw(sf::RenderWindow &window) {
             window.draw(fieldCardSprite);
             window.draw(buyButtonSprite);
             window.draw(auctionButtonSprite);
+
         } else if (isActiveDrawCardMode) {
             window.draw(fieldCardSprite);
         } else if (isActivePayBankMode) {
