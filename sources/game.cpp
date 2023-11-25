@@ -123,7 +123,7 @@ GameMove Game::player_move() {
         auto profitable_field = (ProfitableField &) field;
         if (profitable_field.get_owner() == nullptr) {
             return_obj.funcs = GameFieldTypes::YOU_CAN_BUY;
-            return_obj.field_to_buy = profitable_field;
+            return_obj.field_to_buy = &profitable_field;
         } else if (profitable_field.get_owner()->get_name() == players[cur_player_id].get_name()) {
             return_obj.funcs = GameFieldTypes::DO_NOTHING;
             if (is_player_do_move) {

@@ -22,9 +22,13 @@ class Player;
 
 class Field {
 public:
+    Field(FieldTypes);
+
     virtual ~Field() = default;
 
     virtual FieldTypes get_type() const;
+private:
+    FieldTypes field_type;
 };
 
 
@@ -44,18 +48,21 @@ private:
     std::string name = "Старт";
     int money_for_visit_start;
 
+    FieldTypes field_type = FieldTypes::START;
+
 };
 
 class ProfitableField : public Field {
 public:
-    ProfitableField() = default;
+//    ProfitableField() = default;
 
     ProfitableField(
             std::string name,
             int price,
             std::vector<int> rent,
             int mortgage_price,
-            int type
+            int type,
+            FieldTypes field_type
     );
 
     ~ProfitableField() override = default;
@@ -131,6 +138,8 @@ private:
     int mortgage_price;
     bool is_mortgaged = false;
     int type;
+
+    FieldTypes field_type = FieldTypes::STREET;
 };
 
 
@@ -150,6 +159,8 @@ private:
     int mortgage_price;
     bool is_mortgaged = false;
     int type;
+
+    FieldTypes field_type = FieldTypes::STATION;
 };
 
 
@@ -169,6 +180,8 @@ private:
     int mortgage_price;
     bool is_mortgaged = false;
     int type;
+
+    FieldTypes field_type = FieldTypes::UTILITY;
 };
 
 class Jail : public Field {
@@ -184,6 +197,8 @@ public:
 private:
     std::string name = "Тюрьма";
     int price;
+
+    FieldTypes field_type = FieldTypes::JAIL;
 };
 
 
@@ -198,6 +213,8 @@ public:
 private:
     std::string name = "Бесплатная парковка";
     int bonus = 0;
+
+    FieldTypes field_type = FieldTypes::PARKING;
 };
 
 
@@ -211,6 +228,8 @@ public:
 
 private:
     std::string name = "Иди в тюрьму";
+
+    FieldTypes field_type = FieldTypes::GO_TO_JAIL;
 };
 
 
@@ -227,6 +246,8 @@ public:
 private:
     std::string name = "Шанс";
     std::vector<Card> cards;
+
+    FieldTypes field_type = FieldTypes::CHANCE;
 };
 
 
@@ -243,6 +264,8 @@ public:
 private:
     std::string name = "Общественная казна";
     std::vector<Card> cards;
+
+    FieldTypes field_type = FieldTypes::COMMUNITY_CHEST;
 };
 
 
@@ -259,6 +282,8 @@ public:
 private:
     std::string name = "Налог";
     int price;
+
+    FieldTypes field_type = FieldTypes::TAX;
 };
 
 
