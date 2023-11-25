@@ -267,7 +267,7 @@ bool Game::buy_field() {
     auto player = players[cur_player_id];
     auto field = game_fields[player.get_position()];
 
-    if (field->get_type() != FieldTypes::STREET or field->get_type() != FieldTypes::STATION or
+    if (field->get_type() != FieldTypes::STREET and field->get_type() != FieldTypes::STATION and
         field->get_type() != FieldTypes::UTILITY) {
         throw std::runtime_error("Field is not profitable");
     }
