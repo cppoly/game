@@ -42,20 +42,15 @@ public:
 
     ~Start() override = default;
 
-    FieldTypes get_type() const override;
-
 private:
     std::string name = "Старт";
     int money_for_visit_start;
 
     FieldTypes field_type = FieldTypes::START;
-
 };
 
 class ProfitableField : public Field {
 public:
-//    ProfitableField() = default;
-
     ProfitableField(
             std::string name,
             int price,
@@ -116,8 +111,6 @@ public:
 
     int get_amount_of_houses() const;
 
-    FieldTypes get_type() const override;
-
     void build(Player &player);
 
     void sell_house(Player &player);
@@ -127,17 +120,9 @@ private:
 
     void build_hotel(Player &player) const;
 
-    std::string name;
-    int price;
-    std::vector<int> rent;
-
     int house_price;
     int hotel_price;
     int amount_of_houses = 0;
-
-    int mortgage_price;
-    bool is_mortgaged = false;
-    int type;
 
     FieldTypes field_type = FieldTypes::STREET;
 };
@@ -149,17 +134,7 @@ public:
 
     int get_rent(int amount_of_stations) const;
 
-    FieldTypes get_type() const override;
-
 private:
-    std::string name;
-    int price;
-    std::vector<int> rent;
-
-    int mortgage_price;
-    bool is_mortgaged = false;
-    int type;
-
     FieldTypes field_type = FieldTypes::STATION;
 };
 
@@ -170,17 +145,7 @@ public:
 
     int get_rent(int amount_of_utilities) const;
 
-    FieldTypes get_type() const override;
-
 private:
-    std::string name;
-    int price;
-    std::vector<int> rent;
-
-    int mortgage_price;
-    bool is_mortgaged = false;
-    int type;
-
     FieldTypes field_type = FieldTypes::UTILITY;
 };
 
@@ -191,8 +156,6 @@ public:
     ~Jail() override = default;
 
     int get_price() const;
-
-    FieldTypes get_type() const override;
 
 private:
     std::string name = "Тюрьма";
@@ -208,8 +171,6 @@ public:
 
     ~Parking() override = default;
 
-    FieldTypes get_type() const override;
-
 private:
     std::string name = "Бесплатная парковка";
     int bonus = 0;
@@ -224,8 +185,6 @@ public:
 
     ~GoToJail() override = default;
 
-    FieldTypes get_type() const override;
-
 private:
     std::string name = "Иди в тюрьму";
 
@@ -238,8 +197,6 @@ public:
     Chance();
 
     ~Chance() override = default;
-
-    FieldTypes get_type() const override;
 
     std::string draw_card(Player &player);
 
@@ -256,8 +213,6 @@ public:
     CommunityChest();
 
     ~CommunityChest() override = default;
-
-    FieldTypes get_type() const override;
 
     std::string draw_card(Player &player);
 
@@ -276,8 +231,6 @@ public:
     ~Tax() override = default;
 
     int get_price() const;
-
-    FieldTypes get_type() const override;
 
 private:
     std::string name = "Налог";
