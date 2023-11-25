@@ -32,6 +32,8 @@ public:
 
     int get_amount_of_jail_cards() const;
 
+    std::vector<ProfitableField*> get_fields() const;
+
     void set_money(int money);
 
     void set_position(int position);

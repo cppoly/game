@@ -34,6 +34,10 @@ int Player::get_amount_of_jail_cards() const {
     return amount_of_jail_cards;
 }
 
+std::vector<ProfitableField*> Player::get_fields() const {
+    return fields;
+}
+
 void Player::set_money(int money) {
     Player::money = money;
 }

@@ -65,6 +65,8 @@ public:
 
     bool get_is_player_roll_dice() const;
 
+    std::vector<Field*> get_fields() const;
+
     bool pay_player(int player_id, int amount);
 
     bool pay_bank(int amount);
