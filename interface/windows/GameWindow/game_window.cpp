@@ -8,6 +8,7 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
         !playerInformationCardTexture.loadFromFile("assets/sprite/playerInformationCard.png") ||
         !dice1Texture.loadFromFile("assets/sprite/DicePack/DiceSprSheetX96.png") ||
         !dice2Texture.loadFromFile("assets/sprite/DicePack/DiceSprSheetX96.png") ||
+        !fieldCardTexture.loadFromFile("assets/sprite/fieldCard.png") ||
         !font1.loadFromFile("assets/fonts/Bionicle.ttf")) {
         throw std::runtime_error("Can't load texture for GameWindow");
     }
@@ -46,6 +47,9 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
 
     dice2Sprite = sf::Sprite(dice2Texture);
     dice2Sprite.setPosition(200, 600);
+
+    fieldCardSprite = sf::Sprite(fieldCardTexture);
+    fieldCardSprite.setPosition((window.getSize().x / 2.f) - 175, (window.getSize().y / 2.f) - 200);
 
 }
 

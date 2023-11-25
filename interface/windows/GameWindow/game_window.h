@@ -21,6 +21,7 @@ public:
 private:
     bool isGameStarted = false;
     bool isRollDice = false;
+    bool isActiveBuyMode = false;
 
     GameMove player;
     sf::Sprite currPlayerSprite;
@@ -43,13 +44,22 @@ private:
     sf::Texture playerInformationCardTexture;
     sf::Sprite playerInformationCardSprite;
 
+    // Dices
     sf::Texture dice1Texture;
     sf::Texture dice2Texture;
 
     sf::Sprite dice1Sprite;
     sf::Sprite dice2Sprite;
 
+    // Cards
+
+    sf::Texture fieldCardTexture;
+    sf::Sprite fieldCardSprite;
+
+    // Fonts
+
     sf::Font font1;
+    sf::Font font2;
 
     Game game;
 };
