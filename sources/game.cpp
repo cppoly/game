@@ -282,6 +282,7 @@ bool Game::buy_field() {
     }
     profitable_field->buy(player);
     player.add_field(*profitable_field);
+    player.set_money(player.get_money() - profitable_field->get_price());
     players[cur_player_id] = player;
     game_fields[player.get_position()] = profitable_field;
 
