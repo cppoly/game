@@ -119,32 +119,32 @@ GameMove Game::player_move() {
     } else if (field_type == FieldTypes::GO_TO_JAIL) {
         return_obj.funcs = GameFieldTypes::GO_TO_JAIL;
     } else {
-        auto profitable_field = (ProfitableField &) field;
-        if (profitable_field.get_owner() == nullptr) {
-            return_obj.funcs = GameFieldTypes::YOU_CAN_BUY;
-            return_obj.field_to_buy = &profitable_field;
-        } else if (profitable_field.get_owner()->get_name() == players[cur_player_id].get_name()) {
-            return_obj.funcs = GameFieldTypes::DO_NOTHING;
-            if (is_player_do_move) {
-                is_player_do_move = true;
-            }
-        }
-        else {
-            int user_id = -1;
-            for (int i = 0; i < (int) players.size(); ++i) {
-                if (players[i].get_name() == profitable_field.get_owner()->get_name()) {
-                    user_id = i;
-                    break;
-                }
-            }
-            if (user_id == -1) {
-                throw std::runtime_error("Invalid user id");
-            }
-
-            return_obj.funcs = GameFieldTypes::PAY_PLAYER;
-            return_obj.player_to_pay = user_id;
-            return_obj.amount_to_pay = profitable_field.get_rent();
-        }
+        return_obj.funcs = GameFieldTypes::DO_NOTHING;
+//        auto profitable_field = (ProfitableField &) field;
+//        if (profitable_field.get_owner() == nullptr) {
+//            return_obj.funcs = GameFieldTypes::YOU_CAN_BUY;
+//            return_obj.field_to_buy = &profitable_field;
+//        } else if (profitable_field.get_owner()->get_name() == players[cur_player_id].get_name()) {
+//            return_obj.funcs = GameFieldTypes::DO_NOTHING;
+//            if (is_player_do_move) {
+//                is_player_do_move = true;
+//            }
+//        } else {
+//            int user_id = -1;
+//            for (int i = 0; i < (int) players.size(); ++i) {
+//                if (players[i].get_name() == profitable_field.get_owner()->get_name()) {
+//                    user_id = i;
+//                    break;
+//                }
+//            }
+//            if (user_id == -1) {
+//                throw std::runtime_error("Invalid user id");
+//            }
+//
+//            return_obj.funcs = GameFieldTypes::PAY_PLAYER;
+//            return_obj.player_to_pay = user_id;
+//            return_obj.amount_to_pay = profitable_field.get_rent();
+//        }
     }
 
     return return_obj;
@@ -268,7 +268,8 @@ bool Game::buy_field() {
     auto player = players[cur_player_id];
     auto field = game_fields[player.get_position()];
 
-    if (field.get_type() != FieldTypes::STREET or field.get_type() != FieldTypes::STATION or field.get_type() != FieldTypes::UTILITY) {
+    if (field.get_type() != FieldTypes::STREET or field.get_type() != FieldTypes::STATION or
+        field.get_type() != FieldTypes::UTILITY) {
         throw std::runtime_error("Field is not street");
     }
     auto profitable_field = (ProfitableField &) field;
@@ -315,7 +316,8 @@ bool Game::mortgage_field(int field_id) {
 
     auto player = players[cur_player_id];
     auto field = game_fields[field_id];
-    if (field.get_type() != FieldTypes::STREET or field.get_type() != FieldTypes::STATION or field.get_type() != FieldTypes::UTILITY) {
+    if (field.get_type() != FieldTypes::STREET or field.get_type() != FieldTypes::STATION or
+        field.get_type() != FieldTypes::UTILITY) {
         return false;
     }
     auto profitable_field = (ProfitableField &) field;
