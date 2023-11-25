@@ -96,12 +96,14 @@ GameMove Game::player_move() {
     }
 
     GameMove return_obj;
+    auto player = players[cur_player_id];
     return_obj.player_id = cur_player_id;
-    return_obj.old_position = players[cur_player_id].get_position();
+    return_obj.old_position = player.get_position();
     return_obj.number_on_dice1 = dice1;
     return_obj.number_on_dice2 = dice2;
-    players[cur_player_id].increment_position(dice1 + dice2);
-    return_obj.new_position = players[cur_player_id].get_position();
+    player.increment_position(dice1 + dice2);
+    return_obj.new_position = player.get_position();
+    players[cur_player_id] = player;
 
     auto field = game_fields[players[cur_player_id].get_position()];
     auto field_type = field.get_type();

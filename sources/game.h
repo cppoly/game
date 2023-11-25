@@ -25,8 +25,8 @@ struct GameMove {
     int new_position;
     GameFieldTypes funcs;
 
-    int player_to_pay;
-    int amount_to_pay;
+    int player_to_pay = -1;
+    int amount_to_pay = 0;
     ProfitableField field_to_buy;
 };
 
