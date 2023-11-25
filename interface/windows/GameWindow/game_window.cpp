@@ -92,106 +92,127 @@ bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
     if (event.type == sf::Event::MouseButtonPressed) {
         if (event.mouseButton.button == sf::Mouse::Left) {
             if (startGameButtonSprite.getGlobalBounds().contains(point)) {
-                startGameButtonSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
-                isGameStarted = true;
-
-                game.start_game();
+                onStartGame(window);
             } else if (completeTurnSprite.getGlobalBounds().contains(point)) {
-                if (game.get_is_player_roll_dice()) {
-                    completeTurnSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
-                    int id = game.next_turn();
-                    isRollDice = false;
-                    isActiveBuyMode = false;
-                    isActiveDrawCardMode = false;
-                    isActiveGoToJail = false;
-                    isActivePayBankMode = false;
-                    isActivePayPlayerMode = false;
-                }
+                onCompleteTurn(window);
             } else if (rollDiceButtonSprite.getGlobalBounds().contains(point)) {
-                if (!game.get_is_player_roll_dice()) {
-                    rollDiceButtonSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
-                    player = game.player_move();
-                    isRollDice = true;
-                    if (player.funcs == GameFieldTypes::YOU_CAN_BUY) {
-                        isActiveBuyMode = true;
-                    } else if (player.funcs == GameFieldTypes::YOU_CAN_BUY) {
-                        isActiveBuyMode = true;
-                    } else if (player.funcs == GameFieldTypes::PAY_BANK) {
-                        isActivePayBankMode = true;
-                    } else if (player.funcs == GameFieldTypes::PAY_PLAYER) {
-                        isActivePayPlayerMode = true;
-                    } else if (player.funcs == GameFieldTypes::DRAW_CARD) {
-                        card = game.draw_card();
-                        isActiveDrawCardMode = true;
-                    } else if (player.funcs == GameFieldTypes::GO_TO_JAIL) {
-                        isActiveGoToJail = true;
-                    } else {
-                        isActiveDoNothing = true;
-                    }
-                }
+                onRollDice(window);
             } else if (buyButtonSprite.getGlobalBounds().contains(point)) {
-                game.buy_field();
-                isActiveBuyMode = false;
+                onBuyClick(window);
             } else if (okButtonSprite.getGlobalBounds().contains(point)) {
-                okButtonSprite.setTextureRect({360, 0, 360, 109});
-                // TODO
+                onOkClick(window);
             } else if (payButtonSprite.getGlobalBounds().contains(point)) {
                 payButtonSprite.setTextureRect({360, 0, 360, 109});
             }
         }
     } else if (event.type == sf::Event::MouseMoved) {
-        if (startGameButtonSprite.getGlobalBounds().contains(point)) {
-            startGameButtonSprite.setTextureRect(sf::IntRect(360 * 2, 0, 360, 109));
-        } else if (completeTurnSprite.getGlobalBounds().contains(
-                window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-            if (game.get_is_player_roll_dice()) {
-                completeTurnSprite.setTextureRect(sf::IntRect(360 * 2, 0, 360, 109));
-            } else {
-                completeTurnSprite.setTextureRect(sf::IntRect(360 * 3, 0, 360, 109));
+        startGameButtonSprite.getGlobalBounds().contains(point)
+        ? startGameButtonSprite.setTextureRect({360 * 2, 0, 360, 109})
+        : startGameButtonSprite.setTextureRect({0, 0, 360, 109});
 
-            }
-        } else if (rollDiceButtonSprite.getGlobalBounds().contains(point)) {
-            if (!game.get_is_player_roll_dice()) {
-                rollDiceButtonSprite.setTextureRect(sf::IntRect(360 * 2, 0, 360, 109));
-            } else {
-                rollDiceButtonSprite.setTextureRect(sf::IntRect(360 * 3, 0, 360, 109));
-            }
-        } else if (buyButtonSprite.getGlobalBounds().contains(point)) {
-            buyButtonSprite.setTextureRect(sf::IntRect(360 * 2, 0, 360, 109));
-        } else if (auctionButtonSprite.getGlobalBounds().contains(point)) {
-            auctionButtonSprite.setTextureRect(sf::IntRect(360 * 2, 0, 360, 109));
-        } else if (game.get_is_player_roll_dice()) {
-            completeTurnSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
-            rollDiceButtonSprite.setTextureRect(sf::IntRect(360 * 3, 0, 360, 109));
-        } else if (!game.get_is_player_roll_dice()) {
-            completeTurnSprite.setTextureRect(sf::IntRect(360 * 3, 0, 360, 109));
-            rollDiceButtonSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
+        buyButtonSprite.getGlobalBounds().contains(point)
+        ? buyButtonSprite.setTextureRect(sf::IntRect(360 * 2, 0, 360, 109))
+        : buyButtonSprite.setTextureRect({0, 0, 360, 109});
+
+        auctionButtonSprite.getGlobalBounds().contains(point)
+        ? auctionButtonSprite.setTextureRect({360 * 2, 0, 360, 109})
+        : auctionButtonSprite.setTextureRect({0, 0, 360, 109});
+
+        if (completeTurnSprite.getGlobalBounds().contains(point)) {
+            game.get_is_player_roll_dice()
+            ? completeTurnSprite.setTextureRect(sf::IntRect(360 * 2, 0, 360, 109))
+            : completeTurnSprite.setTextureRect(sf::IntRect(360 * 3, 0, 360, 109));
+        } else {
+            game.get_is_player_roll_dice()
+            ? completeTurnSprite.setTextureRect({0, 0, 360, 109})
+            : completeTurnSprite.setTextureRect({360 * 3, 0, 360, 109});
         }
-    } else if (game.get_is_player_roll_dice()) {
-        completeTurnSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
-        rollDiceButtonSprite.setTextureRect(sf::IntRect(360 * 3, 0, 360, 109));
-    } else if (!game.get_is_player_roll_dice()) {
-        completeTurnSprite.setTextureRect(sf::IntRect(360 * 3, 0, 360, 109));
-        rollDiceButtonSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
+
+        if (rollDiceButtonSprite.getGlobalBounds().contains(point)) {
+            game.get_is_player_roll_dice()
+            ? rollDiceButtonSprite.setTextureRect(sf::IntRect(360 * 3, 0, 360, 109))
+            : rollDiceButtonSprite.setTextureRect(sf::IntRect(360 * 2, 0, 360, 109));
+        } else {
+            game.get_is_player_roll_dice()
+            ? rollDiceButtonSprite.setTextureRect({360 * 3, 0, 360, 109})
+            : rollDiceButtonSprite.setTextureRect({0, 0, 360, 109});
+        }
+    } else {
+        if (game.get_is_player_roll_dice()) {
+            completeTurnSprite.setTextureRect({0, 0, 360, 109});
+            rollDiceButtonSprite.setTextureRect({360 * 3, 0, 360, 109});
+        } else {
+            completeTurnSprite.setTextureRect({360 * 3, 0, 360, 109});
+            rollDiceButtonSprite.setTextureRect({0, 0, 360, 109});
+        }
     }
 
     return false;
+}
+
+void GameWindow::onStartGame(sf::RenderWindow &window) {
+    startGameButtonSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
+    isGameStarted = true;
+    game.start_game();
+}
+
+void GameWindow::onCompleteTurn(sf::RenderWindow &window) {
+    if (game.get_is_player_roll_dice()) {
+        completeTurnSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
+        int id = game.next_turn();
+        isRollDice = false;
+        isActiveBuyMode = false;
+        isActiveDrawCardMode = false;
+        isActiveGoToJail = false;
+        isActivePayBankMode = false;
+        isActivePayPlayerMode = false;
+    }
+}
+
+void GameWindow::onRollDice(sf::RenderWindow &window) {
+    if (!game.get_is_player_roll_dice()) {
+        rollDiceButtonSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
+        player = game.player_move();
+        isRollDice = true;
+        if (player.funcs == GameFieldTypes::YOU_CAN_BUY) {
+            isActiveBuyMode = true;
+        } else if (player.funcs == GameFieldTypes::YOU_CAN_BUY) {
+            isActiveBuyMode = true;
+        } else if (player.funcs == GameFieldTypes::PAY_BANK) {
+            isActivePayBankMode = true;
+        } else if (player.funcs == GameFieldTypes::PAY_PLAYER) {
+            isActivePayPlayerMode = true;
+        } else if (player.funcs == GameFieldTypes::DRAW_CARD) {
+            card = game.draw_card();
+            isActiveDrawCardMode = true;
+        } else if (player.funcs == GameFieldTypes::GO_TO_JAIL) {
+            isActiveGoToJail = true;
+        } else {
+            isActiveDoNothing = true;
+        }
+    }
+}
+
+void GameWindow::onBuyClick(sf::RenderWindow &window) {
+    game.buy_field();
+    isActiveBuyMode = false;
+}
+
+void GameWindow::onOkClick(sf::RenderWindow &window) {
+    okButtonSprite.setTextureRect({360, 0, 360, 109});
+    // TODO
 }
 
 void GameWindow::draw(sf::RenderWindow &window) {
     window.clear();
     window.draw(backgroundImageSprite);
 
-
     if (!isGameStarted) {
         backgroundImageSprite.setColor(sf::Color(255, 255, 255, 60));
         window.draw(startGameButtonSprite);
     } else {
         backgroundImageSprite.setColor(sf::Color(255, 255, 255, 255));
-
         window.draw(playerInformationCardSprite);
-//        window.draw(currPlayerSprite);
-
 
         // Player name
         std::string s = game.get_players()[game.get_cur_player_id()].get_name();
@@ -211,7 +232,6 @@ void GameWindow::draw(sf::RenderWindow &window) {
         window.draw(currAmountJailCards);
 
         if (isRollDice) {
-
             dice1Sprite.setTextureRect(sf::IntRect(96 * (player.number_on_dice1 - 1), 0, 96, 96));
             dice2Sprite.setTextureRect(sf::IntRect(96 * (player.number_on_dice2 - 1), 0, 96, 96));
             window.draw(dice1Sprite);
@@ -220,11 +240,38 @@ void GameWindow::draw(sf::RenderWindow &window) {
 
 
         if (isActiveBuyMode) {
+            backgroundImageSprite.setColor(sf::Color(255, 255, 255, 60));
+
+            auto currPlayer = game.get_players()[game.get_cur_player_id()];
+            auto field = game.get_fields()[currPlayer.get_position()];
+            auto fields = dynamic_cast<ProfitableField *> (field);
+
+            std::string price = std::to_string(fields->get_price());
+            sf::Text priceText;
+
+            std::string fieldName = field->get_name();
+            sf::Text fieldNameText;
+
+            set_text(priceText, font2, price, 50, sf::Color::Black, sf::Text::Style::Regular, (window.getSize().x /2.f) - 50, 830);
+            set_text(fieldNameText, font2, fieldName, 30, sf::Color::Black, sf::Text::Style::Regular, (window.getSize().x /2.f) - 64*4, 230);
+
             window.draw(fieldCardSprite);
             window.draw(buyButtonSprite);
             window.draw(auctionButtonSprite);
-
+            window.draw(fieldNameText);
+            window.draw(priceText);
         } else if (isActiveDrawCardMode) {
+            backgroundImageSprite.setColor(sf::Color(255, 255, 255, 60));
+
+            auto currPlayer = game.get_players()[game.get_cur_player_id()];
+            auto field = game.get_fields()[currPlayer.get_position()];
+            auto fields = dynamic_cast<ProfitableField *> (field);
+
+            if (fields->get_type() == FieldTypes::CHANCE) {
+
+            } else {
+
+            }
             window.draw(fieldCardSprite);
         } else if (isActivePayBankMode) {
             game.pay_bank(player.amount_to_pay);

@@ -15,6 +15,16 @@ public:
 
     bool handleEvent(sf::Event &event, sf::RenderWindow &window);
 
+    void onStartGame(sf::RenderWindow& window);
+
+    void onRollDice(sf::RenderWindow& window);
+
+    void onCompleteTurn(sf::RenderWindow& window);
+
+    void onBuyClick(sf::RenderWindow& window);
+
+    void onOkClick(sf::RenderWindow&window);
+
     void setGame(Game& game1);
 
     void drawPlayers(sf::RenderWindow& window);
