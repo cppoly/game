@@ -22,13 +22,19 @@ class Player;
 
 class Field {
 public:
-    Field(FieldTypes);
+    Field(FieldTypes, std::string name = "");
 
     virtual ~Field() = default;
 
     virtual FieldTypes get_type() const;
+
+    std::string get_name() const;
+
 private:
+
     FieldTypes field_type;
+
+    std::string name;
 };
 
 
@@ -43,7 +49,6 @@ public:
     ~Start() override = default;
 
 private:
-    std::string name = "Старт";
     int money_for_visit_start;
 
     FieldTypes field_type = FieldTypes::START;
@@ -62,8 +67,6 @@ public:
 
     ~ProfitableField() override = default;
 
-    std::string get_name() const;
-
     int get_price() const;
 
     int get_mortgage_price() const;
@@ -76,6 +79,8 @@ public:
 
     int get_rent() const;
 
+    int get_collection_type() const;
+
     Player *get_owner() const;
 
     void buy(Player &player);
@@ -85,7 +90,6 @@ public:
     void unmortgage();
 
 private:
-    std::string name;
     int price;
     std::vector<int> rent;
 
@@ -158,7 +162,6 @@ public:
     int get_price() const;
 
 private:
-    std::string name = "Тюрьма";
     int price;
 
     FieldTypes field_type = FieldTypes::JAIL;
@@ -172,7 +175,6 @@ public:
     ~Parking() override = default;
 
 private:
-    std::string name = "Бесплатная парковка";
     int bonus = 0;
 
     FieldTypes field_type = FieldTypes::PARKING;
@@ -186,8 +188,6 @@ public:
     ~GoToJail() override = default;
 
 private:
-    std::string name = "Иди в тюрьму";
-
     FieldTypes field_type = FieldTypes::GO_TO_JAIL;
 };
 
@@ -201,7 +201,6 @@ public:
     std::string draw_card(Player &player);
 
 private:
-    std::string name = "Шанс";
     std::vector<Card> cards;
 
     FieldTypes field_type = FieldTypes::CHANCE;
@@ -217,7 +216,6 @@ public:
     std::string draw_card(Player &player);
 
 private:
-    std::string name = "Общественная казна";
     std::vector<Card> cards;
 
     FieldTypes field_type = FieldTypes::COMMUNITY_CHEST;
@@ -233,7 +231,6 @@ public:
     int get_price() const;
 
 private:
-    std::string name = "Налог";
     int price;
 
     FieldTypes field_type = FieldTypes::TAX;

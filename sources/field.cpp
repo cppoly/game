@@ -1,7 +1,7 @@
 #include "field.h"
 
 
-Field::Field(FieldTypes type) : field_type(type) {}
+Field::Field(FieldTypes type, std::string name) : field_type(type), name(std::move(name)){}
 
 ProfitableField::ProfitableField(
         std::string name,
@@ -11,8 +11,7 @@ ProfitableField::ProfitableField(
         int type,
         FieldTypes field_type
 ) :
-        Field(field_type),
-        name(std::move(name)),
+        Field(field_type, name),
         price(price),
         rent(std::move(rent)),
         mortgage_price(mortgage_price),
@@ -24,23 +23,27 @@ Station::Station(std::string name, int price, std::vector<int> rent, int mortgag
 Utility::Utility(std::string name, int price, std::vector<int> rent, int mortgage_price, int type) :
         ProfitableField(name, price, rent, mortgage_price, type, FieldTypes::UTILITY) {}
 
-Tax::Tax(int tax) : Field(FieldTypes::TAX), price(tax) {}
+Tax::Tax(int tax) : Field(FieldTypes::TAX, "Tax"), price(tax) {}
 
-Jail::Jail(int price) : Field(FieldTypes::JAIL), price(price) {}
+Jail::Jail(int price) : Field(FieldTypes::JAIL, "Jail"), price(price) {}
+
+Start::Start(int money_for_visit_start) : Field(FieldTypes::START, "Start"), money_for_visit_start(money_for_visit_start) {}
+
+Street::Street(std::string name, int price, std::vector<int> rent, int house_price, int hotel_price, int mortgage_price,
+               int type)
+        :
+        ProfitableField(name, price, rent, mortgage_price, type, FieldTypes::STREET),
+        house_price(house_price), hotel_price(hotel_price) {}
 
 // todo: do it
-CommunityChest::CommunityChest() : Field(FieldTypes::COMMUNITY_CHEST) {}
+CommunityChest::CommunityChest() : Field(FieldTypes::COMMUNITY_CHEST, "Community_chest") {}
 
-Chance::Chance() : Field(FieldTypes::CHANCE) {}
+Chance::Chance() : Field(FieldTypes::CHANCE, "Chance") {}
 
-Parking::Parking() : Field(FieldTypes::PARKING) {}
+Parking::Parking() : Field(FieldTypes::PARKING, "Parking") {}
 
-GoToJail::GoToJail() : Field(FieldTypes::GO_TO_JAIL) {}
+GoToJail::GoToJail() : Field(FieldTypes::GO_TO_JAIL, "Jail") {}
 
-
-std::string ProfitableField::get_name() const {
-    return name;
-}
 
 int ProfitableField::get_price() const {
     return price;
@@ -96,14 +99,9 @@ int ProfitableField::get_rent() const {
     return rent[0];
 }
 
-Start::Start(int money_for_visit_start) : Field(FieldTypes::START), money_for_visit_start(money_for_visit_start) {}
-
-Street::Street(std::string name, int price, std::vector<int> rent, int house_price, int hotel_price, int mortgage_price,
-               int type)
-        :
-        ProfitableField(name, price, rent, mortgage_price, type, FieldTypes::STREET),
-        house_price(house_price), hotel_price(hotel_price) {}
-
+int ProfitableField::get_collection_type() const {
+    return type;
+}
 
 int Street::get_rent() const {
     // todo
@@ -176,4 +174,8 @@ int Jail::get_price() const {
 
 FieldTypes Field::get_type() const {
     return field_type;
+}
+
+std::string Field::get_name() const {
+    return name;
 }
