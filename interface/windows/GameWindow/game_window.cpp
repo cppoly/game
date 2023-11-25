@@ -43,14 +43,14 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
     rollDiceButtonSprite.setScale(0.8f, 0.8f);
 
     buyButtonSprite = sf::Sprite(buyButtonTexture);
-    buyButtonSprite.setPosition((window.getSize().x / 2.f) - 450 - buyButtonSprite.getLocalBounds().getSize().x,
-                                window.getSize().y - 30 - buyButtonSprite.getLocalBounds().getSize().y);
+    buyButtonSprite.setPosition((window.getSize().x / 2.f) - 270, window.getSize().y - 150);
     buyButtonSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
+    buyButtonSprite.setScale(0.6f, 0.6f);
 
     auctionButtonSprite = sf::Sprite(auctionButtonTexture);
-    auctionButtonSprite.setPosition((window.getSize().x / 2.f) + 450,
-            window.getSize().y - 30 - auctionButtonSprite.getLocalBounds().getSize().y);
+    auctionButtonSprite.setPosition((window.getSize().x / 2.f) + 50,window.getSize().y - 150);
     auctionButtonSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
+    auctionButtonSprite.setScale(0.6f, 0.6f);
 
     okButtonSprite = sf::Sprite(okButtonTexture);
     okButtonSprite.setPosition((window.getSize().x / 2.f) - 175, (window.getSize().y / 2.f) - 54.5f);
@@ -59,7 +59,7 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
 
     payButtonSprite = sf::Sprite(payButtonTexture);
     payButtonSprite.setPosition((window.getSize().x / 2.f) - 175, (window.getSize().y / 2.f) - 54.5f);
-    payButtonSprite.setTextureRect({0, 0, 360, 109});
+    payButtonSprite.setTextureRect(sf::IntRect (0, 0, 360, 109));
 
 
     // Cards
@@ -74,8 +74,8 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
     dice2Sprite.setPosition(200, 600);
 
     fieldCardSprite = sf::Sprite(fieldCardTexture);
-    fieldCardSprite.setPosition((window.getSize().x / 2.f) - 175, (window.getSize().y / 2.f) - 200);
-    fieldCardSprite.setScale(3.f, 3.f);
+    fieldCardSprite.setPosition((window.getSize().x / 2.f) - 64*5, (window.getSize().y / 2.f) - 128*4);
+    fieldCardSprite.setScale(5.f, 4.f);
 
     chanceCardSprite = sf::Sprite(chanceCardTexture);
     chanceCardSprite.setPosition((window.getSize().x / 2.f) - 175, (window.getSize().y / 2.f) - 200);
@@ -135,8 +135,8 @@ bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
             } else if (okButtonSprite.getGlobalBounds().contains(point)) {
                 okButtonSprite.setTextureRect({360, 0, 360, 109});
                 // TODO
-            } else if (okButtonSprite.getGlobalBounds().contains(point)) {
-
+            } else if (payButtonSprite.getGlobalBounds().contains(point)) {
+                payButtonSprite.setTextureRect({360, 0, 360, 109});
             }
         }
     } else if (event.type == sf::Event::MouseMoved) {
@@ -213,18 +213,13 @@ void GameWindow::draw(sf::RenderWindow &window) {
             window.draw(dice2Sprite);
         }
 
-//        if (isActiveBuyMode) {
-//            window.draw(fieldCardSprite);
-//        } else {
+
         if (isActiveBuyMode) {
             window.draw(fieldCardSprite);
             window.draw(buyButtonSprite);
             window.draw(auctionButtonSprite);
-//            game.buy_field();
         } else if (isActiveDrawCardMode) {
-
             window.draw(fieldCardSprite);
-//            game.draw_card();
         } else if (isActivePayBankMode) {
             game.pay_bank(player.amount_to_pay);
         } else if (isActivePayPlayerMode) {
@@ -234,9 +229,8 @@ void GameWindow::draw(sf::RenderWindow &window) {
         } else {
             window.draw(completeTurnSprite);
             window.draw(rollDiceButtonSprite);
+            drawPlayers(window);
         }
-
-        drawPlayers(window);
     }
 }
 
