@@ -97,7 +97,7 @@ private:
 
     int cur_player_id;
 
-    std::vector<Field> game_fields;
+    std::vector<Field *> game_fields;
     std::vector<Player> players;
 
     bool is_game_started = false;

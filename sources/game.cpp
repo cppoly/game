@@ -28,46 +28,46 @@ const std::vector<Player> Game::get_players() const {
 }
 
 void Game::feel_game_fields() {
-    game_fields.push_back(Start(settings.get_bonus_for_visit_start()));
-    game_fields.push_back(Street("Buford village", 60, {2, 10, 30, 90, 160, 250}, 50, 50, 30, 1));
-    game_fields.push_back(CommunityChest());
-    game_fields.push_back(Street("Stonington village", 60, {4, 20, 60, 180, 320, 450}, 50, 50, 30, 1));
-    game_fields.push_back(Tax(200));
-    game_fields.push_back(Station("Porshe", 200, {25, 50, 100, 200}, 100, 9));
-    game_fields.push_back(Street("Mont-Saint Michel", 100, {6, 30, 90, 270, 400, 550}, 50, 50, 50, 2));
-    game_fields.push_back(Chance());
-    game_fields.push_back(Street("Chateau d'If", 100, {6, 30, 90, 270, 400, 550}, 50, 50, 50, 2));
-    game_fields.push_back(Street("Hogwarts", 120, {8, 40, 100, 300, 450, 600}, 50, 50, 60, 2));
-    game_fields.push_back(Jail(settings.get_jail_price()));
-    game_fields.push_back(Street("Kawasaki town", 140, {10, 50, 150, 450, 625, 750}, 100, 100, 70, 3));
-    game_fields.push_back(Utility("Ice cream van", 150, {4, 10}, 75, 10));
-    game_fields.push_back(Street("Fukuoka town", 140, {10, 50, 150, 450, 625, 750}, 100, 100, 70, 3));
-    game_fields.push_back(Street("Kioto town", 160, {12, 60, 180, 500, 700, 900}, 100, 100, 80, 3));
-    game_fields.push_back(Station("Porshe", 200, {25, 50, 100, 200}, 100, 9));
-    game_fields.push_back(Street("Khibiny", 180, {14, 70, 200, 550, 750, 950}, 100, 100, 90, 4));
-    game_fields.push_back(Chance());
-    game_fields.push_back(Street("Alps", 180, {14, 70, 200, 550, 750, 950}, 100, 100, 90, 4));
-    game_fields.push_back(Street("Patagonia", 200, {16, 80, 220, 600, 800, 1000}, 100, 100, 100, 4));
-    game_fields.push_back(Parking());
-    game_fields.push_back(Street("Fairytale forest", 220, {18, 90, 250, 700, 875, 1050}, 150, 150, 110, 5));
-    game_fields.push_back(Street("Lake Geneva", 220, {18, 90, 250, 700, 875, 1050}, 150, 150, 110, 5));
-    game_fields.push_back(CommunityChest());
-    game_fields.push_back(Street("Meadow", 240, {20, 100, 300, 750, 925, 1100}, 150, 150, 120, 5));
-    game_fields.push_back(Station("Porshe", 200, {25, 50, 100, 200}, 100, 9));
-    game_fields.push_back(Street("Surfer's cove", 260, {22, 110, 330, 800, 975, 1150}, 150, 150, 130, 6));
-    game_fields.push_back(Street("Maldives", 260, {22, 110, 330, 800, 975, 1150}, 150, 150, 130, 6));
-    game_fields.push_back(Utility("Laundromat", 150, {4, 10}, 75, 10));
-    game_fields.push_back(Street("Bali", 280, {24, 120, 360, 850, 1025, 1200}, 150, 150, 140, 6));
-    game_fields.push_back(GoToJail());
-    game_fields.push_back(Street("Aqua park resort", 300, {26, 130, 390, 900, 1100, 1275}, 200, 200, 150, 7));
-    game_fields.push_back(Street("Himeji castle", 300, {26, 130, 390, 900, 1100, 1275}, 200, 200, 150, 7));
-    game_fields.push_back(CommunityChest());
-    game_fields.push_back(Street("Torii", 320, {28, 150, 450, 1000, 1200, 1400}, 200, 200, 160, 7));
-    game_fields.push_back(Station("Porshe", 200, {25, 50, 100, 200}, 100, 9));
-    game_fields.push_back(Chance());
-    game_fields.push_back(Street("Fortuna valley", 350, {35, 175, 500, 1100, 1300, 1500}, 200, 200, 175, 8));
-    game_fields.push_back(Tax(100));
-    game_fields.push_back(Street("Paradise island", 400, {50, 200, 600, 1400, 1700, 2000}, 200, 200, 200, 8));
+    game_fields.push_back(new Start(settings.get_bonus_for_visit_start()));
+    game_fields.push_back(new Street("Buford village", 60, {2, 10, 30, 90, 160, 250}, 50, 50, 30, 1));
+    game_fields.push_back(new CommunityChest());
+    game_fields.push_back(new Street("Stonington village", 60, {4, 20, 60, 180, 320, 450}, 50, 50, 30, 1));
+    game_fields.push_back(new Tax(200));
+    game_fields.push_back(new Station("Porshe", 200, {25, 50, 100, 200}, 100, 9));
+    game_fields.push_back(new Street("Mont-Saint Michel", 100, {6, 30, 90, 270, 400, 550}, 50, 50, 50, 2));
+    game_fields.push_back(new Chance());
+    game_fields.push_back(new Street("Chateau d'If", 100, {6, 30, 90, 270, 400, 550}, 50, 50, 50, 2));
+    game_fields.push_back(new Street("Hogwarts", 120, {8, 40, 100, 300, 450, 600}, 50, 50, 60, 2));
+    game_fields.push_back(new Jail(settings.get_jail_price()));
+    game_fields.push_back(new Street("Kawasaki town", 140, {10, 50, 150, 450, 625, 750}, 100, 100, 70, 3));
+    game_fields.push_back(new Utility("Ice cream van", 150, {4, 10}, 75, 10));
+    game_fields.push_back(new Street("Fukuoka town", 140, {10, 50, 150, 450, 625, 750}, 100, 100, 70, 3));
+    game_fields.push_back(new Street("Kioto town", 160, {12, 60, 180, 500, 700, 900}, 100, 100, 80, 3));
+    game_fields.push_back(new Station("Porshe", 200, {25, 50, 100, 200}, 100, 9));
+    game_fields.push_back(new Street("Khibiny", 180, {14, 70, 200, 550, 750, 950}, 100, 100, 90, 4));
+    game_fields.push_back(new Chance());
+    game_fields.push_back(new Street("Alps", 180, {14, 70, 200, 550, 750, 950}, 100, 100, 90, 4));
+    game_fields.push_back(new Street("Patagonia", 200, {16, 80, 220, 600, 800, 1000}, 100, 100, 100, 4));
+    game_fields.push_back(new Parking());
+    game_fields.push_back(new Street("Fairytale forest", 220, {18, 90, 250, 700, 875, 1050}, 150, 150, 110, 5));
+    game_fields.push_back(new Street("Lake Geneva", 220, {18, 90, 250, 700, 875, 1050}, 150, 150, 110, 5));
+    game_fields.push_back(new CommunityChest());
+    game_fields.push_back(new Street("Meadow", 240, {20, 100, 300, 750, 925, 1100}, 150, 150, 120, 5));
+    game_fields.push_back(new Station("Porshe", 200, {25, 50, 100, 200}, 100, 9));
+    game_fields.push_back(new Street("Surfer's cove", 260, {22, 110, 330, 800, 975, 1150}, 150, 150, 130, 6));
+    game_fields.push_back(new Street("Maldives", 260, {22, 110, 330, 800, 975, 1150}, 150, 150, 130, 6));
+    game_fields.push_back(new Utility("Laundromat", 150, {4, 10}, 75, 10));
+    game_fields.push_back(new Street("Bali", 280, {24, 120, 360, 850, 1025, 1200}, 150, 150, 140, 6));
+    game_fields.push_back(new GoToJail());
+    game_fields.push_back(new Street("Aqua park resort", 300, {26, 130, 390, 900, 1100, 1275}, 200, 200, 150, 7));
+    game_fields.push_back(new Street("Himeji castle", 300, {26, 130, 390, 900, 1100, 1275}, 200, 200, 150, 7));
+    game_fields.push_back(new CommunityChest());
+    game_fields.push_back(new Street("Torii", 320, {28, 150, 450, 1000, 1200, 1400}, 200, 200, 160, 7));
+    game_fields.push_back(new Station("Porshe", 200, {25, 50, 100, 200}, 100, 9));
+    game_fields.push_back(new Chance());
+    game_fields.push_back(new Street("Fortuna valley", 350, {35, 175, 500, 1100, 1300, 1500}, 200, 200, 175, 8));
+    game_fields.push_back(new Tax(100));
+    game_fields.push_back(new Street("Paradise island", 400, {50, 200, 600, 1400, 1700, 2000}, 200, 200, 200, 8));
 }
 
 void Game::start_game() {
@@ -104,8 +104,8 @@ GameMove Game::player_move() {
     return_obj.new_position = player.get_position();
     players[cur_player_id] = player;
 
-    auto field = game_fields[players[cur_player_id].get_position()];
-    auto field_type = field.get_type();
+    auto field = game_fields[player.get_position()];
+    auto field_type = field->get_type();
     if (field_type == FieldTypes::START or field_type == FieldTypes::PARKING or field_type == FieldTypes::JAIL) {
         return_obj.funcs = GameFieldTypes::DO_NOTHING;
         if (is_player_roll_dice) {
@@ -119,32 +119,31 @@ GameMove Game::player_move() {
     } else if (field_type == FieldTypes::GO_TO_JAIL) {
         return_obj.funcs = GameFieldTypes::GO_TO_JAIL;
     } else {
-        return_obj.funcs = GameFieldTypes::DO_NOTHING;
-//        auto profitable_field = (ProfitableField &) field;
-//        if (profitable_field.get_owner() == nullptr) {
-//            return_obj.funcs = GameFieldTypes::YOU_CAN_BUY;
-//            return_obj.field_to_buy = &profitable_field;
-//        } else if (profitable_field.get_owner()->get_name() == players[cur_player_id].get_name()) {
-//            return_obj.funcs = GameFieldTypes::DO_NOTHING;
-//            if (is_player_do_move) {
-//                is_player_do_move = true;
-//            }
-//        } else {
-//            int user_id = -1;
-//            for (int i = 0; i < (int) players.size(); ++i) {
-//                if (players[i].get_name() == profitable_field.get_owner()->get_name()) {
-//                    user_id = i;
-//                    break;
-//                }
-//            }
-//            if (user_id == -1) {
-//                throw std::runtime_error("Invalid user id");
-//            }
-//
-//            return_obj.funcs = GameFieldTypes::PAY_PLAYER;
-//            return_obj.player_to_pay = user_id;
-//            return_obj.amount_to_pay = profitable_field.get_rent();
-//        }
+        auto profitable_field = dynamic_cast<ProfitableField *>(game_fields[player.get_position()]);
+        if (profitable_field->get_owner() == nullptr) {
+            return_obj.funcs = GameFieldTypes::YOU_CAN_BUY;
+            return_obj.field_to_buy = profitable_field;
+        } else if (profitable_field->get_owner()->get_name() == players[cur_player_id].get_name()) {
+            return_obj.funcs = GameFieldTypes::DO_NOTHING;
+            if (is_player_do_move) {
+                is_player_do_move = true;
+            }
+        } else {
+            int user_id = -1;
+            for (int i = 0; i < (int) players.size(); ++i) {
+                if (players[i].get_name() == profitable_field->get_owner()->get_name()) {
+                    user_id = i;
+                    break;
+                }
+            }
+            if (user_id == -1) {
+                throw std::runtime_error("Invalid user id");
+            }
+
+            return_obj.funcs = GameFieldTypes::PAY_PLAYER;
+            return_obj.player_to_pay = user_id;
+            return_obj.amount_to_pay = profitable_field->get_rent();
+        }
     }
 
     return return_obj;
@@ -268,23 +267,23 @@ bool Game::buy_field() {
     auto player = players[cur_player_id];
     auto field = game_fields[player.get_position()];
 
-    if (field.get_type() != FieldTypes::STREET or field.get_type() != FieldTypes::STATION or
-        field.get_type() != FieldTypes::UTILITY) {
+    if (field->get_type() != FieldTypes::STREET or field->get_type() != FieldTypes::STATION or
+        field->get_type() != FieldTypes::UTILITY) {
         throw std::runtime_error("Field is not street");
     }
-    auto profitable_field = (ProfitableField &) field;
+    auto profitable_field = dynamic_cast<ProfitableField *> (field);
 
-    if (profitable_field.get_owner() != nullptr) {
+    if (profitable_field->get_owner() != nullptr) {
         throw std::runtime_error("Field already has owner");
     }
 
-    if (player.get_money() < profitable_field.get_price()) {
+    if (player.get_money() < profitable_field->get_price()) {
         return false;
     }
-    profitable_field.buy(player);
-    player.add_field(profitable_field);
+    profitable_field->buy(player);
+    player.add_field(*profitable_field);
     players[cur_player_id] = player;
-    game_fields[player.get_position()] = dynamic_cast<Field &>(profitable_field);
+    game_fields[player.get_position()] = profitable_field;
 
     if (is_player_roll_dice) {
         is_player_do_move = true;
@@ -316,23 +315,23 @@ bool Game::mortgage_field(int field_id) {
 
     auto player = players[cur_player_id];
     auto field = game_fields[field_id];
-    if (field.get_type() != FieldTypes::STREET or field.get_type() != FieldTypes::STATION or
-        field.get_type() != FieldTypes::UTILITY) {
+    if (field->get_type() != FieldTypes::STREET or field->get_type() != FieldTypes::STATION or
+        field->get_type() != FieldTypes::UTILITY) {
         return false;
     }
-    auto profitable_field = (ProfitableField &) field;
+    auto profitable_field = dynamic_cast<ProfitableField *>(field);
 
-    if (profitable_field.get_owner()->get_name() != player.get_name()) {
+    if (profitable_field->get_owner()->get_name() != player.get_name()) {
         return false;
     }
-    if (profitable_field.get_is_mortgaged()) {
+    if (profitable_field->get_is_mortgaged()) {
         return false;
     }
 
-    profitable_field.mortgage();
-    player.set_money(player.get_money() + profitable_field.get_mortgage_price());
+    profitable_field->mortgage();
+    player.set_money(player.get_money() + profitable_field->get_mortgage_price());
     players[cur_player_id] = player;
-    game_fields[field_id] = dynamic_cast<Field &>(profitable_field);
+    game_fields[field_id] = profitable_field;
     return true;
 }
 
@@ -344,12 +343,12 @@ bool Game::build_house(int field_id) {
 
     auto player = players[cur_player_id];
     auto field = game_fields[field_id];
-    if (field.get_type() != FieldTypes::STREET) {
+    if (field->get_type() != FieldTypes::STREET) {
         throw std::runtime_error("Field is not street");
     }
-    auto profitable_field = (ProfitableField &) field;
+    auto profitable_field = dynamic_cast<Street *>(field);
 
-    if (profitable_field.get_owner()->get_name() != player.get_name()) {
+    if (profitable_field->get_owner()->get_name() != player.get_name()) {
         throw std::runtime_error("Player is not owner of this field");
     }
     return true;
@@ -364,16 +363,16 @@ bool Game::sell_house(int field_id) {
     auto player = players[cur_player_id];
     auto field = game_fields[field_id];
 
-    if (field.get_type() != FieldTypes::STREET) {
+    if (field->get_type() != FieldTypes::STREET) {
         throw std::runtime_error("Field is not street");
     }
 
-    auto profitable_field = (Street &) field;
+    auto profitable_field = dynamic_cast<Street *>(field);
 
-    if (profitable_field.get_owner()->get_name() != player.get_name()) {
+    if (profitable_field->get_owner()->get_name() != player.get_name()) {
         throw std::runtime_error("Player is not owner of this field");
     }
-    if (profitable_field.get_amount_of_houses() == 0) {
+    if (profitable_field->get_amount_of_houses() == 0) {
         throw std::runtime_error("Field has no houses");
     }
     return true;
