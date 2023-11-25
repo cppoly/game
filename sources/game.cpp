@@ -107,6 +107,9 @@ GameMove Game::player_move() {
     auto field_type = field.get_type();
     if (field_type == FieldTypes::START or field_type == FieldTypes::PARKING or field_type == FieldTypes::JAIL) {
         return_obj.funcs = GameFieldTypes::DO_NOTHING;
+        if (is_player_roll_dice) {
+            is_player_do_move = true;
+        }
     } else if (field_type == FieldTypes::TAX) {
         return_obj.funcs = GameFieldTypes::PAY_BANK;
         return_obj.amount_to_pay = ((Tax &) field).get_price();
@@ -121,9 +124,11 @@ GameMove Game::player_move() {
             return_obj.field_to_buy = profitable_field;
         } else if (profitable_field.get_owner()->get_name() == players[cur_player_id].get_name()) {
             return_obj.funcs = GameFieldTypes::DO_NOTHING;
+            if (is_player_do_move) {
+                is_player_do_move = true;
+            }
         }
         else {
-            // user_id find in players
             int user_id = -1;
             for (int i = 0; i < (int) players.size(); ++i) {
                 if (players[i].get_name() == profitable_field.get_owner()->get_name()) {
@@ -201,7 +206,6 @@ bool Game::pay_player(int player_id, int amount) {
     if (!is_game_started) {
         throw std::runtime_error("Game is not started");
     }
-
     if (player_id < 0 || player_id >= (int) players.size()) {
         throw std::runtime_error("Invalid player id");
     }
@@ -211,6 +215,7 @@ bool Game::pay_player(int player_id, int amount) {
     if (players[cur_player_id].get_money() < amount) {
         return false;
     }
+
     players[cur_player_id].set_money(players[cur_player_id].get_money() - amount);
     players[player_id].set_money(players[player_id].get_money() + amount);
     if (is_player_roll_dice) {
@@ -302,22 +307,23 @@ bool Game::set_field_on_auction() {
 }
 
 bool Game::mortgage_field(int field_id) {
+    // todo: проверка, что на других домах нет зданий
     if (!is_game_started) {
-        throw std::runtime_error("Game is not started");
+        return false;
     }
 
     auto player = players[cur_player_id];
     auto field = game_fields[field_id];
     if (field.get_type() != FieldTypes::STREET or field.get_type() != FieldTypes::STATION or field.get_type() != FieldTypes::UTILITY) {
-        throw std::runtime_error("Field is not street");
+        return false;
     }
     auto profitable_field = (ProfitableField &) field;
 
     if (profitable_field.get_owner()->get_name() != player.get_name()) {
-        throw std::runtime_error("Player is not owner of this field");
+        return false;
     }
     if (profitable_field.get_is_mortgaged()) {
-        throw std::runtime_error("Field is already mortgaged");
+        return false;
     }
 
     profitable_field.mortgage();

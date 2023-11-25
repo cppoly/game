@@ -58,7 +58,7 @@ public:
             int type
     );
 
-    ~ProfitableField() = default;
+    ~ProfitableField() override = default;
 
     std::string get_name() const;
 
@@ -70,18 +70,17 @@ public:
 
     std::vector<int> get_rent_vector() const;
 
+    bool get_is_mortgaged() const;
+
+    int get_rent() const;
+
+    Player *get_owner() const;
+
     void buy(Player &player);
 
     void mortgage();
 
     void unmortgage();
-
-    bool get_is_mortgaged() const;
-
-    int get_rent() const;
-
-
-    Player *get_owner() const;
 
 private:
     std::string name;
@@ -110,11 +109,11 @@ public:
 
     int get_amount_of_houses() const;
 
+    FieldTypes get_type() const override;
+
     void build(Player &player);
 
     void sell_house(Player &player);
-
-    FieldTypes get_type() const override;
 
 private:
     void build_house(Player &player) const;
@@ -180,8 +179,6 @@ public:
 
     int get_price() const;
 
-    void visit(Player &player);
-
     FieldTypes get_type() const override;
 
 private:
@@ -223,9 +220,9 @@ public:
 
     ~Chance() override = default;
 
-    std::string draw_card(Player &player);
-
     FieldTypes get_type() const override;
+
+    std::string draw_card(Player &player);
 
 private:
     std::string name = "Шанс";
@@ -239,9 +236,9 @@ public:
 
     ~CommunityChest() override = default;
 
-    std::string draw_card(Player &player);
-
     FieldTypes get_type() const override;
+
+    std::string draw_card(Player &player);
 
 private:
     std::string name = "Общественная казна";
@@ -253,9 +250,9 @@ class Tax : public Field {
 public:
     Tax(int price);
 
-    int get_price() const;
-
     ~Tax() override = default;
+
+    int get_price() const;
 
     FieldTypes get_type() const override;
 

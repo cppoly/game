@@ -40,9 +40,7 @@ public:
 
     void add_field(ProfitableField &field);
 
-    void remove_street(Field &field);
-
-    void mortgage_street(Field &field);
+    void remove_field(ProfitableField &field);
 
     void increment_position(int number_on_dice);
 
@@ -58,6 +56,6 @@ private:
     int position;
     int amount_of_jail_cards;
 
-    std::vector<Field *> fields;
+    std::vector<ProfitableField *> fields;
     // todo: is in jail
 };

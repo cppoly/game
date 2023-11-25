@@ -28,7 +28,6 @@ int main() {
 
     auto settingsWindow = SettingsWindow(window);
 
-
     // Character
 
     auto characterWindow = CharacterWindow(window);
@@ -68,6 +67,7 @@ int main() {
             } else if (isActiveGame) {
                 if (gameWindow.handleEvent(event, window)) {
                     isActiveGame = false;
+                    isActiveMainScreen = true;
                 }
             }
         }

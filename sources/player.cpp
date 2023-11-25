@@ -54,24 +54,10 @@ void Player::add_field(ProfitableField &field) {
     fields.push_back(&field);
 }
 
-void Player::remove_street(Field &field) {
+void Player::remove_field(ProfitableField &field) {
     for (auto it = fields.begin(); it != fields.end(); ++it) {
         if (*it == &field) {
             fields.erase(it);
-            // TODO: add money
-            // TODO: check houses
-            // TODO: check hotels
-            break;
-        }
-    }
-}
-
-void Player::mortgage_street(Field &field) {
-    for (auto it = fields.begin(); it != fields.end(); ++it) {
-        if (*it == &field) {
-            fields.erase(it);
-            // TODO: add money
-            // TODO: do not remove field
             break;
         }
     }

@@ -79,6 +79,8 @@ public:
 
     bool mortgage_field(int field_id);
 
+    bool unmortgage_field(int field_id);
+
     bool build_house(int field_id);
 
     bool sell_house(int field_id);
@@ -103,3 +105,5 @@ private:
     bool is_player_roll_dice = false;
     bool is_player_do_move = false;
 };
+
+// todo: если дубль ход все равно надо сделать
