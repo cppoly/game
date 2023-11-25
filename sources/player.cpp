@@ -12,7 +12,6 @@ Player::Player(
         money(money),
         position(position),
         amount_of_jail_cards(amount_of_jail_cards) {
-    fields = std::vector<Field *>();
 }
 
 int Player::get_money() const {
