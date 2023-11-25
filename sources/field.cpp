@@ -18,6 +18,26 @@ ProfitableField::ProfitableField(
         mortgage_price(mortgage_price),
         type(type) {}
 
+Station::Station(std::string name, int price, std::vector<int> rent, int mortgage_price, int type) :
+        ProfitableField(name, price, rent, mortgage_price, type, FieldTypes::STATION) {}
+
+Utility::Utility(std::string name, int price, std::vector<int> rent, int mortgage_price, int type) :
+        ProfitableField(name, price, rent, mortgage_price, type, FieldTypes::UTILITY) {}
+
+Tax::Tax(int tax) : Field(FieldTypes::TAX), price(tax) {}
+
+Jail::Jail(int price) : Field(FieldTypes::JAIL), price(price) {}
+
+// todo: do it
+CommunityChest::CommunityChest() : Field(FieldTypes::COMMUNITY_CHEST) {}
+
+Chance::Chance() : Field(FieldTypes::CHANCE) {}
+
+Parking::Parking() : Field(FieldTypes::PARKING) {}
+
+GoToJail::GoToJail() : Field(FieldTypes::GO_TO_JAIL) {}
+
+
 std::string ProfitableField::get_name() const {
     return name;
 }
@@ -81,15 +101,13 @@ Start::Start(int money_for_visit_start) : Field(FieldTypes::START), money_for_vi
 Street::Street(std::string name, int price, std::vector<int> rent, int house_price, int hotel_price, int mortgage_price,
                int type)
         :
-        ProfitableField(name, price, rent, mortgage_price, type, FieldTypes::STREET), name(std::move(name)),
-        price(price),
-        rent(std::move(rent)), house_price(house_price), hotel_price(hotel_price), mortgage_price(mortgage_price),
-        type(type) {}
+        ProfitableField(name, price, rent, mortgage_price, type, FieldTypes::STREET),
+        house_price(house_price), hotel_price(hotel_price) {}
 
 
 int Street::get_rent() const {
     // todo
-    return rent[amount_of_houses];
+    return get_rent_vector()[amount_of_houses];
 }
 
 int Street::get_house_price() const {
@@ -140,85 +158,22 @@ void Street::build_hotel(Player &player) const {
 
 int Station::get_rent(int amount_of_stations) const {
     // todo
-    return rent[amount_of_stations];
+    return get_rent_vector()[amount_of_stations];
 }
 
 int Utility::get_rent(int amount_of_utilities) const {
     // todo
-    return rent[amount_of_utilities];
+    return get_rent_vector()[amount_of_utilities];
 }
-
-Station::Station(std::string name, int price, std::vector<int> rent, int mortgage_price, int type) :
-        ProfitableField(name, price, rent, mortgage_price, type, FieldTypes::STATION), name(std::move(name)),
-        price(price),
-        rent(std::move(rent)), mortgage_price(mortgage_price), type(type) {}
-
-Utility::Utility(std::string name, int price, std::vector<int> rent, int mortgage_price, int type) :
-        ProfitableField(name, price, rent, mortgage_price, type, FieldTypes::UTILITY), name(std::move(name)),
-        price(price),
-        rent(std::move(rent)), mortgage_price(mortgage_price), type(type) {}
-
-Tax::Tax(int tax) : Field(FieldTypes::TAX), price(tax) {}
 
 int Tax::get_price() const {
     return price;
 }
 
-Jail::Jail(int price) : Field(FieldTypes::JAIL), price(price) {}
-
 int Jail::get_price() const {
     return price;
-}
-
-FieldTypes Start::get_type() const {
-    return FieldTypes::START;
-}
-
-FieldTypes Street::get_type() const {
-    return FieldTypes::STREET;
-}
-
-FieldTypes Station::get_type() const {
-    return FieldTypes::STATION;
-}
-
-FieldTypes Utility::get_type() const {
-    return FieldTypes::UTILITY;
-}
-
-FieldTypes Tax::get_type() const {
-    return FieldTypes::TAX;
-}
-
-FieldTypes Jail::get_type() const {
-    return FieldTypes::JAIL;
-}
-
-FieldTypes CommunityChest::get_type() const {
-    return FieldTypes::COMMUNITY_CHEST;
-}
-
-FieldTypes Chance::get_type() const {
-    return FieldTypes::CHANCE;
-}
-
-FieldTypes Parking::get_type() const {
-    return FieldTypes::PARKING;
-}
-
-FieldTypes GoToJail::get_type() const {
-    return FieldTypes::GO_TO_JAIL;
 }
 
 FieldTypes Field::get_type() const {
     return field_type;
 }
-
-// todo: do it
-CommunityChest::CommunityChest() : Field(FieldTypes::COMMUNITY_CHEST) {}
-
-Chance::Chance() : Field(FieldTypes::CHANCE) {}
-
-Parking::Parking() : Field(FieldTypes::PARKING) {}
-
-GoToJail::GoToJail() : Field(FieldTypes::GO_TO_JAIL) {}
