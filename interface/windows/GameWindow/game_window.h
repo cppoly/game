@@ -45,7 +45,6 @@ private:
     Card card;
 
     GameMove player;
-//    sf::Sprite currPlayerSprite;
     sf::Text currPlayerName;
     sf::Text currPlayerCapacity;
     sf::Text currAmountJailCards;

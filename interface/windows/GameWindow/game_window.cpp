@@ -53,14 +53,14 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
     auctionButtonSprite.setScale(0.6f, 0.6f);
 
     okButtonSprite = sf::Sprite(okButtonTexture);
-    okButtonSprite.setPosition((window.getSize().x / 2.f) - 175, (window.getSize().y / 2.f) - 54.5f);
+    okButtonSprite.setPosition((window.getSize().x / 2.f)-20, window.getSize().y - 150);
     okButtonSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
-
+    okButtonSprite.setScale(0.6f, 0.6f);
 
     payButtonSprite = sf::Sprite(payButtonTexture);
-    payButtonSprite.setPosition((window.getSize().x / 2.f) - 175, (window.getSize().y / 2.f) - 54.5f);
+    payButtonSprite.setPosition((window.getSize().x / 2.f)-20, (window.getSize().y / 2.f) - 54.5f);
     payButtonSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
-
+    payButtonSprite.setScale(0.6f, 0.6f);
 
     // Cards
 
@@ -78,12 +78,12 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
     fieldCardSprite.setScale(5.f, 4.f);
 
     chanceCardSprite = sf::Sprite(chanceCardTexture);
-    chanceCardSprite.setPosition((window.getSize().x / 2.f) - 175, (window.getSize().y / 2.f) - 200);
-    chanceCardSprite.setScale(3.f, 3.f);
+    chanceCardSprite.setPosition((window.getSize().x / 2.f) - 64*5, (window.getSize().y / 2.f) - 128*4);
+    chanceCardSprite.setScale(5.f, 4.f);
 
     communityChestCardSprite = sf::Sprite(communityChestCardTexture);
-    communityChestCardSprite.setPosition((window.getSize().x / 2.f) - 175, (window.getSize().y / 2.f) - 200);
-    communityChestCardSprite.setScale(3.f, 3.f);
+    communityChestCardSprite.setPosition((window.getSize().x / 2.f) - 64*5, (window.getSize().y / 2.f) - 128*4);
+    communityChestCardSprite.setScale(5.f, 4.f);
 
 }
 
@@ -117,6 +117,10 @@ bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
         auctionButtonSprite.getGlobalBounds().contains(point)
         ? auctionButtonSprite.setTextureRect({360 * 2, 0, 360, 109})
         : auctionButtonSprite.setTextureRect({0, 0, 360, 109});
+
+        okButtonSprite.getGlobalBounds().contains(point)
+        ? okButtonSprite.setTextureRect({360 * 2, 0, 360, 109})
+        : okButtonSprite.setTextureRect({0, 0, 360, 109});
 
         if (completeTurnSprite.getGlobalBounds().contains(point)) {
             game.get_is_player_roll_dice()
@@ -200,6 +204,7 @@ void GameWindow::onBuyClick(sf::RenderWindow &window) {
 
 void GameWindow::onOkClick(sf::RenderWindow &window) {
     okButtonSprite.setTextureRect({360, 0, 360, 109});
+    isActiveDrawCardMode = false;
     // TODO
 }
 
@@ -252,8 +257,10 @@ void GameWindow::draw(sf::RenderWindow &window) {
             std::string fieldName = field->get_name();
             sf::Text fieldNameText;
 
-            set_text(priceText, font2, price, 50, sf::Color::Black, sf::Text::Style::Regular, (window.getSize().x /2.f) - 50, 830);
-            set_text(fieldNameText, font2, fieldName, 30, sf::Color::Black, sf::Text::Style::Regular, (window.getSize().x /2.f) - 64*4, 230);
+            set_text(priceText, font2, price, 50, sf::Color::Black, sf::Text::Style::Regular,
+                     (window.getSize().x / 2.f) - 50, 830);
+            set_text(fieldNameText, font2, fieldName, 30, sf::Color::Black, sf::Text::Style::Regular,
+                     (window.getSize().x / 2.f) - 64 * 4, 230);
 
             window.draw(fieldCardSprite);
             window.draw(buyButtonSprite);
@@ -265,15 +272,16 @@ void GameWindow::draw(sf::RenderWindow &window) {
 
             auto currPlayer = game.get_players()[game.get_cur_player_id()];
             auto field = game.get_fields()[currPlayer.get_position()];
-            auto fields = dynamic_cast<ProfitableField *> (field);
+            auto fields = dynamic_cast<Field *> (field);
 
             if (fields->get_type() == FieldTypes::CHANCE) {
-
+                window.draw(chanceCardSprite);
             } else {
-
+                window.draw(communityChestCardSprite);
             }
-            window.draw(fieldCardSprite);
+            window.draw(okButtonSprite);
         } else if (isActivePayBankMode) {
+
             game.pay_bank(player.amount_to_pay);
         } else if (isActivePayPlayerMode) {
             game.pay_player(player.player_to_pay, player.amount_to_pay);
