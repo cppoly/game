@@ -32,6 +32,8 @@ private:
     bool isActivePayBankMode = false;
     bool isActiveGoToJail = false;
 
+    Card card;
+
     GameMove player;
 //    sf::Sprite currPlayerSprite;
     sf::Text currPlayerName;
@@ -59,6 +61,12 @@ private:
     sf::Texture auctionButtonTexture;
     sf::Sprite auctionButtonSprite;
 
+    sf::Texture payButtonTexture;
+    sf::Sprite payButtonSprite;
+
+    sf::Texture okButtonTexture;
+    sf::Sprite okButtonSprite;
+
     // Dices
 
     sf::Texture dice1Texture;
@@ -74,6 +82,13 @@ private:
 
     sf::Texture playerInformationCardTexture;
     sf::Sprite playerInformationCardSprite;
+
+    sf::Texture chanceCardTexture;
+    sf::Sprite chanceCardSprite;
+
+    sf::Texture communityChestCardTexture;
+    sf::Sprite communityChestCardSprite;
+
 
     // Fonts
 

@@ -5,6 +5,8 @@
 
 class Card {
 public:
+    Card() = default;
+
     Card(
             std::string name,
             int money,

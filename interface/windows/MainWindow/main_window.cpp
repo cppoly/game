@@ -14,7 +14,6 @@ MainWindow::MainWindow(sf::RenderWindow &window) {
     buttonStartGameSprite = sf::Sprite(buttonStartGameTexture);
     buttonStartGameSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
     buttonStartGameSprite.setPosition((window.getSize().x / 2.f) - 180, (window.getSize().y / 2.f));
-
 }
 
 void MainWindow::draw(sf::RenderWindow &window) {
