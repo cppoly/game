@@ -58,49 +58,62 @@ bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
                 isGameStarted = true;
 
                 game.start_game();
-//                player = game.player_move();
-
             } else if (completeTurnSprite.getGlobalBounds().contains(
                     window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-                completeTurnSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
-                int id = game.next_turn();
-//                std::cout << id << game.get_cur_player_id();
-//                if (id != game.get_cur_player_id()) {
-//                    player = std::fintgame.get_players();
-//                }
-                isRollDice = false;
-
+                if (game.get_is_player_roll_dice()) {
+                    completeTurnSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
+                    int id = game.next_turn();
+                    isRollDice = false;
+                }
             } else if (rollDiceButtonSprite.getGlobalBounds().contains(
                     window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-                rollDiceButtonSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
-
-                player = game.player_move();
-                isRollDice = true;
+                if (!game.get_is_player_roll_dice()) {
+                    rollDiceButtonSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
+                    player = game.player_move();
+                    isRollDice = true;
+                }
             }
-
         }
     } else if (event.type == sf::Event::MouseMoved) {
         if (startGameButtonSprite.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
             startGameButtonSprite.setTextureRect(sf::IntRect(360 * 2, 0, 360, 109));
         } else if (completeTurnSprite.getGlobalBounds().contains(
                 window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-            completeTurnSprite.setTextureRect(sf::IntRect(360 * 2, 0, 360, 109));
+            if (game.get_is_player_roll_dice()) {
+                completeTurnSprite.setTextureRect(sf::IntRect(360 * 2, 0, 360, 109));
+            } else {
+                completeTurnSprite.setTextureRect(sf::IntRect(360 * 3, 0, 360, 109));
+
+            }
         } else if (rollDiceButtonSprite.getGlobalBounds().contains(
                 window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-            rollDiceButtonSprite.setTextureRect(sf::IntRect(360 * 2, 0, 360, 109));
-
-
-        } else {
+            if (!game.get_is_player_roll_dice()) {
+                rollDiceButtonSprite.setTextureRect(sf::IntRect(360 * 2, 0, 360, 109));
+            } else {
+                rollDiceButtonSprite.setTextureRect(sf::IntRect(360 * 3, 0, 360, 109));
+            }
+        } else if (game.get_is_player_roll_dice()) {
             completeTurnSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
+            rollDiceButtonSprite.setTextureRect(sf::IntRect(360 * 3, 0, 360, 109));
+        } else if (!game.get_is_player_roll_dice()) {
+            completeTurnSprite.setTextureRect(sf::IntRect(360 * 3, 0, 360, 109));
             rollDiceButtonSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
         }
+    } else if (game.get_is_player_roll_dice()) {
+        completeTurnSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
+        rollDiceButtonSprite.setTextureRect(sf::IntRect(360 * 3, 0, 360, 109));
+    } else if (!game.get_is_player_roll_dice()) {
+        completeTurnSprite.setTextureRect(sf::IntRect(360 * 3, 0, 360, 109));
+        rollDiceButtonSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
     }
+
     return false;
 }
 
 void GameWindow::draw(sf::RenderWindow &window) {
     window.clear();
     window.draw(backgroundImageSprite);
+
 
     if (!isGameStarted) {
         backgroundImageSprite.setColor(sf::Color(255, 255, 255, 60));
@@ -123,10 +136,15 @@ void GameWindow::draw(sf::RenderWindow &window) {
         window.draw(currPlayerCapacity);
 
         if (isRollDice) {
+
             dice1Sprite.setTextureRect(sf::IntRect(96 * (player.number_on_dice1 - 1), 0, 96, 96));
             dice2Sprite.setTextureRect(sf::IntRect(96 * (player.number_on_dice2 - 1), 0, 96, 96));
             window.draw(dice1Sprite);
             window.draw(dice2Sprite);
+
+            if (player.funcs == GameFieldTypes::YOU_CAN_BUY) {
+
+            }
         }
 
         for (int i = 0; i < game.get_players().size(); i++) {
@@ -134,20 +152,19 @@ void GameWindow::draw(sf::RenderWindow &window) {
                 sf::Sprite sprite = game.get_players()[i].get_sprite();
                 int currPosition = player.new_position;
                 if (0 <= currPosition && currPosition <= 10) {
-                    if(currPosition == 0) {
+                    if (currPosition == 0) {
                         sprite.setPosition(1354 + i * 30, 870);
                     } else if (currPosition == 10) {
                         sprite.setPosition(552, 870);
-                    }
-                    else {
+                    } else {
                         sprite.setPosition(1384 - i * 10 - game.get_players()[i].get_position() * 85, 870);
                     }
                 } else if (11 <= currPosition && currPosition <= 20) {
                     sprite.setPosition(562, 870 - i * 10 - (currPosition - 10) * 85);
                 } else if (21 <= currPosition && currPosition <= 30) {
-                    sprite.setPosition(539 + i * 10 +(currPosition - 20) * 85, 100);
+                    sprite.setPosition(539 + i * 10 + (currPosition - 20) * 85, 80);
                 } else {
-                    sprite.setPosition(1354, 60 + i*10 + (currPosition - 30) * 85);
+                    sprite.setPosition(1354, 60 + i * 10 + (currPosition - 30) * 85);
                 }
 
                 window.draw(sprite);
@@ -157,20 +174,19 @@ void GameWindow::draw(sf::RenderWindow &window) {
             int currPosition = game.get_players()[i].get_position();
 
             if (0 <= currPosition && currPosition <= 10) {
-                if(currPosition == 0) {
+                if (currPosition == 0) {
                     sprite.setPosition(1354 + i * 30, 870);
                 } else if (currPosition == 10) {
                     sprite.setPosition(552, 870);
-                }
-                else {
+                } else {
                     sprite.setPosition(1384 - i * 10 - game.get_players()[i].get_position() * 85, 870);
                 }
             } else if (11 <= currPosition && currPosition <= 20) {
                 sprite.setPosition(562, 870 - i * 10 - (currPosition - 10) * 85);
             } else if (21 <= currPosition && currPosition <= 30) {
-                sprite.setPosition(539 + i * 10 +(currPosition - 20) * 85, 100);
+                sprite.setPosition(539 + i * 10 + (currPosition - 20) * 85, 80);
             } else {
-                sprite.setPosition(1354, 60 + i*10 + (currPosition - 30) * 85);
+                sprite.setPosition(1354, 60 + i * 10 + (currPosition - 30) * 85);
             }
             window.draw(sprite);
         }

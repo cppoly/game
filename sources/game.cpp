@@ -91,6 +91,7 @@ GameMove Game::player_move() {
     int dice1 = number_on_dice();
     int dice2 = number_on_dice();
     if (dice1 != dice2) {
+        is_player_do_move = true;
         is_player_roll_dice = true;
     }
 
@@ -141,6 +142,14 @@ GameMove Game::player_move() {
     }
 
     return return_obj;
+}
+
+bool Game::get_is_player_do_move() const {
+    return is_player_do_move;
+}
+
+bool Game::get_is_player_roll_dice() const {
+    return is_player_roll_dice;
 }
 
 int Game::number_on_dice() {

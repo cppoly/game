@@ -11,7 +11,7 @@ int main() {
             sf::VideoMode(
                     sf::VideoMode::getDesktopMode().width,
                     sf::VideoMode::getDesktopMode().height),
-            "Monopoly"
+            "Monopoly", sf::Style::Fullscreen
             );
 
 

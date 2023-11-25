@@ -61,6 +61,10 @@ public:
 
     int get_cur_player_id() const;
 
+    bool get_is_player_do_move() const;
+
+    bool get_is_player_roll_dice() const;
+
     bool pay_player(int player_id, int amount);
 
     bool pay_bank(int amount);
