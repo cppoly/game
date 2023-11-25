@@ -7,6 +7,7 @@ MainWindow::MainWindow(sf::RenderWindow &window) {
 
     mainScreenSprite = sf::Sprite(mainScreenTexture);
 
+    mainScreenSprite.setScale(window.getSize().x / mainScreenSprite.getLocalBounds().width, window.getSize().y / mainScreenSprite.getLocalBounds().height);
     if (!buttonStartGameTexture.loadFromFile("assets/sprite/Buttons/buttonStartGame.png")) {
         throw std::runtime_error("Can't load button start game texture");
     }
