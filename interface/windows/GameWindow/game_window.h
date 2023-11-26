@@ -55,6 +55,7 @@ private:
     bool isGameStarted = false;
     bool isRollDice = false;
     bool isActiveMyFieldsMode = false;
+    bool isActiveZoomMode = false;
 
     bool isActiveDoNothing = false;
     bool isActiveBuyMode = false;
@@ -99,6 +100,12 @@ private:
 
     sf::Texture myFieldsButtonTexture;
     sf::Sprite myFieldsButtonSprite;
+
+    sf::Texture payToPlayerCardTexture;
+    sf::Sprite payToPlayerCardSprite;
+
+    sf::Texture loupeButtonTexture;
+    sf::Sprite loupeButtonSprite;
 
     // Dices
 

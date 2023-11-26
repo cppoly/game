@@ -25,7 +25,9 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
         !audiCardTexture.loadFromFile("assets/sprite/Card/FieldCard/fieldAudiCard.png") ||
         !communityChestCardTexture.loadFromFile("assets/sprite/Card/FieldCard/CommunityChestCard.png") ||
         !taxCardTexture.loadFromFile("assets/sprite/Card/FieldCard/fieldTaxCard.png") ||
-        !chanceCardTexture.loadFromFile("assets/sprite/Card/FieldCard/ChanceCard.png")) {
+        !chanceCardTexture.loadFromFile("assets/sprite/Card/FieldCard/ChanceCard.png") ||
+        !payToPlayerCardTexture.loadFromFile("assets/sprite/Card/FieldCard/payPlayerCard.png") ||
+        !loupeButtonTexture.loadFromFile("assets/sprite/Buttons/loupeButton.png")) {
         throw std::runtime_error("Can't load texture for GameWindow");
     }
 
@@ -43,7 +45,8 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
 
     completeTurnSprite = sf::Sprite(completeTurnTexture);
     completeTurnSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
-    completeTurnSprite.setPosition(window.getSize().x - 50 - 360, 100);
+    completeTurnSprite.setOrigin(360, 0);
+    completeTurnSprite.setPosition(window.getSize().x - 50, 100);
     completeTurnSprite.setScale(0.8f, 0.8f);
 
 
@@ -55,7 +58,7 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
     myFieldsButtonSprite = sf::Sprite(myFieldsButtonTexture);
     myFieldsButtonSprite.setTextureRect({0, 0, 360, 109});
     myFieldsButtonSprite.setScale(0.8f, 0.8f);
-    myFieldsButtonSprite.setPosition(50, 800);
+    myFieldsButtonSprite.setPosition(50, window.getSize().y - 100 - 109);
 
     buyButtonSprite = sf::Sprite(buyButtonTexture);
     buyButtonSprite.setPosition((window.getSize().x / 2.f) - 270, window.getSize().y - 150);
@@ -76,6 +79,10 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
     payButtonSprite.setPosition((window.getSize().x / 2.f) - 100, window.getSize().y - 150);
     payButtonSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
     payButtonSprite.setScale(0.6f, 0.6f);
+
+    loupeButtonSprite = sf::Sprite(loupeButtonTexture);
+    loupeButtonSprite.setPosition(50 + 180 - 54, 250);
+    loupeButtonSprite.setTextureRect({0, 0, 52, 49});
 
     // Cards
 
@@ -146,6 +153,11 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
     myFieldsCardSprite.setPosition(((float) window.getSize().x / 2.f) - (300 * 2.5f),
                                    ((float) window.getSize().y / 2.f) - (200 * 2.5f));
     myFieldsCardSprite.setScale(2.5f, 2.5f);
+
+    payToPlayerCardSprite = sf::Sprite(payToPlayerCardTexture);
+    payToPlayerCardSprite.setPosition((window.getSize().x / 2.f) - 64 * 5, (window.getSize().y / 2.f) - 128 * 4);
+    payToPlayerCardSprite.setScale(5.f, 4.f);
+
 }
 
 bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
@@ -160,6 +172,14 @@ bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
             if (myFieldsButtonSprite.getGlobalBounds().contains(point)) {
                 if (!isActiveMyFieldsMode) {
                     isActiveMyFieldsMode = true;
+                }
+            }
+
+            if (loupeButtonSprite.getGlobalBounds().contains(point)) {
+                if (!isActiveZoomMode) {
+                    isActiveZoomMode = true;
+                } else {
+                    isActiveZoomMode = false;
                 }
             }
             if (completeTurnSprite.getGlobalBounds().contains(point)) {
@@ -296,16 +316,21 @@ void GameWindow::onOkClick(sf::RenderWindow &window) {
 }
 
 void GameWindow::onPayButtonClick(sf::RenderWindow &window) {
+    payButtonSprite.setTextureRect({360, 0, 360, 109});
     if (isActivePayBankMode) {
-        payButtonSprite.setTextureRect({360, 0, 360, 109});
         bool pay = game.pay_bank(player.amount_to_pay);
         if (pay) {
             isActivePayBankMode = false;
         }
+    } else if (isActivePayPlayerMode) {
+        bool pay = game.pay_player(player.player_to_pay, player.amount_to_pay);
+        if (pay) {
+            isActivePayPlayerMode = false;
+        }
     }
 }
 
-void GameWindow::draw(sf::RenderWindow &window, sf::Event& event) {
+void GameWindow::draw(sf::RenderWindow &window, sf::Event &event) {
     window.clear();
     window.draw(backgroundImageSprite);
 
@@ -313,12 +338,30 @@ void GameWindow::draw(sf::RenderWindow &window, sf::Event& event) {
         backgroundImageSprite.setColor(sf::Color(255, 255, 255, 60));
         window.draw(startGameButtonSprite);
     } else {
+        window.setView(window.getDefaultView());
         backgroundImageSprite.setColor(sf::Color(255, 255, 255, 255));
-
 
         // Draw player activity
 
-        if (isActiveMyFieldsMode) {
+        if (isActiveZoomMode) {
+            auto currPlayerId = game.get_cur_player_id();
+            auto currPosition = game.get_players()[game.get_cur_player_id()].get_position();
+//            sf::Sprite sprite = game.get_players()[game.get_cur_player_id()].get_sprite();
+            sf::View view;
+            view.setSize(window.getSize().x / 3.f, window.getSize().y/3.f);
+            if (0 <= currPosition && currPosition <= 10) {
+                if (currPosition == 0) {
+                    view.setCenter(1354 - currPosition, 870);
+                } else if (currPosition == 10) {
+                    view.setCenter(552, 870);
+                } else {
+                    view.setCenter(1384 - currPlayerId * 10 - currPosition * 85, 870);
+                }
+            }
+            window.setView(view);
+
+            drawPlayers(window);
+        } else if (isActiveMyFieldsMode) {
             backgroundImageSprite.setColor(sf::Color(255, 255, 255, 60));
             auto fields = game.get_players()[game.get_cur_player_id()].get_fields();
             drawMyFields(window, event, fields);
@@ -331,17 +374,23 @@ void GameWindow::draw(sf::RenderWindow &window, sf::Event& event) {
             } else if (isActivePayBankMode) {
                 drawPayBankCard(window);
             } else if (isActivePayPlayerMode) {
-//            game.pay_player(player.player_to_pay, player.amount_to_pay);
+                window.draw(payToPlayerCardSprite);
+                window.draw(payButtonSprite);
+                sf::Sprite playerToPaySprite = game.get_players()[player.player_to_pay].get_sprite();
+                playerToPaySprite.setPosition(window.getSize().x, window.getSize().y);
             } else if (isActiveGoToJail) {
 //            game.go_to_jail();
             } else {
                 window.draw(completeTurnSprite);
                 window.draw(rollDiceButtonSprite);
+                window.draw(loupeButtonSprite);
+
                 drawPlayers(window);
                 window.draw(myFieldsButtonSprite);
             }
         }
     }
+
 }
 
 void GameWindow::setGame(Game &game1) {
@@ -463,30 +512,28 @@ void GameWindow::drawMyFields(sf::RenderWindow &window, sf::Event &event, std::v
     for (int i = 0; i < fields.size(); i++) {
         if (fields[i]->get_type() == FieldTypes::STREET) {
             sf::Sprite rentCardSprite = sf::Sprite(cardsRentSprite[fields[i]->get_collection_type() - 1]);
-            drawRentStreetCard(window, fields[i], rentCardSprite, 200 + 300 * 0.7 * i + 100, 100 + 450 * (i / 6), 0.5f, 0.5f);
-            if (event.type == sf::Event::MouseButtonPressed) {
-                if (event.mouseButton.button == sf::Mouse::Left) {
-
-                }
-            }
+            drawRentStreetCard(window, fields[i], rentCardSprite, 200 + 300 * 0.7 * i + 100, 100 + 450 * (i / 7), 0.5f,
+                               0.5f);
         } else if (fields[i]->get_type() == FieldTypes::STATION) {
-            drawRentStationCard(window, fields[i], 200 + 300 * 0.7 * i + 100, 100 + 450 * (i / 6), 0.5f, 0.5f);
+            drawRentStationCard(window, fields[i], 200 + 300 * 0.7 * i + 100, 100 + 450 * (i / 7), 0.5f, 0.5f);
         } else {
-            drawRentUtilityCard(window, fields[i], 200 + 300 * 0.7 * i + 100, 100 + 450 * (i / 6), 0.5f, 0.5f);
+            drawRentUtilityCard(window, fields[i], 200 + 300 * 0.7 * i + 100, 100 + 450 * (i / 7), 0.5f, 0.5f);
         }
     }
 }
 
-void GameWindow::drawRentStreetCard(sf::RenderWindow &window, ProfitableField *field, sf::Sprite& rentCardSprite, float x, float y, float scaleX,
-                                    float scaleY) {
+void
+GameWindow::drawRentStreetCard(sf::RenderWindow &window, ProfitableField *field, sf::Sprite &rentCardSprite, float x,
+                               float y, float scaleX,
+                               float scaleY) {
     auto street = dynamic_cast<Street *>(field);
 //    sf::Sprite rentCardSprite = sf::Sprite(cardsRentSprite[field->get_collection_type() - 1]);
     rentCardSprite.setPosition(x, y);
-    rentCardSprite.setScale(scaleX, 1.2*scaleY);
+    rentCardSprite.setScale(scaleX, 1.2 * scaleY);
     window.draw(rentCardSprite);
 
     std::string name = field->get_name();
-    std::string rent =  "Rent:  " + std::to_string(field->get_rent());
+    std::string rent = "Rent:  " + std::to_string(field->get_rent());
     std::string rentWith1House = "Rent with 1 house:   " + std::to_string(field->get_rent_vector()[0]);
     std::string rentWith2House = "Rent with 2 houses:  " + std::to_string(field->get_rent_vector()[1]);
     std::string rentWith3House = "Rent with 3 houses:  " + std::to_string(field->get_rent_vector()[2]);
@@ -530,9 +577,9 @@ void GameWindow::drawRentStreetCard(sf::RenderWindow &window, ProfitableField *f
              sf::Text::Style::Regular,
              x + 20, y + (340 * scaleY * 1.1));
     set_text(price1HouseText, font2, price1House, (int) (25 * scaleX), sf::Color::Black, sf::Text::Style::Regular,
-             x + 100, y + (350 * scaleY* 1.2));
+             x + 100, y + (350 * scaleY * 1.2));
     set_text(price1HotelText, font2, price1Hotel, (int) (25 * scaleX), sf::Color::Black, sf::Text::Style::Regular,
-             x + 100, y + (400 * scaleY*1.2));
+             x + 100, y + (400 * scaleY * 1.2));
 
     window.draw(nameText);
     window.draw(rentText);
@@ -551,7 +598,7 @@ void GameWindow::drawRentStationCard(sf::RenderWindow &window, ProfitableField *
                                      float scaleY) {
     sf::Sprite rentCard = sf::Sprite(cardsRentTexture[2]);
     rentCard.setPosition(x, y);
-    rentCard.setScale(scaleX, 1.2*scaleY);
+    rentCard.setScale(scaleX, 1.2 * scaleY);
     window.draw(rentCard);
     auto station = dynamic_cast<Station *>(field);
 
@@ -604,7 +651,7 @@ void GameWindow::drawRentUtilityCard(sf::RenderWindow &window, ProfitableField *
                                      float scaleY) {
     sf::Sprite rentCard = sf::Sprite(cardsRentTexture[1]);
     rentCard.setPosition(x, y);
-    rentCard.setScale(scaleX, 1.2*scaleY);
+    rentCard.setScale(scaleX, 1.2 * scaleY);
     window.draw(rentCard);
     auto utility = dynamic_cast<Utility *>(field);
 
