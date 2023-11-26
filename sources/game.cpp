@@ -43,7 +43,7 @@ void Game::feel_game_fields() {
     game_fields.push_back(new Utility("Ice cream van", 150, {4, 10}, 75, 10));
     game_fields.push_back(new Street("Fukuoka town", 140, {10, 50, 150, 450, 625, 750}, 100, 100, 70, 3));
     game_fields.push_back(new Street("Kioto town", 160, {12, 60, 180, 500, 700, 900}, 100, 100, 80, 3));
-    game_fields.push_back(new Station("Porshe", 200, {25, 50, 100, 200}, 100, 9));
+    game_fields.push_back(new Station("BMW", 200, {25, 50, 100, 200}, 100, 9));
     game_fields.push_back(new Street("Khibiny", 180, {14, 70, 200, 550, 750, 950}, 100, 100, 90, 4));
     game_fields.push_back(new Chance());
     game_fields.push_back(new Street("Alps", 180, {14, 70, 200, 550, 750, 950}, 100, 100, 90, 4));
@@ -53,7 +53,7 @@ void Game::feel_game_fields() {
     game_fields.push_back(new Street("Lake Geneva", 220, {18, 90, 250, 700, 875, 1050}, 150, 150, 110, 5));
     game_fields.push_back(new CommunityChest());
     game_fields.push_back(new Street("Meadow", 240, {20, 100, 300, 750, 925, 1100}, 150, 150, 120, 5));
-    game_fields.push_back(new Station("Porshe", 200, {25, 50, 100, 200}, 100, 9));
+    game_fields.push_back(new Station("Tesla", 200, {25, 50, 100, 200}, 100, 9));
     game_fields.push_back(new Street("Surfer's cove", 260, {22, 110, 330, 800, 975, 1150}, 150, 150, 130, 6));
     game_fields.push_back(new Street("Maldives", 260, {22, 110, 330, 800, 975, 1150}, 150, 150, 130, 6));
     game_fields.push_back(new Utility("Laundromat", 150, {4, 10}, 75, 10));
@@ -63,7 +63,7 @@ void Game::feel_game_fields() {
     game_fields.push_back(new Street("Himeji castle", 300, {26, 130, 390, 900, 1100, 1275}, 200, 200, 150, 7));
     game_fields.push_back(new CommunityChest());
     game_fields.push_back(new Street("Torii", 320, {28, 150, 450, 1000, 1200, 1400}, 200, 200, 160, 7));
-    game_fields.push_back(new Station("Porshe", 200, {25, 50, 100, 200}, 100, 9));
+    game_fields.push_back(new Station("Audi", 200, {25, 50, 100, 200}, 100, 9));
     game_fields.push_back(new Chance());
     game_fields.push_back(new Street("Fortuna valley", 350, {35, 175, 500, 1100, 1300, 1500}, 200, 200, 175, 8));
     game_fields.push_back(new Tax(100));
@@ -90,6 +90,7 @@ GameMove Game::player_move() {
 
     int dice1 = number_on_dice();
     int dice2 = number_on_dice();
+
     if (dice1 != dice2) {
         is_player_roll_dice = true;
     }

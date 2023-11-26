@@ -15,10 +15,19 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
         !fieldCardTexture.loadFromFile("assets/sprite/fieldCard.png") ||
         !font1.loadFromFile("assets/fonts/Bionicle.ttf") ||
         !font2.loadFromFile("assets/fonts/big-shot.ttf") ||
+        !vanCardTexture.loadFromFile("assets/sprite/fieldVanCard.png") ||
+        !laundryCardTexture.loadFromFile("assets/sprite/fieldLaundromatCard.png") ||
+        !porsheCardTexture.loadFromFile("assets/sprite/fieldPorsheCard.png") ||
+        !bmwCardTexture.loadFromFile("assets/sprite/fieldBMWCard.png") ||
+        !teslaCardTexture.loadFromFile("assets/sprite/fieldTeslaCard.png") ||
+        !audiCardTexture.loadFromFile("assets/sprite/fieldAudiCard.png") ||
         !communityChestCardTexture.loadFromFile("assets/sprite/CommunityChestCard.png") ||
+        !taxCardTexture.loadFromFile("assets/sprite/fieldTaxCard.png") ||
         !chanceCardTexture.loadFromFile("assets/sprite/ChanceCard.png")) {
         throw std::runtime_error("Can't load texture for GameWindow");
     }
+
+
 
     // Background
     backgroundImageSprite = sf::Sprite(backgroundImageTexture);
@@ -53,12 +62,12 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
     auctionButtonSprite.setScale(0.6f, 0.6f);
 
     okButtonSprite = sf::Sprite(okButtonTexture);
-    okButtonSprite.setPosition((window.getSize().x / 2.f)-20, window.getSize().y - 150);
+    okButtonSprite.setPosition((window.getSize().x / 2.f) - 100, window.getSize().y - 150);
     okButtonSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
     okButtonSprite.setScale(0.6f, 0.6f);
 
     payButtonSprite = sf::Sprite(payButtonTexture);
-    payButtonSprite.setPosition((window.getSize().x / 2.f)-20, (window.getSize().y / 2.f) - 54.5f);
+    payButtonSprite.setPosition((window.getSize().x / 2.f) - 100, window.getSize().y - 150);
     payButtonSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
     payButtonSprite.setScale(0.6f, 0.6f);
 
@@ -66,6 +75,45 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
 
     playerInformationCardSprite = sf::Sprite(playerInformationCardTexture);
     playerInformationCardSprite.setPosition(50, 300);
+
+    for (int i = 0; i < cardsRentTexture.size(); i++) {
+
+        if (!cardsRentTexture[i].loadFromFile(
+                "assets/sprite/Card/RentCard/rent" + std::to_string(i + 1) + "Card.png")) {
+            throw std::runtime_error("Can't load texture of rent card");
+        }
+        cardsRentSprite[i] = sf::Sprite(cardsRentTexture[i]);
+        cardsRentSprite[i].setPosition(window.getSize().x - 50 - 300, 300);
+    }
+
+    vanCardSprite = sf::Sprite(vanCardTexture);
+    laundryCardSprite = sf::Sprite(laundryCardTexture);
+    porsheCardSprite = sf::Sprite(porsheCardTexture);
+    bmwCardSprite = sf::Sprite(bmwCardTexture);
+    teslaCardSprite = sf::Sprite(teslaCardTexture);
+    audiCardSprite = sf::Sprite(audiCardTexture);
+    taxCardSprite = sf::Sprite(taxCardTexture);
+
+    vanCardSprite.setPosition((window.getSize().x / 2.f) - 64 * 5, (window.getSize().y / 2.f) - 128 * 4);
+    vanCardSprite.setScale(5.f, 4.f);
+
+    laundryCardSprite.setPosition((window.getSize().x / 2.f) - 64 * 5, (window.getSize().y / 2.f) - 128 * 4);
+    laundryCardSprite.setScale(5.f, 4.f);
+
+    porsheCardSprite.setPosition((window.getSize().x / 2.f) - 64 * 5, (window.getSize().y / 2.f) - 128 * 4);
+    porsheCardSprite.setScale(5.f, 4.f);
+
+    bmwCardSprite.setPosition((window.getSize().x / 2.f) - 64 * 5, (window.getSize().y / 2.f) - 128 * 4);
+    bmwCardSprite.setScale(5.f, 4.f);
+
+    teslaCardSprite.setPosition((window.getSize().x / 2.f) - 64 * 5, (window.getSize().y / 2.f) - 128 * 4);
+    teslaCardSprite.setScale(5.f, 4.f);
+
+    audiCardSprite.setPosition((window.getSize().x / 2.f) - 64 * 5, (window.getSize().y / 2.f) - 128 * 4);
+    audiCardSprite.setScale(5.f, 4.f);
+
+    taxCardSprite.setPosition((window.getSize().x / 2.f) - 64 * 5, (window.getSize().y / 2.f) - 128 * 4);
+    taxCardSprite.setScale(5.f, 4.f);
 
     dice1Sprite = sf::Sprite(dice1Texture);
     dice1Sprite.setPosition(100, 600);
@@ -78,11 +126,11 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
     fieldCardSprite.setScale(5.f, 4.f);
 
     chanceCardSprite = sf::Sprite(chanceCardTexture);
-    chanceCardSprite.setPosition((window.getSize().x / 2.f) - 64*5, (window.getSize().y / 2.f) - 128*4);
+    chanceCardSprite.setPosition((window.getSize().x / 2.f) - 64 * 5, (window.getSize().y / 2.f) - 128 * 4);
     chanceCardSprite.setScale(5.f, 4.f);
 
     communityChestCardSprite = sf::Sprite(communityChestCardTexture);
-    communityChestCardSprite.setPosition((window.getSize().x / 2.f) - 64*5, (window.getSize().y / 2.f) - 128*4);
+    communityChestCardSprite.setPosition((window.getSize().x / 2.f) - 64 * 5, (window.getSize().y / 2.f) - 128 * 4);
     communityChestCardSprite.setScale(5.f, 4.f);
 
 }
@@ -92,17 +140,34 @@ bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
     if (event.type == sf::Event::MouseButtonPressed) {
         if (event.mouseButton.button == sf::Mouse::Left) {
             if (startGameButtonSprite.getGlobalBounds().contains(point)) {
-                onStartGame(window);
-            } else if (completeTurnSprite.getGlobalBounds().contains(point)) {
+                if (!isGameStarted) {
+                    onStartGame(window);
+                }
+            }
+            if (completeTurnSprite.getGlobalBounds().contains(point)) {
                 onCompleteTurn(window);
-            } else if (rollDiceButtonSprite.getGlobalBounds().contains(point)) {
+            }
+            if (rollDiceButtonSprite.getGlobalBounds().contains(point)) {
                 onRollDice(window);
-            } else if (buyButtonSprite.getGlobalBounds().contains(point)) {
-                onBuyClick(window);
-            } else if (okButtonSprite.getGlobalBounds().contains(point)) {
-                onOkClick(window);
-            } else if (payButtonSprite.getGlobalBounds().contains(point)) {
-                payButtonSprite.setTextureRect({360, 0, 360, 109});
+            }
+            if (buyButtonSprite.getGlobalBounds().contains(point)) {
+                if (isActiveBuyMode) {
+                    onBuyClick(window);
+                }
+            }
+            if (okButtonSprite.getGlobalBounds().contains(point)) {
+                if (isActiveDrawCardMode) {
+                    onOkClick(window);
+                }
+            }
+            if (payButtonSprite.getGlobalBounds().contains(point)) {
+                if (isActivePayBankMode) {
+                    payButtonSprite.setTextureRect({360, 0, 360, 109});
+                    bool pay = game.pay_bank(player.amount_to_pay);
+                    if (pay) {
+                        isActivePayBankMode = false;
+                    }
+                }
             }
         }
     } else if (event.type == sf::Event::MouseMoved) {
@@ -121,6 +186,10 @@ bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
         okButtonSprite.getGlobalBounds().contains(point)
         ? okButtonSprite.setTextureRect({360 * 2, 0, 360, 109})
         : okButtonSprite.setTextureRect({0, 0, 360, 109});
+
+        payButtonSprite.getGlobalBounds().contains(point)
+        ? payButtonSprite.setTextureRect({360 * 2, 0, 360, 109})
+        : payButtonSprite.setTextureRect({0, 0, 360, 109});
 
         if (completeTurnSprite.getGlobalBounds().contains(point)) {
             game.get_is_player_roll_dice()
@@ -248,10 +317,9 @@ void GameWindow::draw(sf::RenderWindow &window) {
             backgroundImageSprite.setColor(sf::Color(255, 255, 255, 60));
 
             auto currPlayer = game.get_players()[game.get_cur_player_id()];
-            auto field = game.get_fields()[currPlayer.get_position()];
-            auto fields = dynamic_cast<ProfitableField *> (field);
+            auto field = dynamic_cast<ProfitableField *>(game.get_fields()[currPlayer.get_position()]);
 
-            std::string price = std::to_string(fields->get_price());
+            std::string price = std::to_string(field->get_price());
             sf::Text priceText;
 
             std::string fieldName = field->get_name();
@@ -262,27 +330,57 @@ void GameWindow::draw(sf::RenderWindow &window) {
             set_text(fieldNameText, font2, fieldName, 30, sf::Color::Black, sf::Text::Style::Regular,
                      (window.getSize().x / 2.f) - 64 * 4, 230);
 
-            window.draw(fieldCardSprite);
+
+            if (field->get_type() == FieldTypes::STREET) {
+                window.draw(fieldCardSprite);
+                window.draw(cardsRentSprite[field->get_collection_type() - 1]);
+            } else if (field->get_type() == FieldTypes::STATION) {
+                if (fieldName == "Porshe") {
+                    window.draw(porsheCardSprite);
+                } else if (fieldName == "BMW") {
+                    window.draw(bmwCardSprite);
+                } else if (fieldName == "Tesla") {
+                    window.draw(teslaCardSprite);
+                } else {
+                    window.draw(audiCardSprite);
+                }
+            } else if (field->get_type() == FieldTypes::UTILITY) {
+                if (fieldName == "Laundromat") {
+                    window.draw(laundryCardSprite);
+                } else {
+                    window.draw(vanCardSprite);
+                }
+            }
+
             window.draw(buyButtonSprite);
             window.draw(auctionButtonSprite);
             window.draw(fieldNameText);
             window.draw(priceText);
         } else if (isActiveDrawCardMode) {
+
             backgroundImageSprite.setColor(sf::Color(255, 255, 255, 60));
 
             auto currPlayer = game.get_players()[game.get_cur_player_id()];
-            auto field = game.get_fields()[currPlayer.get_position()];
-            auto fields = dynamic_cast<Field *> (field);
+            auto field = dynamic_cast<Field *>(game.get_fields()[currPlayer.get_position()]);
 
-            if (fields->get_type() == FieldTypes::CHANCE) {
+            if (field->get_type() == FieldTypes::CHANCE) {
                 window.draw(chanceCardSprite);
             } else {
                 window.draw(communityChestCardSprite);
             }
             window.draw(okButtonSprite);
         } else if (isActivePayBankMode) {
+            auto currPlayer = game.get_players()[game.get_cur_player_id()];
+            auto field = dynamic_cast<Tax *>(game.get_fields()[currPlayer.get_position()]);
 
-            game.pay_bank(player.amount_to_pay);
+            std::string price = std::to_string(field->get_price());
+            sf::Text priceText;
+            set_text(priceText, font2, price, 50, sf::Color::Black, sf::Text::Style::Regular,
+                     (window.getSize().x / 2.f) - 50, 830);
+
+            window.draw(taxCardSprite);
+            window.draw(priceText);
+            window.draw(payButtonSprite);
         } else if (isActivePayPlayerMode) {
             game.pay_player(player.player_to_pay, player.amount_to_pay);
         } else if (isActiveGoToJail) {
