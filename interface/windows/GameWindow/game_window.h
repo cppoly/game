@@ -45,6 +45,8 @@ public:
 
     void drawMyFields(sf::RenderWindow& window);
 
+    void drawRentStreetCard(sf::RenderWindow& window, ProfitableField * field);
+
 private:
     bool isGameStarted = false;
     bool isRollDice = false;

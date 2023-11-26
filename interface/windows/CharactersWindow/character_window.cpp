@@ -35,7 +35,7 @@ CharacterWindow::CharacterWindow(sf::RenderWindow &window) {
     if (!backgroundTexture.loadFromFile("assets/sprite/BackgroundImage/Settings.png") ||
         !buttonAddPlayerTexture.loadFromFile("assets/sprite/Buttons/buttonAddPlayer.png") ||
         !buttonStartGameTexture.loadFromFile("assets/sprite/Buttons/buttonStartGame.png") ||
-        !chosePlayerTexture.loadFromFile("assets/sprite/ChosePlayerCard.png") ||
+        !chosePlayerTexture.loadFromFile("assets/sprite/Card/ChosePlayerCard.png") ||
         !font1.loadFromFile("assets/fonts/Bionicle.ttf") ||
         !font2.loadFromFile("assets/fonts/Minecraft.otf") ||
         !playersLargeTexture.loadFromFile("assets/sprite/LargePlayer/Players.png")) {

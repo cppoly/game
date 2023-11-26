@@ -10,24 +10,23 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
         !okButtonTexture.loadFromFile("assets/sprite/Buttons/okButton.png") ||
         !payButtonTexture.loadFromFile("assets/sprite/Buttons/payButton.png") ||
         !myFieldsButtonTexture.loadFromFile("assets/sprite/Buttons/buttonMyFields.png") ||
-        !playerInformationCardTexture.loadFromFile("assets/sprite/playerInformationCard.png") ||
+        !playerInformationCardTexture.loadFromFile("assets/sprite/Card/playerInformationCard.png") ||
         !dice1Texture.loadFromFile("assets/sprite/DicePack/DiceSprSheetX96.png") ||
         !dice2Texture.loadFromFile("assets/sprite/DicePack/DiceSprSheetX96.png") ||
-        !fieldCardTexture.loadFromFile("assets/sprite/fieldCard.png") ||
+        !fieldCardTexture.loadFromFile("assets/sprite/Card/FieldCard/fieldCard.png") ||
         !font1.loadFromFile("assets/fonts/Bionicle.ttf") ||
         !font2.loadFromFile("assets/fonts/big-shot.ttf") ||
-        !vanCardTexture.loadFromFile("assets/sprite/fieldVanCard.png") ||
-        !laundryCardTexture.loadFromFile("assets/sprite/fieldLaundromatCard.png") ||
-        !porsheCardTexture.loadFromFile("assets/sprite/fieldPorsheCard.png") ||
-        !bmwCardTexture.loadFromFile("assets/sprite/fieldBMWCard.png") ||
-        !teslaCardTexture.loadFromFile("assets/sprite/fieldTeslaCard.png") ||
-        !audiCardTexture.loadFromFile("assets/sprite/fieldAudiCard.png") ||
-        !communityChestCardTexture.loadFromFile("assets/sprite/CommunityChestCard.png") ||
-        !taxCardTexture.loadFromFile("assets/sprite/fieldTaxCard.png") ||
-        !chanceCardTexture.loadFromFile("assets/sprite/ChanceCard.png")) {
+        !vanCardTexture.loadFromFile("assets/sprite/Card/FieldCard/fieldVanCard.png") ||
+        !laundryCardTexture.loadFromFile("assets/sprite/Card/FieldCard/fieldLaundromatCard.png") ||
+        !porsheCardTexture.loadFromFile("assets/sprite/Card/FieldCard/fieldPorsheCard.png") ||
+        !bmwCardTexture.loadFromFile("assets/sprite/Card/FieldCard/fieldBMWCard.png") ||
+        !teslaCardTexture.loadFromFile("assets/sprite/Card/FieldCard/fieldTeslaCard.png") ||
+        !audiCardTexture.loadFromFile("assets/sprite/Card/FieldCard/fieldAudiCard.png") ||
+        !communityChestCardTexture.loadFromFile("assets/sprite/Card/FieldCard/CommunityChestCard.png") ||
+        !taxCardTexture.loadFromFile("assets/sprite/Card/FieldCard/fieldTaxCard.png") ||
+        !chanceCardTexture.loadFromFile("assets/sprite/Card/FieldCard/ChanceCard.png")) {
         throw std::runtime_error("Can't load texture for GameWindow");
     }
-
 
 
     // Background
@@ -55,7 +54,7 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
     myFieldsButtonSprite = sf::Sprite(myFieldsButtonTexture);
     myFieldsButtonSprite.setTextureRect({0, 0, 360, 109});
     myFieldsButtonSprite.setScale(0.8f, 0.8f);
-    myFieldsButtonSprite.setPosition(50, 500);
+    myFieldsButtonSprite.setPosition(50, 800);
 
     buyButtonSprite = sf::Sprite(buyButtonTexture);
     buyButtonSprite.setPosition((window.getSize().x / 2.f) - 270, window.getSize().y - 150);
@@ -197,7 +196,7 @@ bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
         : payButtonSprite.setTextureRect({0, 0, 360, 109});
 
         myFieldsButtonSprite.getGlobalBounds().contains(point)
-        ? myFieldsButtonSprite.setTextureRect({360*2, 0, 360, 109})
+        ? myFieldsButtonSprite.setTextureRect({360 * 2, 0, 360, 109})
         : myFieldsButtonSprite.setTextureRect({0, 0, 360, 109});
 
         if (completeTurnSprite.getGlobalBounds().contains(point)) {
@@ -381,7 +380,7 @@ void GameWindow::drawBuyCard(sf::RenderWindow &window) {
 
     if (field->get_type() == FieldTypes::STREET) {
         window.draw(fieldCardSprite);
-        window.draw(cardsRentSprite[field->get_collection_type() - 1]);
+        drawRentStreetCard(window, field);
     } else if (field->get_type() == FieldTypes::STATION) {
         if (fieldName == "Porshe") {
             window.draw(porsheCardSprite);
@@ -448,9 +447,78 @@ void GameWindow::drawMyFields(sf::RenderWindow &window) {
 
     for (int i = 0; i < fields.size(); i++) {
         sf::Sprite field = sf::Sprite(cardsRentTexture[i]);
-        field.setPosition(100+300+i*100, 400);
+        field.setPosition(100 + 300 + i * 100, 400);
         window.draw(field);
     }
+}
+
+void GameWindow::drawRentStreetCard(sf::RenderWindow &window, ProfitableField *field) {
+    auto street = dynamic_cast<Street *>(field);
+
+    window.draw(cardsRentSprite[field->get_collection_type() - 1]);
+
+    std::string rent = std::to_string(field->get_rent());
+    std::string rentWith1House = "Rent with 1 house:   " + std::to_string(field->get_rent_vector()[0]);
+    std::string rentWith2House = "Rent with 2 houses:  " + std::to_string(field->get_rent_vector()[1]);
+    std::string rentWith3House = "Rent with 3 houses:  " + std::to_string(field->get_rent_vector()[2]);
+    std::string rentWith4House = "Rent with 4 houses:  " + std::to_string(field->get_rent_vector()[3]);
+    std::string rentWith1Hotel = "Rent with 1 hotel:   " + std::to_string(field->get_rent_vector()[4]);
+    std::string rentWith2Hotel = "Rent with 2 hotels:  " + std::to_string(field->get_rent_vector()[5]);
+    std::string mortgageValue = "Mortgage value:       " + std::to_string(field->get_mortgage_price());
+    std::string redemptionValue = "Redemption value:     " + std::to_string(field->get_redemption_price());
+
+    std::string price1House = std::to_string(street->get_house_price());
+    std::string price1Hotel = std::to_string(street->get_hotel_price());
+
+
+    sf::Text rentText;
+    sf::Text rentWith1HouseText;
+    sf::Text rentWith2HouseText;
+    sf::Text rentWith3HouseText;
+    sf::Text rentWith4HouseText;
+    sf::Text rentWith1HotelText;
+    sf::Text rentWith2HotelText;
+    sf::Text mortgageValueText;
+    sf::Text redemptionValueText;
+    sf::Text price1HouseText;
+    sf::Text price1HotelText;
+
+    set_text(rentText, font1, rent, 50, sf::Color::Black, sf::Text::Style::Regular,
+             window.getSize().x - 160, 320);
+
+    set_text(rentWith1HouseText, font2, rentWith1House, 15, sf::Color::Black, sf::Text::Style::Regular,
+             window.getSize().x - 330, 400);
+    set_text(rentWith2HouseText, font2, rentWith2House, 15, sf::Color::Black, sf::Text::Style::Regular,
+             window.getSize().x - 330, 430);
+    set_text(rentWith3HouseText, font2, rentWith3House, 15, sf::Color::Black, sf::Text::Style::Regular,
+             window.getSize().x - 330, 460);
+    set_text(rentWith4HouseText, font2, rentWith4House, 15, sf::Color::Black, sf::Text::Style::Regular,
+             window.getSize().x - 330, 490);
+    set_text(rentWith1HotelText, font2, rentWith1Hotel, 15, sf::Color::Black, sf::Text::Style::Regular,
+             window.getSize().x - 330, 520);
+    set_text(rentWith2HotelText, font2, rentWith2Hotel, 15, sf::Color::Black, sf::Text::Style::Regular,
+             window.getSize().x - 330, 550);
+    set_text(mortgageValueText, font2, mortgageValue, 15, sf::Color::Black, sf::Text::Style::Regular,
+             window.getSize().x - 330, 580);
+    set_text(redemptionValueText, font2, redemptionValue, 15, sf::Color::Black, sf::Text::Style::Regular,
+             window.getSize().x - 330, 610);
+    set_text(price1HouseText, font2, price1House, 25, sf::Color::Black, sf::Text::Style::Regular,
+             window.getSize().x - 250, 650);
+    set_text(price1HotelText, font2, price1Hotel, 25, sf::Color::Black, sf::Text::Style::Regular,
+             window.getSize().x - 250, 700);
+
+    window.draw(rentText);
+    window.draw(rentWith1HouseText);
+    window.draw(rentWith2HouseText);
+    window.draw(rentWith3HouseText);
+    window.draw(rentWith4HouseText);
+    window.draw(rentWith1HotelText);
+    window.draw(rentWith2HotelText);
+    window.draw(mortgageValueText);
+    window.draw(redemptionValueText);
+    window.draw(price1HouseText);
+    window.draw(price1HotelText);
+
 }
 
 void GameWindow::drawPlayers(sf::RenderWindow &window) {
