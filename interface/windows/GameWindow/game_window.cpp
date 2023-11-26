@@ -9,6 +9,7 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
         !auctionButtonTexture.loadFromFile("assets/sprite/Buttons/buttonAuction.png") ||
         !okButtonTexture.loadFromFile("assets/sprite/Buttons/okButton.png") ||
         !payButtonTexture.loadFromFile("assets/sprite/Buttons/payButton.png") ||
+        !myFieldsButtonTexture.loadFromFile("assets/sprite/Buttons/buttonMyFields.png") ||
         !playerInformationCardTexture.loadFromFile("assets/sprite/playerInformationCard.png") ||
         !dice1Texture.loadFromFile("assets/sprite/DicePack/DiceSprSheetX96.png") ||
         !dice2Texture.loadFromFile("assets/sprite/DicePack/DiceSprSheetX96.png") ||
@@ -50,6 +51,11 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
     rollDiceButtonSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
     rollDiceButtonSprite.setPosition(50, 100);
     rollDiceButtonSprite.setScale(0.8f, 0.8f);
+
+    myFieldsButtonSprite = sf::Sprite(myFieldsButtonTexture);
+    myFieldsButtonSprite.setTextureRect({0, 0, 360, 109});
+    myFieldsButtonSprite.setScale(0.8f, 0.8f);
+    myFieldsButtonSprite.setPosition(50, 500);
 
     buyButtonSprite = sf::Sprite(buyButtonTexture);
     buyButtonSprite.setPosition((window.getSize().x / 2.f) - 270, window.getSize().y - 150);
@@ -144,6 +150,11 @@ bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
                     onStartGame(window);
                 }
             }
+            if (myFieldsButtonSprite.getGlobalBounds().contains(point)) {
+                if (!isActiveMyFieldsMode) {
+                    isActiveMyFieldsMode = true;
+                }
+            }
             if (completeTurnSprite.getGlobalBounds().contains(point)) {
                 onCompleteTurn(window);
             }
@@ -190,6 +201,10 @@ bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
         payButtonSprite.getGlobalBounds().contains(point)
         ? payButtonSprite.setTextureRect({360 * 2, 0, 360, 109})
         : payButtonSprite.setTextureRect({0, 0, 360, 109});
+
+        myFieldsButtonSprite.getGlobalBounds().contains(point)
+        ? myFieldsButtonSprite.setTextureRect({360*2, 0, 360, 109})
+        : myFieldsButtonSprite.setTextureRect({0, 0, 360, 109});
 
         if (completeTurnSprite.getGlobalBounds().contains(point)) {
             game.get_is_player_roll_dice()
@@ -312,6 +327,17 @@ void GameWindow::draw(sf::RenderWindow &window) {
             window.draw(dice2Sprite);
         }
 
+        if (isActiveMyFieldsMode) {
+            auto currPlayer = game.get_players()[game.get_cur_player_id()];
+            auto fields = currPlayer.get_fields();
+
+            for (int i = 0; i < fields.size(); i++) {
+                sf::Sprite field = sf::Sprite(cardsRentTexture[i]);
+                field.setPosition(100+300+i*100, 400);
+                window.draw(field);
+            }
+        }
+
 
         if (isActiveBuyMode) {
             backgroundImageSprite.setColor(sf::Color(255, 255, 255, 60));
@@ -389,6 +415,7 @@ void GameWindow::draw(sf::RenderWindow &window) {
             window.draw(completeTurnSprite);
             window.draw(rollDiceButtonSprite);
             drawPlayers(window);
+            window.draw(myFieldsButtonSprite);
         }
     }
 }

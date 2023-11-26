@@ -34,6 +34,7 @@ public:
 private:
     bool isGameStarted = false;
     bool isRollDice = false;
+    bool isActiveMyFieldsMode = false;
 
     bool isActiveDoNothing = false;
     bool isActiveBuyMode = false;
@@ -75,6 +76,9 @@ private:
 
     sf::Texture okButtonTexture;
     sf::Sprite okButtonSprite;
+
+    sf::Texture myFieldsButtonTexture;
+    sf::Sprite myFieldsButtonSprite;
 
     // Dices
 
