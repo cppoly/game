@@ -2,6 +2,7 @@
 
 GameWindow::GameWindow(sf::RenderWindow &window) {
     if (!backgroundImageTexture.loadFromFile("assets/sprite/BackgroundImage/playing_field.png") ||
+        !playingFieldTexture.loadFromFile("assets/sprite/BackgroundImage/playingField.png") ||
         !startGameButtonTexture.loadFromFile("assets/sprite/Buttons/buttonStartGame.png") ||
         !completeTurnTexture.loadFromFile("assets/sprite/Buttons/buttonCompleteTurn.png") ||
         !rollDiceButtonTexture.loadFromFile("assets/sprite/Buttons/buttonRollDice.png") ||
@@ -36,6 +37,10 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
     backgroundImageSprite = sf::Sprite(backgroundImageTexture);
     backgroundImageSprite.setScale(window.getSize().x / backgroundImageSprite.getLocalBounds().getSize().x,
                                    window.getSize().y / backgroundImageSprite.getLocalBounds().getSize().y);
+
+    playingFieldSprite = sf::Sprite(playingFieldTexture);
+    playingFieldSprite.setOrigin(512, 512);
+    playingFieldSprite.setPosition(window.getSize().x / 2.f, window.getSize().y / 2.f);
 
     // Buttons
     startGameButtonSprite = sf::Sprite(startGameButtonTexture);
@@ -330,37 +335,49 @@ void GameWindow::onPayButtonClick(sf::RenderWindow &window) {
     }
 }
 
+void GameWindow::zoomCurrPlayer(sf::RenderWindow &window) {
+    auto currPlayerId = game.get_cur_player_id();
+    auto currPosition = game.get_players()[game.get_cur_player_id()].get_position();
+    sf::Sprite currPlayerSprite = game.get_players()[game.get_cur_player_id()].get_sprite();
+
+    sf::View view;
+    view.setSize(window.getSize().x / 3.f, window.getSize().y / 3.f);
+
+    if (currPosition == 0 || currPosition % 10 == 1) {
+        view.setCenter(1354 - (currPosition % 11), 870);
+        currPlayerSprite.setPosition(1354 - (currPosition % 11), 870);
+    } else if (currPosition % 10 == 0) {
+        view.setCenter(552, 870);
+        currPlayerSprite.setPosition(552, 870);
+    } else {
+        view.setCenter(1384 - currPlayerId * 10 - (currPosition % 11) * 85, 870);
+        currPlayerSprite.setPosition(1384 - currPlayerId * 10 - (currPosition % 11) * 85, 870);
+    }
+
+    playingFieldSprite.setRotation(-90 * (currPosition / 11));
+    window.setView(view);
+    window.draw(currPlayerSprite);
+}
+
 void GameWindow::draw(sf::RenderWindow &window, sf::Event &event) {
     window.clear();
     window.draw(backgroundImageSprite);
+    window.draw(playingFieldSprite);
 
     if (!isGameStarted) {
         backgroundImageSprite.setColor(sf::Color(255, 255, 255, 60));
+        playingFieldSprite.setColor(sf::Color(255, 255, 255, 60));
+        window.draw(playingFieldSprite);
         window.draw(startGameButtonSprite);
     } else {
         window.setView(window.getDefaultView());
         backgroundImageSprite.setColor(sf::Color(255, 255, 255, 255));
-
+        playingFieldSprite.setColor({255, 255, 255, 255});
+        playingFieldSprite.setRotation(0);
         // Draw player activity
 
         if (isActiveZoomMode) {
-            auto currPlayerId = game.get_cur_player_id();
-            auto currPosition = game.get_players()[game.get_cur_player_id()].get_position();
-//            sf::Sprite sprite = game.get_players()[game.get_cur_player_id()].get_sprite();
-            sf::View view;
-            view.setSize(window.getSize().x / 3.f, window.getSize().y/3.f);
-            if (0 <= currPosition && currPosition <= 10) {
-                if (currPosition == 0) {
-                    view.setCenter(1354 - currPosition, 870);
-                } else if (currPosition == 10) {
-                    view.setCenter(552, 870);
-                } else {
-                    view.setCenter(1384 - currPlayerId * 10 - currPosition * 85, 870);
-                }
-            }
-            window.setView(view);
-
-            drawPlayers(window);
+            zoomCurrPlayer(window);
         } else if (isActiveMyFieldsMode) {
             backgroundImageSprite.setColor(sf::Color(255, 255, 255, 60));
             auto fields = game.get_players()[game.get_cur_player_id()].get_fields();

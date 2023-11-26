@@ -29,6 +29,8 @@ public:
 
     void setGame(Game& game1);
 
+    void zoomCurrPlayer(sf::RenderWindow& window);
+
     void drawPlayers(sf::RenderWindow& window);
 
     void drawPlayer(sf::RenderWindow& window, int currPosition, int numberPlayer);
@@ -74,6 +76,9 @@ private:
 
     sf::Texture backgroundImageTexture;
     sf::Sprite backgroundImageSprite;
+
+    sf::Texture playingFieldTexture;
+    sf::Sprite playingFieldSprite;
 
     // Buttons
 
