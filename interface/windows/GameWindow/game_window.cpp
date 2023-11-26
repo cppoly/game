@@ -172,13 +172,7 @@ bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
                 }
             }
             if (payButtonSprite.getGlobalBounds().contains(point)) {
-                if (isActivePayBankMode) {
-                    payButtonSprite.setTextureRect({360, 0, 360, 109});
-                    bool pay = game.pay_bank(player.amount_to_pay);
-                    if (pay) {
-                        isActivePayBankMode = false;
-                    }
-                }
+                onPayButtonClick(window);
             }
         }
     } else if (event.type == sf::Event::MouseMoved) {
@@ -292,6 +286,16 @@ void GameWindow::onOkClick(sf::RenderWindow &window) {
     // TODO
 }
 
+void GameWindow::onPayButtonClick(sf::RenderWindow &window) {
+    if (isActivePayBankMode) {
+        payButtonSprite.setTextureRect({360, 0, 360, 109});
+        bool pay = game.pay_bank(player.amount_to_pay);
+        if (pay) {
+            isActivePayBankMode = false;
+        }
+    }
+}
+
 void GameWindow::draw(sf::RenderWindow &window) {
     window.clear();
     window.draw(backgroundImageSprite);
@@ -301,116 +305,24 @@ void GameWindow::draw(sf::RenderWindow &window) {
         window.draw(startGameButtonSprite);
     } else {
         backgroundImageSprite.setColor(sf::Color(255, 255, 255, 255));
-        window.draw(playerInformationCardSprite);
 
-        // Player name
-        std::string s = game.get_players()[game.get_cur_player_id()].get_name();
-        set_text(currPlayerName, font1, s, 60, sf::Color::Black, sf::Text::Style::Bold, 60, 310);
-        window.draw(currPlayerName);
-
-        // Player capacity
-        std::string capacity = std::to_string(game.get_players()[game.get_cur_player_id()].get_money()) + "$";
-        set_text(currPlayerCapacity, font2, capacity, 40, sf::Color::Black, sf::Text::Style::Regular, 60,
-                 400);
-        window.draw(currPlayerCapacity);
-
-        // Player jail cards
-        std::string amountJailCards = "Count of jail cards: " + std::to_string(
-                game.get_players()[game.get_cur_player_id()].get_amount_of_jail_cards());
-        set_text(currAmountJailCards, font2, amountJailCards, 20, sf::Color::Black, sf::Text::Style::Regular, 60, 470);
-        window.draw(currAmountJailCards);
-
-        if (isRollDice) {
-            dice1Sprite.setTextureRect(sf::IntRect(96 * (player.number_on_dice1 - 1), 0, 96, 96));
-            dice2Sprite.setTextureRect(sf::IntRect(96 * (player.number_on_dice2 - 1), 0, 96, 96));
-            window.draw(dice1Sprite);
-            window.draw(dice2Sprite);
-        }
+        drawPlayerInformation(window);
 
         if (isActiveMyFieldsMode) {
-            auto currPlayer = game.get_players()[game.get_cur_player_id()];
-            auto fields = currPlayer.get_fields();
-
-            for (int i = 0; i < fields.size(); i++) {
-                sf::Sprite field = sf::Sprite(cardsRentTexture[i]);
-                field.setPosition(100+300+i*100, 400);
-                window.draw(field);
-            }
+            drawMyFields(window);
         }
 
-
+        // Draw player activity
         if (isActiveBuyMode) {
-            backgroundImageSprite.setColor(sf::Color(255, 255, 255, 60));
-
-            auto currPlayer = game.get_players()[game.get_cur_player_id()];
-            auto field = dynamic_cast<ProfitableField *>(game.get_fields()[currPlayer.get_position()]);
-
-            std::string price = std::to_string(field->get_price());
-            sf::Text priceText;
-
-            std::string fieldName = field->get_name();
-            sf::Text fieldNameText;
-
-            set_text(priceText, font2, price, 50, sf::Color::Black, sf::Text::Style::Regular,
-                     (window.getSize().x / 2.f) - 50, 830);
-            set_text(fieldNameText, font2, fieldName, 30, sf::Color::Black, sf::Text::Style::Regular,
-                     (window.getSize().x / 2.f) - 64 * 4, 230);
-
-
-            if (field->get_type() == FieldTypes::STREET) {
-                window.draw(fieldCardSprite);
-                window.draw(cardsRentSprite[field->get_collection_type() - 1]);
-            } else if (field->get_type() == FieldTypes::STATION) {
-                if (fieldName == "Porshe") {
-                    window.draw(porsheCardSprite);
-                } else if (fieldName == "BMW") {
-                    window.draw(bmwCardSprite);
-                } else if (fieldName == "Tesla") {
-                    window.draw(teslaCardSprite);
-                } else {
-                    window.draw(audiCardSprite);
-                }
-            } else if (field->get_type() == FieldTypes::UTILITY) {
-                if (fieldName == "Laundromat") {
-                    window.draw(laundryCardSprite);
-                } else {
-                    window.draw(vanCardSprite);
-                }
-            }
-
-            window.draw(buyButtonSprite);
-            window.draw(auctionButtonSprite);
-            window.draw(fieldNameText);
-            window.draw(priceText);
+            drawBuyCard(window);
         } else if (isActiveDrawCardMode) {
-
-            backgroundImageSprite.setColor(sf::Color(255, 255, 255, 60));
-
-            auto currPlayer = game.get_players()[game.get_cur_player_id()];
-            auto field = dynamic_cast<Field *>(game.get_fields()[currPlayer.get_position()]);
-
-            if (field->get_type() == FieldTypes::CHANCE) {
-                window.draw(chanceCardSprite);
-            } else {
-                window.draw(communityChestCardSprite);
-            }
-            window.draw(okButtonSprite);
+            drawDrawCard(window);
         } else if (isActivePayBankMode) {
-            auto currPlayer = game.get_players()[game.get_cur_player_id()];
-            auto field = dynamic_cast<Tax *>(game.get_fields()[currPlayer.get_position()]);
-
-            std::string price = std::to_string(field->get_price());
-            sf::Text priceText;
-            set_text(priceText, font2, price, 50, sf::Color::Black, sf::Text::Style::Regular,
-                     (window.getSize().x / 2.f) - 50, 830);
-
-            window.draw(taxCardSprite);
-            window.draw(priceText);
-            window.draw(payButtonSprite);
+            drawPayBankCard(window);
         } else if (isActivePayPlayerMode) {
-            game.pay_player(player.player_to_pay, player.amount_to_pay);
+//            game.pay_player(player.player_to_pay, player.amount_to_pay);
         } else if (isActiveGoToJail) {
-            game.go_to_jail();
+//            game.go_to_jail();
         } else {
             window.draw(completeTurnSprite);
             window.draw(rollDiceButtonSprite);
@@ -423,6 +335,122 @@ void GameWindow::draw(sf::RenderWindow &window) {
 
 void GameWindow::setGame(Game &game1) {
     game = game1;
+}
+
+void GameWindow::drawPlayerInformation(sf::RenderWindow &window) {
+    window.draw(playerInformationCardSprite);
+
+    // Player name
+    std::string s = game.get_players()[game.get_cur_player_id()].get_name();
+    set_text(currPlayerName, font1, s, 60, sf::Color::Black, sf::Text::Style::Bold, 60, 310);
+    window.draw(currPlayerName);
+
+    // Player capacity
+    std::string capacity = std::to_string(game.get_players()[game.get_cur_player_id()].get_money()) + "$";
+    set_text(currPlayerCapacity, font2, capacity, 40, sf::Color::Black, sf::Text::Style::Regular, 60,
+             400);
+    window.draw(currPlayerCapacity);
+
+    // Player jail cards
+    std::string amountJailCards = "Count of jail cards: " + std::to_string(
+            game.get_players()[game.get_cur_player_id()].get_amount_of_jail_cards());
+    set_text(currAmountJailCards, font2, amountJailCards, 20, sf::Color::Black, sf::Text::Style::Regular, 60, 470);
+    window.draw(currAmountJailCards);
+
+    if (isRollDice) {
+        drawDice(window);
+    }
+}
+
+void GameWindow::drawBuyCard(sf::RenderWindow &window) {
+    backgroundImageSprite.setColor(sf::Color(255, 255, 255, 60));
+
+    auto currPlayer = game.get_players()[game.get_cur_player_id()];
+    auto field = dynamic_cast<ProfitableField *>(game.get_fields()[currPlayer.get_position()]);
+
+    std::string price = std::to_string(field->get_price());
+    sf::Text priceText;
+
+    std::string fieldName = field->get_name();
+    sf::Text fieldNameText;
+
+    set_text(priceText, font2, price, 50, sf::Color::Black, sf::Text::Style::Regular,
+             (window.getSize().x / 2.f) - 50, 830);
+    set_text(fieldNameText, font2, fieldName, 30, sf::Color::Black, sf::Text::Style::Regular,
+             (window.getSize().x / 2.f) - 64 * 4, 230);
+
+    if (field->get_type() == FieldTypes::STREET) {
+        window.draw(fieldCardSprite);
+        window.draw(cardsRentSprite[field->get_collection_type() - 1]);
+    } else if (field->get_type() == FieldTypes::STATION) {
+        if (fieldName == "Porshe") {
+            window.draw(porsheCardSprite);
+        } else if (fieldName == "BMW") {
+            window.draw(bmwCardSprite);
+        } else if (fieldName == "Tesla") {
+            window.draw(teslaCardSprite);
+        } else {
+            window.draw(audiCardSprite);
+        }
+    } else if (field->get_type() == FieldTypes::UTILITY) {
+        if (fieldName == "Laundromat") {
+            window.draw(laundryCardSprite);
+        } else {
+            window.draw(vanCardSprite);
+        }
+    }
+
+    window.draw(buyButtonSprite);
+    window.draw(auctionButtonSprite);
+    window.draw(fieldNameText);
+    window.draw(priceText);
+}
+
+void GameWindow::drawDrawCard(sf::RenderWindow &window) {
+    backgroundImageSprite.setColor(sf::Color(255, 255, 255, 60));
+
+    auto currPlayer = game.get_players()[game.get_cur_player_id()];
+    auto field = dynamic_cast<Field *>(game.get_fields()[currPlayer.get_position()]);
+
+    if (field->get_type() == FieldTypes::CHANCE) {
+        window.draw(chanceCardSprite);
+    } else {
+        window.draw(communityChestCardSprite);
+    }
+    window.draw(okButtonSprite);
+}
+
+void GameWindow::drawPayBankCard(sf::RenderWindow &window) {
+    auto currPlayer = game.get_players()[game.get_cur_player_id()];
+    auto field = dynamic_cast<Tax *>(game.get_fields()[currPlayer.get_position()]);
+
+    std::string price = std::to_string(field->get_price());
+    sf::Text priceText;
+    set_text(priceText, font2, price, 50, sf::Color::Black, sf::Text::Style::Regular,
+             (window.getSize().x / 2.f) - 50, 830);
+
+    window.draw(taxCardSprite);
+    window.draw(priceText);
+    window.draw(payButtonSprite);
+}
+
+void GameWindow::drawDice(sf::RenderWindow &window) {
+    dice1Sprite.setTextureRect(sf::IntRect(96 * (player.number_on_dice1 - 1), 0, 96, 96));
+    dice2Sprite.setTextureRect(sf::IntRect(96 * (player.number_on_dice2 - 1), 0, 96, 96));
+    window.draw(dice1Sprite);
+    window.draw(dice2Sprite);
+
+}
+
+void GameWindow::drawMyFields(sf::RenderWindow &window) {
+    auto currPlayer = game.get_players()[game.get_cur_player_id()];
+    auto fields = currPlayer.get_fields();
+
+    for (int i = 0; i < fields.size(); i++) {
+        sf::Sprite field = sf::Sprite(cardsRentTexture[i]);
+        field.setPosition(100+300+i*100, 400);
+        window.draw(field);
+    }
 }
 
 void GameWindow::drawPlayers(sf::RenderWindow &window) {
@@ -462,3 +490,4 @@ void GameWindow::drawPlayer(sf::RenderWindow &window, int currPosition, int i) {
     }
     window.draw(sprite);
 }
+

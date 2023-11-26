@@ -25,11 +25,25 @@ public:
 
     void onOkClick(sf::RenderWindow&window);
 
+    void onPayButtonClick(sf::RenderWindow& window);
+
     void setGame(Game& game1);
 
     void drawPlayers(sf::RenderWindow& window);
 
     void drawPlayer(sf::RenderWindow& window, int currPosition, int numberPlayer);
+
+    void drawDice(sf::RenderWindow& window);
+
+    void drawPlayerInformation(sf::RenderWindow& window);
+
+    void drawBuyCard(sf::RenderWindow& window);
+
+    void drawDrawCard(sf::RenderWindow& window);
+
+    void drawPayBankCard(sf::RenderWindow& window);
+
+    void drawMyFields(sf::RenderWindow& window);
 
 private:
     bool isGameStarted = false;
