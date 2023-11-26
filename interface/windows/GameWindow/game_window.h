@@ -11,7 +11,7 @@ class GameWindow {
 public:
     GameWindow(sf::RenderWindow &window);
 
-    void draw(sf::RenderWindow &window);
+    void draw(sf::RenderWindow &window, sf::Event& event);
 
     bool handleEvent(sf::Event &event, sf::RenderWindow &window);
 
@@ -43,13 +43,13 @@ public:
 
     void drawPayBankCard(sf::RenderWindow& window);
 
-    void drawMyFields(sf::RenderWindow& window);
+    void drawMyFields(sf::RenderWindow& window, sf::Event& event, std::vector<ProfitableField*>& field);
 
-    void drawRentStreetCard(sf::RenderWindow& window, ProfitableField * field);
+    void drawRentStreetCard(sf::RenderWindow& window, ProfitableField * field, sf::Sprite& rentCardSprite, float x, float y, float scaleX, float ScaleY);
 
-    void drawRentStationCard(sf::RenderWindow& window, ProfitableField* field);
+    void drawRentStationCard(sf::RenderWindow& window, ProfitableField* field, float x, float y, float scaleX, float ScaleY);
 
-    void drawRentUtilityCard(sf::RenderWindow& window, ProfitableField* field);
+    void drawRentUtilityCard(sf::RenderWindow& window, ProfitableField* field, float x, float y, float scaleX, float ScaleY);
 
 private:
     bool isGameStarted = false;
@@ -122,7 +122,8 @@ private:
     sf::Texture communityChestCardTexture;
     sf::Sprite communityChestCardSprite;
 
-
+    sf::Texture myFieldsCardTexture;
+    sf::Sprite myFieldsCardSprite;
     // Card Rent
 
     sf::Texture cardRent1Texture;

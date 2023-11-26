@@ -11,7 +11,7 @@ int main() {
             sf::VideoMode(
                     sf::VideoMode::getDesktopMode().width,
                     sf::VideoMode::getDesktopMode().height),
-            "Monopoly"
+            "Monopoly", sf::Style::Fullscreen
             );
 
 
@@ -80,7 +80,7 @@ int main() {
         } else if (isActiveCharacter) {
             characterWindow.draw(window);
         } else if (isActiveGame) {
-            gameWindow.draw(window);
+            gameWindow.draw(window, event);
         }
         window.display();
     }

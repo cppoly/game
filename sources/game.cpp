@@ -91,6 +91,9 @@ GameMove Game::player_move() {
     int dice1 = number_on_dice();
     int dice2 = number_on_dice();
 
+//    dice1 = 3;
+//    dice2 = 2;
+
     if (dice1 != dice2) {
         is_player_roll_dice = true;
     }
