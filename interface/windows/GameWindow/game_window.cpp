@@ -179,9 +179,9 @@ bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
                     isActiveMyFieldsMode = true;
                 }
             }
-            auto p = [&](sf::Sprite& x){ return x.getGlobalBounds().contains(point); };
+//            auto p = [&](ProfitableField& x){ return x.getGlobalBounds().contains(point); };
 
-            if ( isActiveMyFieldsMode)  {
+            if (isActiveMyFieldsMode)  {
                 isActiveZoomCardMode = true;
             }
 

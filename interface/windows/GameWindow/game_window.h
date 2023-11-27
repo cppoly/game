@@ -67,6 +67,7 @@ private:
     int activeRentZoomCard = 0;
 
     std::vector<ProfitableField*> currField;
+    std::vector<sf::Sprite> currSprite;
 
     bool isActiveDoNothing = false;
     bool isActiveBuyMode = false;
