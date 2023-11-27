@@ -94,9 +94,6 @@ GameMove Game::player_move() {
     if (dice1 != dice2) {
         is_player_roll_dice = true;
     }
-    dice1 = 1;
-    dice2 = 2;
-
 
     GameMove return_obj;
     auto player = players[cur_player_id];
