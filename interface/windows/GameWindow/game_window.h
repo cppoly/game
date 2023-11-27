@@ -6,6 +6,7 @@
 #include "../../../sources/game.h"
 #include <vector>
 #include "../../text/text.h"
+#include <algorithm>
 
 class GameWindow {
 public:
@@ -24,6 +25,8 @@ public:
     void onBuyClick(sf::RenderWindow& window);
 
     void onOkClick(sf::RenderWindow&window);
+
+    void onZoomButtonClick(sf::RenderWindow& window);
 
     void onPayButtonClick(sf::RenderWindow& window);
 
@@ -45,6 +48,8 @@ public:
 
     void drawPayBankCard(sf::RenderWindow& window);
 
+    void drawPayPlayerCard(sf::RenderWindow& window);
+
     void drawMyFields(sf::RenderWindow& window, sf::Event& event, std::vector<ProfitableField*>& field);
 
     void drawRentStreetCard(sf::RenderWindow& window, ProfitableField * field, sf::Sprite& rentCardSprite, float x, float y, float scaleX, float ScaleY);
@@ -58,6 +63,10 @@ private:
     bool isRollDice = false;
     bool isActiveMyFieldsMode = false;
     bool isActiveZoomMode = false;
+    bool isActiveZoomCardMode = false;
+    int activeRentZoomCard = 0;
+
+    std::vector<ProfitableField*> currField;
 
     bool isActiveDoNothing = false;
     bool isActiveBuyMode = false;
@@ -136,6 +145,7 @@ private:
 
     sf::Texture myFieldsCardTexture;
     sf::Sprite myFieldsCardSprite;
+
     // Card Rent
 
     sf::Texture cardRent1Texture;

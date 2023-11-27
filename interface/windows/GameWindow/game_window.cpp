@@ -86,7 +86,7 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
     payButtonSprite.setScale(0.6f, 0.6f);
 
     loupeButtonSprite = sf::Sprite(loupeButtonTexture);
-    loupeButtonSprite.setPosition(50 + 180 - 54, 250);
+    loupeButtonSprite.setPosition(50 + 180 - 54, 220);
     loupeButtonSprite.setTextureRect({0, 0, 52, 49});
 
     // Cards
@@ -179,13 +179,17 @@ bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
                     isActiveMyFieldsMode = true;
                 }
             }
+            auto p = [&](sf::Sprite& x){ return x.getGlobalBounds().contains(point); };
 
+            if ( isActiveMyFieldsMode)  {
+                isActiveZoomCardMode = true;
+            }
+
+            if (isActiveZoomCardMode) {
+                isActiveZoomCardMode = false;
+            }
             if (loupeButtonSprite.getGlobalBounds().contains(point)) {
-                if (!isActiveZoomMode) {
-                    isActiveZoomMode = true;
-                } else {
-                    isActiveZoomMode = false;
-                }
+                onZoomButtonClick(window);
             }
             if (completeTurnSprite.getGlobalBounds().contains(point)) {
                 onCompleteTurn(window);
@@ -201,9 +205,10 @@ bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
             if (okButtonSprite.getGlobalBounds().contains(point)) {
                 if (isActiveDrawCardMode) {
                     onOkClick(window);
-                } else if (isActiveMyFieldsMode) {
+                } else if (isActiveMyFieldsMode && !isActiveZoomCardMode) {
                     isActiveMyFieldsMode = false;
                 }
+
             }
             if (payButtonSprite.getGlobalBounds().contains(point)) {
                 onPayButtonClick(window);
@@ -273,7 +278,7 @@ void GameWindow::onStartGame(sf::RenderWindow &window) {
 }
 
 void GameWindow::onCompleteTurn(sf::RenderWindow &window) {
-    if (game.get_is_player_roll_dice()) {
+    if (game.get_is_player_roll_dice() && !isActiveMyFieldsMode) {
         completeTurnSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
         int id = game.next_turn();
         isRollDice = false;
@@ -335,6 +340,17 @@ void GameWindow::onPayButtonClick(sf::RenderWindow &window) {
     }
 }
 
+void GameWindow::onZoomButtonClick(sf::RenderWindow &window) {
+    if (!isActiveZoomMode) {
+        isActiveZoomMode = true;
+        loupeButtonSprite.setTextureRect({52, 0, 52, 49});
+    } else {
+        isActiveZoomMode = false;
+        loupeButtonSprite.setPosition(50 + 180 - 54, 220);
+        loupeButtonSprite.setTextureRect({0, 0, 52, 49});
+    }
+}
+
 void GameWindow::zoomCurrPlayer(sf::RenderWindow &window) {
     auto currPlayerId = game.get_cur_player_id();
     auto currPosition = game.get_players()[game.get_cur_player_id()].get_position();
@@ -343,19 +359,21 @@ void GameWindow::zoomCurrPlayer(sf::RenderWindow &window) {
     sf::View view;
     view.setSize(window.getSize().x / 3.f, window.getSize().y / 3.f);
 
-    if (currPosition == 0 || currPosition % 10 == 1) {
+    if (currPosition == 0) {
         view.setCenter(1354 - (currPosition % 11), 870);
-        currPlayerSprite.setPosition(1354 - (currPosition % 11), 870);
+        currPlayerSprite.setPosition(1354 - (currPosition % 10), 870);
     } else if (currPosition % 10 == 0) {
         view.setCenter(552, 870);
         currPlayerSprite.setPosition(552, 870);
     } else {
-        view.setCenter(1384 - currPlayerId * 10 - (currPosition % 11) * 85, 870);
-        currPlayerSprite.setPosition(1384 - currPlayerId * 10 - (currPosition % 11) * 85, 870);
+        view.setCenter(1384 - currPlayerId * 10 - (currPosition % 10) * 85, 870);
+        currPlayerSprite.setPosition(1384 - currPlayerId * 10 - (currPosition % 10) * 85, 870);
     }
 
-    playingFieldSprite.setRotation(-90 * (currPosition / 11));
+    loupeButtonSprite.setPosition(view.getCenter().x - 300, view.getCenter().y- 160);
+    playingFieldSprite.setRotation((float)(-90 * (currPosition / 11)));
     window.setView(view);
+    window.draw(loupeButtonSprite);
     window.draw(currPlayerSprite);
 }
 
@@ -374,6 +392,7 @@ void GameWindow::draw(sf::RenderWindow &window, sf::Event &event) {
         backgroundImageSprite.setColor(sf::Color(255, 255, 255, 255));
         playingFieldSprite.setColor({255, 255, 255, 255});
         playingFieldSprite.setRotation(0);
+
         // Draw player activity
 
         if (isActiveZoomMode) {
@@ -381,6 +400,7 @@ void GameWindow::draw(sf::RenderWindow &window, sf::Event &event) {
         } else if (isActiveMyFieldsMode) {
             backgroundImageSprite.setColor(sf::Color(255, 255, 255, 60));
             auto fields = game.get_players()[game.get_cur_player_id()].get_fields();
+            currField = fields;
             drawMyFields(window, event, fields);
         } else {
             drawPlayerInformation(window);
@@ -391,23 +411,18 @@ void GameWindow::draw(sf::RenderWindow &window, sf::Event &event) {
             } else if (isActivePayBankMode) {
                 drawPayBankCard(window);
             } else if (isActivePayPlayerMode) {
-                window.draw(payToPlayerCardSprite);
-                window.draw(payButtonSprite);
-                sf::Sprite playerToPaySprite = game.get_players()[player.player_to_pay].get_sprite();
-                playerToPaySprite.setPosition(window.getSize().x, window.getSize().y);
+                drawPayPlayerCard(window);
             } else if (isActiveGoToJail) {
-//            game.go_to_jail();
+//              game.go_to_jail();
             } else {
                 window.draw(completeTurnSprite);
                 window.draw(rollDiceButtonSprite);
                 window.draw(loupeButtonSprite);
-
                 drawPlayers(window);
                 window.draw(myFieldsButtonSprite);
             }
         }
     }
-
 }
 
 void GameWindow::setGame(Game &game1) {
@@ -441,6 +456,7 @@ void GameWindow::drawPlayerInformation(sf::RenderWindow &window) {
 
 void GameWindow::drawBuyCard(sf::RenderWindow &window) {
     backgroundImageSprite.setColor(sf::Color(255, 255, 255, 60));
+    playingFieldSprite.setColor({255, 255, 255, 60});
 
     auto currPlayer = game.get_players()[game.get_cur_player_id()];
     auto field = dynamic_cast<ProfitableField *>(game.get_fields()[currPlayer.get_position()]);
@@ -487,6 +503,7 @@ void GameWindow::drawBuyCard(sf::RenderWindow &window) {
 
 void GameWindow::drawDrawCard(sf::RenderWindow &window) {
     backgroundImageSprite.setColor(sf::Color(255, 255, 255, 60));
+    playingFieldSprite.setColor({255, 255, 255, 60});
 
     auto currPlayer = game.get_players()[game.get_cur_player_id()];
     auto field = dynamic_cast<Field *>(game.get_fields()[currPlayer.get_position()]);
@@ -500,6 +517,9 @@ void GameWindow::drawDrawCard(sf::RenderWindow &window) {
 }
 
 void GameWindow::drawPayBankCard(sf::RenderWindow &window) {
+    backgroundImageSprite.setColor(sf::Color(255, 255, 255, 60));
+    playingFieldSprite.setColor({255, 255, 255, 60});
+
     auto currPlayer = game.get_players()[game.get_cur_player_id()];
     auto field = dynamic_cast<Tax *>(game.get_fields()[currPlayer.get_position()]);
 
@@ -513,6 +533,13 @@ void GameWindow::drawPayBankCard(sf::RenderWindow &window) {
     window.draw(payButtonSprite);
 }
 
+void GameWindow::drawPayPlayerCard(sf::RenderWindow &window) {
+    window.draw(payToPlayerCardSprite);
+    window.draw(payButtonSprite);
+    sf::Sprite playerToPaySprite = game.get_players()[player.player_to_pay].get_sprite();
+    playerToPaySprite.setPosition(window.getSize().x, window.getSize().y);
+}
+
 void GameWindow::drawDice(sf::RenderWindow &window) {
     dice1Sprite.setTextureRect(sf::IntRect(96 * (player.number_on_dice1 - 1), 0, 96, 96));
     dice2Sprite.setTextureRect(sf::IntRect(96 * (player.number_on_dice2 - 1), 0, 96, 96));
@@ -522,19 +549,25 @@ void GameWindow::drawDice(sf::RenderWindow &window) {
 }
 
 void GameWindow::drawMyFields(sf::RenderWindow &window, sf::Event &event, std::vector<ProfitableField *> &fields) {
-    window.draw(myFieldsCardSprite);
-    window.draw(okButtonSprite);
-    auto point = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+    backgroundImageSprite.setColor(sf::Color(255, 255, 255, 60));
+    playingFieldSprite.setColor({255, 255, 255, 60});
 
+    window.draw(myFieldsCardSprite);
     for (int i = 0; i < fields.size(); i++) {
         if (fields[i]->get_type() == FieldTypes::STREET) {
             sf::Sprite rentCardSprite = sf::Sprite(cardsRentSprite[fields[i]->get_collection_type() - 1]);
-            drawRentStreetCard(window, fields[i], rentCardSprite, 200 + 300 * 0.7 * i + 100, 100 + 450 * (i / 7), 0.5f,
-                               0.5f);
+
+            myFieldsCardSprite.setColor({255, 255, 255, 255});
+                drawRentStreetCard(window, fields[i], cardsRentSprite[fields[i]->get_collection_type() - 1], (float)(200 + 300 * 0.7 * i + 100), 100.f + 450.f * (i / 7), 0.5f,
+                                   0.5f);
+                window.draw(okButtonSprite);
+
         } else if (fields[i]->get_type() == FieldTypes::STATION) {
             drawRentStationCard(window, fields[i], 200 + 300 * 0.7 * i + 100, 100 + 450 * (i / 7), 0.5f, 0.5f);
+            window.draw(okButtonSprite);
         } else {
             drawRentUtilityCard(window, fields[i], 200 + 300 * 0.7 * i + 100, 100 + 450 * (i / 7), 0.5f, 0.5f);
+            window.draw(okButtonSprite);
         }
     }
 }
@@ -668,7 +701,7 @@ void GameWindow::drawRentUtilityCard(sf::RenderWindow &window, ProfitableField *
                                      float scaleY) {
     sf::Sprite rentCard = sf::Sprite(cardsRentTexture[1]);
     rentCard.setPosition(x, y);
-    rentCard.setScale(scaleX, 1.2 * scaleY);
+    rentCard.setScale(scaleX, 1.2f * scaleY);
     window.draw(rentCard);
     auto utility = dynamic_cast<Utility *>(field);
 
@@ -717,26 +750,26 @@ void GameWindow::drawPlayer(sf::RenderWindow &window, int currPosition, int i) {
     sf::Sprite sprite = game.get_players()[i].get_sprite();
     if (0 <= currPosition && currPosition <= 10) {
         if (currPosition == 0) {
-            sprite.setPosition(1354 + i * 30, 870);
+            sprite.setPosition((float)(1354 + i * 30), 870);
         } else if (currPosition == 10) {
             sprite.setPosition(552, 870);
         } else {
-            sprite.setPosition(1384 - i * 10 - game.get_players()[i].get_position() * 85, 870);
+            sprite.setPosition((float)(1384 - i * 10 - game.get_players()[i].get_position() * 85), 870);
         }
     } else if (11 <= currPosition && currPosition <= 20) {
         sprite.setOrigin(0, 76);
         sprite.setRotation(90);
-        sprite.setPosition(562, 963 - i * 10 - (currPosition - 10) * 85);
+        sprite.setPosition(562, (float)(963 - i * 10 - (currPosition - 10) * 85));
 
     } else if (21 <= currPosition && currPosition <= 30) {
         sprite.setOrigin(42, 76);
         sprite.setRotation(180);
-        sprite.setPosition(534 + i * 10 + (currPosition - 20) * 85, 140);
+        sprite.setPosition((float)(534 + i * 10 + (currPosition - 20) * 85), 140);
     } else {
 
         sprite.setOrigin(0, 76);
         sprite.setRotation(-90);
-        sprite.setPosition(1357, 117 + i * 10 + (currPosition - 30) * 85);
+        sprite.setPosition(1357, (float)(117 + i * 10 + (currPosition - 30) * 85));
     }
     window.draw(sprite);
 }
