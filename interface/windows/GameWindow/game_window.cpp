@@ -322,6 +322,7 @@ void GameWindow::onBuyClick(sf::RenderWindow &window) {
 void GameWindow::onOkClick(sf::RenderWindow &window) {
     okButtonSprite.setTextureRect({360, 0, 360, 109});
     isActiveDrawCardMode = false;
+
     // TODO
 }
 
@@ -510,8 +511,19 @@ void GameWindow::drawDrawCard(sf::RenderWindow &window) {
 
     if (field->get_type() == FieldTypes::CHANCE) {
         window.draw(chanceCardSprite);
+        auto chanceField = dynamic_cast<Chance *>(field);
+        std::string name = card.get_name();
+        sf::Text nameText;
+        set_text(nameText, font1, name, 50, sf::Color::Black, sf::Text::Style::Regular, (window.getSize().x / 2.f) - 100, (window.getSize().y / 2.f) );
+        window.draw(nameText);
     } else {
         window.draw(communityChestCardSprite);
+        window.draw(chanceCardSprite);
+        auto chanceField = dynamic_cast<CommunityChest *>(field);
+        std::string name = card.get_name();
+        sf::Text nameText;
+        set_text(nameText, font1, name, 50, sf::Color::Black, sf::Text::Style::Regular, (window.getSize().x / 2.f) - 100, (window.getSize().y / 2.f) );
+        window.draw(nameText);
     }
     window.draw(okButtonSprite);
 }

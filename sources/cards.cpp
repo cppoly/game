@@ -44,7 +44,7 @@ std::vector<Card> get_cards_for_chance() {
 std::vector<Card> get_cards_for_community_chest() {
     std::vector<Card> cards;
 
-    cards.emplace_back("Получите 200$", 200, 0, 0, 0);
+    cards.emplace_back("Collect 200$", 200, 0, 0, 0);
 
     return cards;
 }

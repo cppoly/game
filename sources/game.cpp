@@ -91,6 +91,9 @@ GameMove Game::player_move() {
     int dice1 = number_on_dice();
     int dice2 = number_on_dice();
 
+//    dice1 = 2;
+//    dice2 = 5;
+
     if (dice1 != dice2) {
         is_player_roll_dice = true;
     }
@@ -396,5 +399,5 @@ Card Game::draw_card() {
     if (is_player_roll_dice) {
         is_player_do_move = true;
     }
-    return {"Ага", 0, 0, 0, 0};
+    return {"Yeah", 0, 0, 0, 0};
 }
