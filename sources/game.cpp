@@ -91,9 +91,6 @@ GameMove Game::player_move() {
     int dice1 = number_on_dice();
     int dice2 = number_on_dice();
 
-//    dice1 = 2;
-//    dice2 = 5;
-
     if (dice1 != dice2) {
         is_player_roll_dice = true;
     }
@@ -117,13 +114,13 @@ GameMove Game::player_move() {
         }
     } else if (field_type == FieldTypes::TAX) {
         return_obj.funcs = GameFieldTypes::PAY_BANK;
-        return_obj.amount_to_pay = ((Tax &) field).get_price();
+        return_obj.amount_to_pay = dynamic_cast<Tax *>(field)->get_price();
     } else if (field_type == FieldTypes::CHANCE or field_type == FieldTypes::COMMUNITY_CHEST) {
         return_obj.funcs = GameFieldTypes::DRAW_CARD;
     } else if (field_type == FieldTypes::GO_TO_JAIL) {
         return_obj.funcs = GameFieldTypes::GO_TO_JAIL;
     } else {
-        auto profitable_field = dynamic_cast<ProfitableField *>(game_fields[player.get_position()]);
+        auto profitable_field = dynamic_cast<ProfitableField *>(field);
         if (profitable_field->get_owner() == nullptr) {
             return_obj.funcs = GameFieldTypes::YOU_CAN_BUY;
             return_obj.field_to_buy = profitable_field;
