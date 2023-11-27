@@ -49,7 +49,7 @@ public:
 
     void add_player(sf::Sprite sprite, std::string name);
 
-    const std::vector<Player> get_players() const;
+    const std::vector<Player *> get_players() const;
 
     void start_game();
 
@@ -100,7 +100,7 @@ private:
     int cur_player_id;
 
     std::vector<Field *> game_fields;
-    std::vector<Player> players;
+    std::vector<Player *> players;
 
     bool is_game_started = false;
 

@@ -83,7 +83,7 @@ public:
 
     Player *get_owner() const;
 
-    void buy(Player &player);
+    void buy(Player *player);
 
     void mortgage();
 

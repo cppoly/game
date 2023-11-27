@@ -61,9 +61,9 @@ std::vector<int> ProfitableField::get_rent_vector() const {
     return rent;
 }
 
-void ProfitableField::buy(Player &player) {
-    player.add_field(*this);
-    owner = &player;
+void ProfitableField::buy(Player *player) {
+    player->add_field(*this);
+    owner = player;
 }
 
 

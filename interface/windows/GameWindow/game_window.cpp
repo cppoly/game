@@ -354,8 +354,8 @@ void GameWindow::onZoomButtonClick(sf::RenderWindow &window) {
 
 void GameWindow::zoomCurrPlayer(sf::RenderWindow &window) {
     auto currPlayerId = game.get_cur_player_id();
-    auto currPosition = game.get_players()[game.get_cur_player_id()].get_position();
-    sf::Sprite currPlayerSprite = game.get_players()[game.get_cur_player_id()].get_sprite();
+    auto currPosition = game.get_players()[game.get_cur_player_id()]->get_position();
+    sf::Sprite currPlayerSprite = game.get_players()[game.get_cur_player_id()]->get_sprite();
 
     sf::View view;
     view.setSize(window.getSize().x / 3.f, window.getSize().y / 3.f);
@@ -400,7 +400,7 @@ void GameWindow::draw(sf::RenderWindow &window, sf::Event &event) {
             zoomCurrPlayer(window);
         } else if (isActiveMyFieldsMode) {
             backgroundImageSprite.setColor(sf::Color(255, 255, 255, 60));
-            auto fields = game.get_players()[game.get_cur_player_id()].get_fields();
+            auto fields = game.get_players()[game.get_cur_player_id()]->get_fields();
             currField = fields;
             drawMyFields(window, event, fields);
         } else {
@@ -434,19 +434,19 @@ void GameWindow::drawPlayerInformation(sf::RenderWindow &window) {
     window.draw(playerInformationCardSprite);
 
     // Player name
-    std::string s = game.get_players()[game.get_cur_player_id()].get_name();
+    std::string s = game.get_players()[game.get_cur_player_id()]->get_name();
     set_text(currPlayerName, font1, s, 60, sf::Color::Black, sf::Text::Style::Bold, 60, 310);
     window.draw(currPlayerName);
 
     // Player capacity
-    std::string capacity = std::to_string(game.get_players()[game.get_cur_player_id()].get_money()) + "$";
+    std::string capacity = std::to_string(game.get_players()[game.get_cur_player_id()]->get_money()) + "$";
     set_text(currPlayerCapacity, font2, capacity, 40, sf::Color::Black, sf::Text::Style::Regular, 60,
              400);
     window.draw(currPlayerCapacity);
 
     // Player jail cards
     std::string amountJailCards = "Count of jail cards: " + std::to_string(
-            game.get_players()[game.get_cur_player_id()].get_amount_of_jail_cards());
+            game.get_players()[game.get_cur_player_id()]->get_amount_of_jail_cards());
     set_text(currAmountJailCards, font2, amountJailCards, 20, sf::Color::Black, sf::Text::Style::Regular, 60, 470);
     window.draw(currAmountJailCards);
 
@@ -460,7 +460,7 @@ void GameWindow::drawBuyCard(sf::RenderWindow &window) {
     playingFieldSprite.setColor({255, 255, 255, 60});
 
     auto currPlayer = game.get_players()[game.get_cur_player_id()];
-    auto field = dynamic_cast<ProfitableField *>(game.get_fields()[currPlayer.get_position()]);
+    auto field = dynamic_cast<ProfitableField *>(game.get_fields()[currPlayer->get_position()]);
 
     std::string price = std::to_string(field->get_price());
     sf::Text priceText;
@@ -507,7 +507,7 @@ void GameWindow::drawDrawCard(sf::RenderWindow &window) {
     playingFieldSprite.setColor({255, 255, 255, 60});
 
     auto currPlayer = game.get_players()[game.get_cur_player_id()];
-    auto field = dynamic_cast<Field *>(game.get_fields()[currPlayer.get_position()]);
+    auto field = dynamic_cast<Field *>(game.get_fields()[currPlayer->get_position()]);
 
     if (field->get_type() == FieldTypes::CHANCE) {
         window.draw(chanceCardSprite);
@@ -533,7 +533,7 @@ void GameWindow::drawPayBankCard(sf::RenderWindow &window) {
     playingFieldSprite.setColor({255, 255, 255, 60});
 
     auto currPlayer = game.get_players()[game.get_cur_player_id()];
-    auto field = dynamic_cast<Tax *>(game.get_fields()[currPlayer.get_position()]);
+    auto field = dynamic_cast<Tax *>(game.get_fields()[currPlayer->get_position()]);
 
     std::string price = std::to_string(field->get_price());
     sf::Text priceText;
@@ -548,7 +548,7 @@ void GameWindow::drawPayBankCard(sf::RenderWindow &window) {
 void GameWindow::drawPayPlayerCard(sf::RenderWindow &window) {
     window.draw(payToPlayerCardSprite);
     window.draw(payButtonSprite);
-    sf::Sprite playerToPaySprite = game.get_players()[player.player_to_pay].get_sprite();
+    sf::Sprite playerToPaySprite = game.get_players()[player.player_to_pay]->get_sprite();
     playerToPaySprite.setPosition(window.getSize().x, window.getSize().y);
 }
 
@@ -754,19 +754,19 @@ void GameWindow::drawPlayers(sf::RenderWindow &window) {
             drawPlayer(window, player.new_position, i);
             continue;
         }
-        drawPlayer(window, game.get_players()[i].get_position(), i);
+        drawPlayer(window, game.get_players()[i]->get_position(), i);
     }
 }
 
 void GameWindow::drawPlayer(sf::RenderWindow &window, int currPosition, int i) {
-    sf::Sprite sprite = game.get_players()[i].get_sprite();
+    sf::Sprite sprite = game.get_players()[i]->get_sprite();
     if (0 <= currPosition && currPosition <= 10) {
         if (currPosition == 0) {
             sprite.setPosition((float)(1354 + i * 30), 870);
         } else if (currPosition == 10) {
             sprite.setPosition(552, 870);
         } else {
-            sprite.setPosition((float)(1384 - i * 10 - game.get_players()[i].get_position() * 85), 870);
+            sprite.setPosition((float)(1384 - i * 10 - game.get_players()[i]->get_position() * 85), 870);
         }
     } else if (11 <= currPosition && currPosition <= 20) {
         sprite.setOrigin(0, 76);

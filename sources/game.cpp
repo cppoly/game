@@ -19,11 +19,11 @@ Game::Game(int money_for_game_start, int money_for_win, int money_per_loop, int 
 }
 
 void Game::add_player(sf::Sprite sprite, std::string name) {
-    Player player(std::move(sprite), std::move(name), settings.get_money_for_game_start(), 0, 0);
+    auto player = new Player(std::move(sprite), std::move(name), settings.get_money_for_game_start(), 0, 0);
     players.push_back(player);
 }
 
-const std::vector<Player> Game::get_players() const {
+const std::vector<Player *> Game::get_players() const {
     return players;
 }
 
@@ -94,18 +94,20 @@ GameMove Game::player_move() {
     if (dice1 != dice2) {
         is_player_roll_dice = true;
     }
+    dice1 = 1;
+    dice2 = 2;
+
 
     GameMove return_obj;
     auto player = players[cur_player_id];
     return_obj.player_id = cur_player_id;
-    return_obj.old_position = player.get_position();
+    return_obj.old_position = player->get_position();
     return_obj.number_on_dice1 = dice1;
     return_obj.number_on_dice2 = dice2;
-    player.increment_position(dice1 + dice2);
-    return_obj.new_position = player.get_position();
-    players[cur_player_id] = player;
+    player->increment_position(dice1 + dice2);
+    return_obj.new_position = player->get_position();
 
-    auto field = game_fields[player.get_position()];
+    auto field = game_fields[player->get_position()];
     auto field_type = field->get_type();
     if (field_type == FieldTypes::START or field_type == FieldTypes::PARKING or field_type == FieldTypes::JAIL) {
         return_obj.funcs = GameFieldTypes::DO_NOTHING;
@@ -124,7 +126,7 @@ GameMove Game::player_move() {
         if (profitable_field->get_owner() == nullptr) {
             return_obj.funcs = GameFieldTypes::YOU_CAN_BUY;
             return_obj.field_to_buy = profitable_field;
-        } else if (profitable_field->get_owner()->get_name() == players[cur_player_id].get_name()) {
+        } else if (profitable_field->get_owner()->get_name() == players[cur_player_id]->get_name()) {
             return_obj.funcs = GameFieldTypes::DO_NOTHING;
             if (is_player_do_move) {
                 is_player_do_move = true;
@@ -132,7 +134,7 @@ GameMove Game::player_move() {
         } else {
             int user_id = -1;
             for (int i = 0; i < (int) players.size(); ++i) {
-                if (players[i].get_name() == profitable_field->get_owner()->get_name()) {
+                if (players[i]->get_name() == profitable_field->get_owner()->get_name()) {
                     user_id = i;
                     break;
                 }
@@ -217,12 +219,12 @@ bool Game::pay_player(int player_id, int amount) {
     if (amount < 0) {
         throw std::runtime_error("Invalid amount");
     }
-    if (players[cur_player_id].get_money() < amount) {
+    if (players[cur_player_id]->get_money() < amount) {
         return false;
     }
 
-    players[cur_player_id].set_money(players[cur_player_id].get_money() - amount);
-    players[player_id].set_money(players[player_id].get_money() + amount);
+    players[cur_player_id]->set_money(players[cur_player_id]->get_money() - amount);
+    players[player_id]->set_money(players[player_id]->get_money() + amount);
     if (is_player_roll_dice) {
         is_player_do_move = true;
     }
@@ -237,10 +239,10 @@ bool Game::pay_bank(int amount) {
     if (amount < 0) {
         throw std::runtime_error("Invalid amount");
     }
-    if (players[cur_player_id].get_money() < amount) {
+    if (players[cur_player_id]->get_money() < amount) {
         return false;
     }
-    players[cur_player_id].set_money(players[cur_player_id].get_money() - amount);
+    players[cur_player_id]->set_money(players[cur_player_id]->get_money() - amount);
 
     if (is_player_roll_dice) {
         is_player_do_move = true;
@@ -253,7 +255,7 @@ bool Game::go_to_jail() {
     if (!is_game_started) {
         throw std::runtime_error("Game is not started");
     }
-    players[cur_player_id].set_position(10);
+    players[cur_player_id]->set_position(10);
 
     if (is_player_roll_dice) {
         is_player_do_move = true;
@@ -270,7 +272,7 @@ bool Game::buy_field() {
     }
 
     auto player = players[cur_player_id];
-    auto field = game_fields[player.get_position()];
+    auto field = game_fields[player->get_position()];
 
     if (field->get_type() != FieldTypes::STREET and field->get_type() != FieldTypes::STATION and
         field->get_type() != FieldTypes::UTILITY) {
@@ -282,14 +284,12 @@ bool Game::buy_field() {
         throw std::runtime_error("Field already has owner");
     }
 
-    if (player.get_money() < profitable_field->get_price()) {
+    if (player->get_money() < profitable_field->get_price()) {
         return false;
     }
     profitable_field->buy(player);
-    player.add_field(*profitable_field);
-    player.set_money(player.get_money() - profitable_field->get_price());
-    players[cur_player_id] = player;
-    game_fields[player.get_position()] = profitable_field;
+    player->add_field(*profitable_field);
+    player->set_money(player->get_money() - profitable_field->get_price());
 
     if (is_player_roll_dice) {
         is_player_do_move = true;
@@ -327,7 +327,7 @@ bool Game::mortgage_field(int field_id) {
     }
     auto profitable_field = dynamic_cast<ProfitableField *>(field);
 
-    if (profitable_field->get_owner()->get_name() != player.get_name()) {
+    if (profitable_field->get_owner()->get_name() != player->get_name()) {
         return false;
     }
     if (profitable_field->get_is_mortgaged()) {
@@ -335,9 +335,7 @@ bool Game::mortgage_field(int field_id) {
     }
 
     profitable_field->mortgage();
-    player.set_money(player.get_money() + profitable_field->get_mortgage_price());
-    players[cur_player_id] = player;
-    game_fields[field_id] = profitable_field;
+    player->set_money(player->get_money() + profitable_field->get_mortgage_price());
     return true;
 }
 
@@ -354,7 +352,7 @@ bool Game::build_house(int field_id) {
     }
     auto profitable_field = dynamic_cast<Street *>(field);
 
-    if (profitable_field->get_owner()->get_name() != player.get_name()) {
+    if (profitable_field->get_owner()->get_name() != player->get_name()) {
         throw std::runtime_error("Player is not owner of this field");
     }
     return true;
@@ -375,7 +373,7 @@ bool Game::sell_house(int field_id) {
 
     auto profitable_field = dynamic_cast<Street *>(field);
 
-    if (profitable_field->get_owner()->get_name() != player.get_name()) {
+    if (profitable_field->get_owner()->get_name() != player->get_name()) {
         throw std::runtime_error("Player is not owner of this field");
     }
     if (profitable_field->get_amount_of_houses() == 0) {
