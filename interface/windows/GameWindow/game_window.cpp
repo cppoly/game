@@ -179,14 +179,19 @@ bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
                     isActiveMyFieldsMode = true;
                 }
             }
-//            auto p = [&](ProfitableField& x){ return x.getGlobalBounds().contains(point); };
 
-            if (isActiveMyFieldsMode)  {
-                isActiveZoomCardMode = true;
-            }
+            auto isGetGlobalBounds = [&](sf::Sprite& s) { return s.getGlobalBounds().contains(point); };
 
-            if (isActiveZoomCardMode) {
-                isActiveZoomCardMode = false;
+            if (isActiveMyFieldsMode) { //cardsRentSprite[any] onclick
+                if ( auto it = std::find_if(begin(cardsRentSprite), end(cardsRentSprite), isGetGlobalBounds); it != std::end(cardsRentSprite)) {
+                    isActiveZoomCardMode = true;
+                    itActiveZoomRentCard = it;
+                }
+                if (isActiveZoomCardMode) {
+                    if (auto it = std::find_if(begin(cardsRentSprite), end(cardsRentSprite), isGetGlobalBounds); it == std::end(cardsRentSprite)) {
+                        isActiveZoomCardMode = false;
+                    }
+                }
             }
             if (loupeButtonSprite.getGlobalBounds().contains(point)) {
                 onZoomButtonClick(window);
@@ -287,6 +292,7 @@ void GameWindow::onCompleteTurn(sf::RenderWindow &window) {
         isActiveGoToJail = false;
         isActivePayBankMode = false;
         isActivePayPlayerMode = false;
+        currField = game.get_players()[game.get_cur_player_id()]->get_fields();
     }
 }
 
@@ -317,6 +323,7 @@ void GameWindow::onRollDice(sf::RenderWindow &window) {
 void GameWindow::onBuyClick(sf::RenderWindow &window) {
     game.buy_field();
     isActiveBuyMode = false;
+    currField = game.get_players()[game.get_cur_player_id()]->get_fields();
 }
 
 void GameWindow::onOkClick(sf::RenderWindow &window) {
@@ -360,6 +367,7 @@ void GameWindow::zoomCurrPlayer(sf::RenderWindow &window) {
     sf::View view;
     view.setSize(window.getSize().x / 3.f, window.getSize().y / 3.f);
 
+
     if (currPosition == 0) {
         view.setCenter(1354 - (currPosition % 11), 870);
         currPlayerSprite.setPosition(1354 - (currPosition % 10), 870);
@@ -372,6 +380,7 @@ void GameWindow::zoomCurrPlayer(sf::RenderWindow &window) {
     }
 
     loupeButtonSprite.setPosition(view.getCenter().x - 300, view.getCenter().y- 160);
+
     playingFieldSprite.setRotation((float)(-90 * (currPosition / 11)));
     window.setView(view);
     window.draw(loupeButtonSprite);
@@ -400,9 +409,20 @@ void GameWindow::draw(sf::RenderWindow &window, sf::Event &event) {
             zoomCurrPlayer(window);
         } else if (isActiveMyFieldsMode) {
             backgroundImageSprite.setColor(sf::Color(255, 255, 255, 60));
-            auto fields = game.get_players()[game.get_cur_player_id()]->get_fields();
-            currField = fields;
-            drawMyFields(window, event, fields);
+            playingFieldSprite.setColor(sf::Color(255, 255, 255, 60));
+            if (isActiveZoomCardMode) {
+                myFieldsCardSprite.setColor(sf::Color(255, 255, 255, 100));
+
+                sf::Sprite s = *itActiveZoomRentCard;
+                s.setPosition(window.getSize().x /2.f - 150*2, window.getSize().y /2.f - 225*2);
+                s.setScale(2, 2);
+                window.draw(myFieldsCardSprite);
+                window.draw(s);
+            } else {
+                auto fields = game.get_players()[game.get_cur_player_id()]->get_fields();
+                currField = fields;
+                drawMyFields(window, event, fields);
+            }
         } else {
             drawPlayerInformation(window);
             if (isActiveBuyMode) {
@@ -414,7 +434,14 @@ void GameWindow::draw(sf::RenderWindow &window, sf::Event &event) {
             } else if (isActivePayPlayerMode) {
                 drawPayPlayerCard(window);
             } else if (isActiveGoToJail) {
-//              game.go_to_jail();
+                game.get_players()[game.get_cur_player_id()]->set_position(10);
+
+                window.draw(completeTurnSprite);
+                window.draw(rollDiceButtonSprite);
+                window.draw(loupeButtonSprite);
+                drawPlayers(window);
+
+                window.draw(myFieldsButtonSprite);
             } else {
                 window.draw(completeTurnSprite);
                 window.draw(rollDiceButtonSprite);
@@ -546,10 +573,23 @@ void GameWindow::drawPayBankCard(sf::RenderWindow &window) {
 }
 
 void GameWindow::drawPayPlayerCard(sf::RenderWindow &window) {
+    backgroundImageSprite.setColor(sf::Color(255, 255, 255, 60));
+    playingFieldSprite.setColor({255, 255, 255, 60});
+
     window.draw(payToPlayerCardSprite);
     window.draw(payButtonSprite);
+
     sf::Sprite playerToPaySprite = game.get_players()[player.player_to_pay]->get_sprite();
-    playerToPaySprite.setPosition(window.getSize().x, window.getSize().y);
+    playerToPaySprite.setPosition(window.getSize().x/2.f - 21*4.f, window.getSize().y/2.f - 38*4.f);
+    playerToPaySprite.setScale(4.f, 4.f);
+
+    std::string amountToPay = std::to_string(player.amount_to_pay);
+    sf::Text amountToPayText;
+    set_text(amountToPayText, font2, amountToPay, 50, sf::Color::Black, sf::Text::Style::Regular,
+             (window.getSize().x / 2.f) - 30, 830);
+
+    window.draw(amountToPayText);
+    window.draw(playerToPaySprite);
 }
 
 void GameWindow::drawDice(sf::RenderWindow &window) {
@@ -563,23 +603,21 @@ void GameWindow::drawDice(sf::RenderWindow &window) {
 void GameWindow::drawMyFields(sf::RenderWindow &window, sf::Event &event, std::vector<ProfitableField *> &fields) {
     backgroundImageSprite.setColor(sf::Color(255, 255, 255, 60));
     playingFieldSprite.setColor({255, 255, 255, 60});
+    myFieldsCardSprite.setColor({255, 255, 255, 255});
 
     window.draw(myFieldsCardSprite);
+    window.draw(okButtonSprite);
+
     for (int i = 0; i < fields.size(); i++) {
         if (fields[i]->get_type() == FieldTypes::STREET) {
             sf::Sprite rentCardSprite = sf::Sprite(cardsRentSprite[fields[i]->get_collection_type() - 1]);
 
-            myFieldsCardSprite.setColor({255, 255, 255, 255});
                 drawRentStreetCard(window, fields[i], cardsRentSprite[fields[i]->get_collection_type() - 1], (float)(200 + 300 * 0.7 * i + 100), 100.f + 450.f * (i / 7), 0.5f,
                                    0.5f);
-                window.draw(okButtonSprite);
-
         } else if (fields[i]->get_type() == FieldTypes::STATION) {
             drawRentStationCard(window, fields[i], 200 + 300 * 0.7 * i + 100, 100 + 450 * (i / 7), 0.5f, 0.5f);
-            window.draw(okButtonSprite);
         } else {
             drawRentUtilityCard(window, fields[i], 200 + 300 * 0.7 * i + 100, 100 + 450 * (i / 7), 0.5f, 0.5f);
-            window.draw(okButtonSprite);
         }
     }
 }
