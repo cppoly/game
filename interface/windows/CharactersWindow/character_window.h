@@ -8,8 +8,6 @@
 #include "../../input/input.hpp"
 #include "../../../sources/game.h"
 
-#define MAX_PLAYERS_COUNT 6
-
 class CharacterWindow {
 public:
     CharacterWindow(sf::RenderWindow &window);

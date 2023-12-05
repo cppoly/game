@@ -6,15 +6,13 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
         !startGameButtonTexture.loadFromFile("assets/sprite/Buttons/buttonStartGame.png") ||
         !completeTurnTexture.loadFromFile("assets/sprite/Buttons/buttonCompleteTurn.png") ||
         !rollDiceButtonTexture.loadFromFile("assets/sprite/Buttons/buttonRollDice.png") ||
-        !okButtonTexture.loadFromFile("assets/sprite/Buttons/okButton.png") ||
         !playerInformationCardTexture.loadFromFile("assets/sprite/Card/playerInformationCard.png") ||
         !dice1Texture.loadFromFile("assets/sprite/DicePack/DiceSprSheetX96.png") ||
         !dice2Texture.loadFromFile("assets/sprite/DicePack/DiceSprSheetX96.png") ||
         !font1.loadFromFile("assets/fonts/Bionicle.ttf") ||
         !font2.loadFromFile("assets/fonts/big-shot.ttf") ||
-        !communityChestCardTexture.loadFromFile("assets/sprite/Card/FieldCard/CommunityChestCard.png") ||
-        !chanceCardTexture.loadFromFile("assets/sprite/Card/FieldCard/ChanceCard.png") ||
         !myFieldsButtonTexture.loadFromFile("assets/sprite/Buttons/buttonMyFields.png") ||
+        !swapButtonTexture.loadFromFile("assets/sprite/Buttons/buttonSwap.png") ||
         !loupeButtonTexture.loadFromFile("assets/sprite/Buttons/loupeButton.png")) {
         throw std::runtime_error("Can't load texture for GameWindow");
     }
@@ -22,28 +20,30 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
     buyPage.loadBuyModeWindow(window);
     myFieldsPage.loadBuyModeWindow(window);
     payPage.loadBuyModeWindow(window);
+    drawCardPage.loadBuyModeWindow(window);
+    swapPage.loadBuyModeWindow(window);
 
     // Background
 
     backgroundImageSprite = sf::Sprite(backgroundImageTexture);
-    backgroundImageSprite.setScale(window.getSize().x / backgroundImageSprite.getLocalBounds().getSize().x,
-                                   window.getSize().y / backgroundImageSprite.getLocalBounds().getSize().y);
+    backgroundImageSprite.setScale((float) window.getSize().x / backgroundImageSprite.getLocalBounds().getSize().x,
+                                   (float) window.getSize().y / backgroundImageSprite.getLocalBounds().getSize().y);
 
     playingFieldSprite = sf::Sprite(playingFieldTexture);
     playingFieldSprite.setOrigin(512, 512);
-    playingFieldSprite.setPosition(window.getSize().x / 2.f, window.getSize().y / 2.f);
+    playingFieldSprite.setPosition((float) window.getSize().x / 2.f, (float) window.getSize().y / 2.f);
 
     // Buttons
 
     startGameButtonSprite = sf::Sprite(startGameButtonTexture);
     startGameButtonSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
-    startGameButtonSprite.setPosition((window.getSize().x / 2.f) - 360 / 2,
-                                      (window.getSize().y / 2.f) - 109 / 2);
+    startGameButtonSprite.setPosition(((float) window.getSize().x / 2.f - 360 / 2),
+                                      ((float) window.getSize().y / 2.f) - 109 / 2);
 
     completeTurnSprite = sf::Sprite(completeTurnTexture);
     completeTurnSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
     completeTurnSprite.setOrigin(360, 0);
-    completeTurnSprite.setPosition(window.getSize().x - 50, 100);
+    completeTurnSprite.setPosition((float) window.getSize().x - 50, 100);
     completeTurnSprite.setScale(0.8f, 0.8f);
 
 
@@ -55,16 +55,16 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
     myFieldsButtonSprite = sf::Sprite(myFieldsButtonTexture);
     myFieldsButtonSprite.setTextureRect({0, 0, 360, 109});
     myFieldsButtonSprite.setScale(0.8f, 0.8f);
-    myFieldsButtonSprite.setPosition(50, window.getSize().y - 100 - 109);
-
-    okButtonSprite = sf::Sprite(okButtonTexture);
-    okButtonSprite.setPosition((window.getSize().x / 2.f) - 100, window.getSize().y - 150);
-    okButtonSprite.setTextureRect(sf::IntRect(0, 0, 360, 109));
-    okButtonSprite.setScale(0.6f, 0.6f);
+    myFieldsButtonSprite.setPosition(50, (float) window.getSize().y - 150 - 109);
 
     loupeButtonSprite = sf::Sprite(loupeButtonTexture);
     loupeButtonSprite.setPosition(50 + 180 - 54, 220);
     loupeButtonSprite.setTextureRect({0, 0, 52, 49});
+
+    swapButtonSprite = sf::Sprite(swapButtonTexture);
+    swapButtonSprite.setTextureRect({0, 0, 360, 109});
+    swapButtonSprite.setScale(0.8f, 0.8f);
+    swapButtonSprite.setPosition(50, (float) window.getSize().y - 50 - 109);
 
     // Cards
 
@@ -76,16 +76,6 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
 
     dice2Sprite = sf::Sprite(dice2Texture);
     dice2Sprite.setPosition(200, 600);
-
-    chanceCardSprite = sf::Sprite(chanceCardTexture);
-    chanceCardSprite.setPosition(((float) window.getSize().x / 2.f) - 64 * 5,
-                                 ((float) window.getSize().y / 2.f) - 128 * 4);
-    chanceCardSprite.setScale(5.f, 4.f);
-
-    communityChestCardSprite = sf::Sprite(communityChestCardTexture);
-    communityChestCardSprite.setPosition(((float) window.getSize().x / 2.f) - 64 * 5,
-                                         ((float) window.getSize().y / 2.f) - 128 * 4);
-    communityChestCardSprite.setScale(5.f, 4.f);
 }
 
 bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
@@ -94,7 +84,7 @@ bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
         if (event.mouseButton.button == sf::Mouse::Left) {
             if (startGameButtonSprite.getGlobalBounds().contains(point)) {
                 if (!isGameStarted) {
-                    onStartGame(window);
+                    onStartGame();
                 }
             }
             if (myFieldsButtonSprite.getGlobalBounds().contains(point)) {
@@ -102,19 +92,19 @@ bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
                     isActiveMyFieldsMode = true;
                 }
             }
+            if (swapButtonSprite.getGlobalBounds().contains(point)) {
+                if (!isActiveSwapMode) {
+                    isActiveSwapMode = true;
+                }
+            }
             if (loupeButtonSprite.getGlobalBounds().contains(point)) {
-                onZoomButtonClick(window);
+                onZoomButtonClick();
             }
             if (completeTurnSprite.getGlobalBounds().contains(point)) {
-                onCompleteTurn(window);
+                onCompleteTurn();
             }
             if (rollDiceButtonSprite.getGlobalBounds().contains(point)) {
-                onRollDice(window);
-            }
-            if (okButtonSprite.getGlobalBounds().contains(point)) {
-                if (isActiveDrawCardMode) {
-                    onOkClick(window);
-                }
+                onRollDice();
             }
         }
     } else if (event.type == sf::Event::MouseMoved) {
@@ -122,13 +112,13 @@ bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
         ? startGameButtonSprite.setTextureRect({360 * 2, 0, 360, 109})
         : startGameButtonSprite.setTextureRect({0, 0, 360, 109});
 
-        okButtonSprite.getGlobalBounds().contains(point)
-        ? okButtonSprite.setTextureRect({360 * 2, 0, 360, 109})
-        : okButtonSprite.setTextureRect({0, 0, 360, 109});
-
         myFieldsButtonSprite.getGlobalBounds().contains(point)
         ? myFieldsButtonSprite.setTextureRect({360 * 2, 0, 360, 109})
         : myFieldsButtonSprite.setTextureRect({0, 0, 360, 109});
+
+        swapButtonSprite.getGlobalBounds().contains(point)
+        ? swapButtonSprite.setTextureRect({360 * 2, 0, 360, 109})
+        : swapButtonSprite.setTextureRect({0, 0, 360, 109});
 
         if (completeTurnSprite.getGlobalBounds().contains(point)) {
             game.get_is_player_roll_dice()
@@ -186,21 +176,33 @@ bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
             }
         }
     }
+    if (isActiveDrawCardMode) {
+        if (drawCardPage.handleEvent(event, window)) {
+            isActiveDrawCardMode = false;
+        }
+    }
+    if (isActiveSwapMode) {
+        if (swapPage.handleEvent(event, window)) {
+            isActiveSwapMode = false;
+        }
+    }
     return false;
 }
 
-void GameWindow::onStartGame(sf::RenderWindow &window) {
+void GameWindow::onStartGame() {
     startGameButtonSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
     isGameStarted = true;
     game.start_game();
     myFieldsPage.setGame(game);
+    swapPage.setGame(game);
 }
 
-void GameWindow::onCompleteTurn(sf::RenderWindow &window) {
+void GameWindow::onCompleteTurn() {
     if (game.get_is_player_roll_dice() && !isActiveMyFieldsMode) {
         completeTurnSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
         int id = game.next_turn();
         myFieldsPage.setGame(game);
+        swapPage.setGame(game);
         isRollDice = false;
         isActiveBuyMode = false;
         isActiveDrawCardMode = false;
@@ -210,7 +212,7 @@ void GameWindow::onCompleteTurn(sf::RenderWindow &window) {
     }
 }
 
-void GameWindow::onRollDice(sf::RenderWindow &window) {
+void GameWindow::onRollDice() {
     if (!game.get_is_player_roll_dice()) {
         rollDiceButtonSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
         player = game.player_move();
@@ -229,23 +231,14 @@ void GameWindow::onRollDice(sf::RenderWindow &window) {
         } else if (player.funcs == GameFieldTypes::DRAW_CARD) {
             card = game.draw_card();
             isActiveDrawCardMode = true;
+            drawCardPage.setGame(game, card);
         } else if (player.funcs == GameFieldTypes::GO_TO_JAIL) {
             isActiveGoToJail = true;
-        } else {
-            isActiveDoNothing = true;
         }
     }
 }
 
-
-void GameWindow::onOkClick(sf::RenderWindow &window) {
-    okButtonSprite.setTextureRect({360, 0, 360, 109});
-    isActiveDrawCardMode = false;
-
-    // TODO
-}
-
-void GameWindow::onZoomButtonClick(sf::RenderWindow &window) {
+void GameWindow::onZoomButtonClick() {
     if (!isActiveZoomMode) {
         isActiveZoomMode = true;
         loupeButtonSprite.setTextureRect({52, 0, 52, 49});
@@ -262,23 +255,23 @@ void GameWindow::zoomCurrPlayer(sf::RenderWindow &window) {
     sf::Sprite currPlayerSprite = game.get_players()[game.get_cur_player_id()]->get_sprite();
 
     sf::View view;
-    view.setSize(window.getSize().x / 3.f, window.getSize().y / 3.f);
+    view.setSize((float) window.getSize().x / 3.f, (float) window.getSize().y / 3.f);
 
 
     if (currPosition == 0) {
-        view.setCenter(1354 - (currPosition % 11), 870);
-        currPlayerSprite.setPosition(1354 - (currPosition % 10), 870);
+        view.setCenter((float) (1354 - (currPosition % 11)), 870);
+        currPlayerSprite.setPosition((float) (1354 - (currPosition % 10)), 870);
     } else if (currPosition % 10 == 0) {
         view.setCenter(552, 870);
         currPlayerSprite.setPosition(552, 870);
     } else {
-        view.setCenter(1384 - currPlayerId * 10 - (currPosition % 10) * 85, 870);
-        currPlayerSprite.setPosition(1384 - currPlayerId * 10 - (currPosition % 10) * 85, 870);
+        view.setCenter((float) (1384 - currPlayerId * 10 - (currPosition % 10) * 85), 870);
+        currPlayerSprite.setPosition((float) (1384 - currPlayerId * 10 - (currPosition % 10) * 85), 870);
     }
 
     loupeButtonSprite.setPosition(view.getCenter().x - 300, view.getCenter().y - 160);
 
-    playingFieldSprite.setRotation((float) (-90 * (currPosition / 11)));
+    playingFieldSprite.setRotation((float) -90 * (currPosition / 11));
     window.setView(view);
     window.draw(loupeButtonSprite);
     window.draw(currPlayerSprite);
@@ -308,6 +301,10 @@ void GameWindow::draw(sf::RenderWindow &window, sf::Event &event) {
             backgroundImageSprite.setColor(sf::Color(255, 255, 255, 60));
             playingFieldSprite.setColor(sf::Color(255, 255, 255, 60));
             myFieldsPage.draw(window, event);
+        } else if (isActiveSwapMode) {
+            backgroundImageSprite.setColor(sf::Color(255, 255, 255, 60));
+            playingFieldSprite.setColor(sf::Color(255, 255, 255, 60));
+            swapPage.draw(window, event);
         } else {
             drawPlayerInformation(window);
             if (isActiveBuyMode) {
@@ -315,7 +312,9 @@ void GameWindow::draw(sf::RenderWindow &window, sf::Event &event) {
                 playingFieldSprite.setColor({255, 255, 255, 60});
                 buyPage.draw(window, event);
             } else if (isActiveDrawCardMode) {
-                drawDrawCard(window);
+                backgroundImageSprite.setColor(sf::Color(255, 255, 255, 60));
+                playingFieldSprite.setColor({255, 255, 255, 60});
+                drawCardPage.draw(window, event);
             } else if (isActivePayBankMode | isActivePayPlayerMode) {
                 backgroundImageSprite.setColor(sf::Color(255, 255, 255, 60));
                 playingFieldSprite.setColor({255, 255, 255, 60});
@@ -335,6 +334,7 @@ void GameWindow::draw(sf::RenderWindow &window, sf::Event &event) {
                 window.draw(loupeButtonSprite);
                 drawPlayers(window);
                 window.draw(myFieldsButtonSprite);
+                window.draw(swapButtonSprite);
             }
         }
     }
@@ -367,34 +367,6 @@ void GameWindow::drawPlayerInformation(sf::RenderWindow &window) {
     if (isRollDice) {
         drawDice(window);
     }
-}
-
-void GameWindow::drawDrawCard(sf::RenderWindow &window) {
-    backgroundImageSprite.setColor(sf::Color(255, 255, 255, 60));
-    playingFieldSprite.setColor({255, 255, 255, 60});
-
-    auto currPlayer = game.get_players()[game.get_cur_player_id()];
-    auto field = dynamic_cast<Field *>(game.get_fields()[currPlayer->get_position()]);
-
-    if (field->get_type() == FieldTypes::CHANCE) {
-        window.draw(chanceCardSprite);
-        auto chanceField = dynamic_cast<Chance *>(field);
-        std::string name = card.get_name();
-        sf::Text nameText;
-        set_text(nameText, font1, name, 50, sf::Color::Black, sf::Text::Style::Regular,
-                 (window.getSize().x / 2.f) - 100, (window.getSize().y / 2.f));
-        window.draw(nameText);
-    } else {
-        window.draw(communityChestCardSprite);
-        window.draw(chanceCardSprite);
-        auto chanceField = dynamic_cast<CommunityChest *>(field);
-        std::string name = card.get_name();
-        sf::Text nameText;
-        set_text(nameText, font1, name, 50, sf::Color::Black, sf::Text::Style::Regular,
-                 (window.getSize().x / 2.f) - 100, (window.getSize().y / 2.f));
-        window.draw(nameText);
-    }
-    window.draw(okButtonSprite);
 }
 
 void GameWindow::drawDice(sf::RenderWindow &window) {
