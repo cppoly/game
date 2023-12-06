@@ -1,4 +1,4 @@
-#include "input.hpp"
+#include "input.h"
 
 namespace sdx {
     TextBox::Text::Text(sf::String string, float x, float y) {

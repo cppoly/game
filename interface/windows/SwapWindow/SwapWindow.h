@@ -6,7 +6,7 @@
 #include "../../../sources/player.h"
 #include "../../text/text.h"
 #include "../MyFieldsWindow/MyFieldsWindow.h"
-#include "../../input/input.hpp"
+#include "../../input/input.h"
 
 class SwapWindow {
 public:

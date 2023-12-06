@@ -1,5 +1,5 @@
-#ifndef MONOPOLY_INPUT_HPP
-#define MONOPOLY_INPUT_HPP
+#ifndef MONOPOLY_INPUT_H
+#define MONOPOLY_INPUT_H
 
 
 #include<SFML/Graphics.hpp>
@@ -56,4 +56,4 @@ namespace sdx {
     };
 }
 
-#endif //MONOPOLY_INPUT_HPP
+#endif //MONOPOLY_INPUT_H
