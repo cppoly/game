@@ -158,9 +158,8 @@ bool CharacterWindow::onStartGame() {
 
 void CharacterWindow::onAddPlayer(sf::RenderWindow &window) {
     if (isActiveSelectCharacterMode) {
-        buttonAddPlayerSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));\
-                    sf::Text namePlayer =
-                std::string(input.getInput()).size() != 0 ? sf::Text(input.getInput(), font2, 25)
+        buttonAddPlayerSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
+        sf::Text namePlayer = std::string(input.getInput()).size() != 0 ? sf::Text(input.getInput(), font2, 25)
                                                           : sf::Text(
                         sf::String("Player" + std::to_string(addedPlayersSprite.size() + 1)), font2, 25);
         namePlayer.setFillColor(sf::Color::Black);

@@ -22,6 +22,9 @@ private:
     Game game;
     int indexPlayer;
     bool isActiveLargeMode = false;
+    bool isActiveTradeMode = false;
+    Player* currPlayer;
+    Player* player2;
     // Fonts
 
     sf::Font font1;
@@ -35,6 +38,12 @@ private:
 
     sf::Texture buttonChoosePlayerTexture;
     sf::Sprite buttonChoosePlayerSprite;
+
+    sf::Texture buttonCancelTexture;
+    sf::Sprite buttonCancelSprite;
+
+    sf::Texture buttonSwapTexture;
+    sf::Sprite buttonSwapSprite;
 
     sf::Sprite playersLargeSprite;
     sf::Sprite activePlayerSprite;
