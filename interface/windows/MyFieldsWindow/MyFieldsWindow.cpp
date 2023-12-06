@@ -30,8 +30,9 @@ void MyFieldsWindow::loadBuyModeWindow(sf::RenderWindow &window) {
 
 }
 
-void MyFieldsWindow::setGame(Game &_game) {
+void MyFieldsWindow::setGame(Game &_game, size_t index) {
     game = _game;
+    indexPlayer = index;
 }
 
 bool MyFieldsWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
@@ -55,7 +56,7 @@ void MyFieldsWindow::draw(sf::RenderWindow &window, sf::Event &event) {
     window.draw(myFieldsCardSprite);
     window.draw(okButtonSprite);
 
-    auto fields = game.get_players()[game.get_cur_player_id()]->get_fields();
+    auto fields = game.get_players()[indexPlayer]->get_fields();
 
     for (int i = 0; i < fields.size(); i++) {
         if (fields[i]->get_type() == FieldTypes::STREET) {
@@ -63,12 +64,24 @@ void MyFieldsWindow::draw(sf::RenderWindow &window, sf::Event &event) {
             drawRentStreetCard(window, fields[i], cardsRentSprite[fields[i]->get_collection_type() - 1],
                                (float) (200 + 300 * 0.7 * i + 100), 100.f + 450.f * (i / 6), 0.5f,
                                0.5f, font2);
+            sf::Text numberText;
+            std::string number = std::to_string(i+1);
+            set_text(numberText, font2, number, 30, sf::Color::Black, sf::Text::Style::Regular, (float) (200 + 300 * 0.7 * i + 170), 100 + 150.f*1.5 + 50 + 450.f * (i / 6));
+            window.draw(numberText);
         } else if (fields[i]->get_type() == FieldTypes::STATION) {
             auto rentCardSprite = new sf::Sprite(cardsRentSprite[2]);
             drawRentStationCard(window, fields[i], *rentCardSprite, 200 + 300 * 0.7 * i + 100, 100 + 450 * (i / 6), 0.5f, 0.5f, font2);
+            sf::Text numberText;
+            std::string number = std::to_string(i+1);
+            set_text(numberText, font2, number, 30, sf::Color::Black, sf::Text::Style::Regular, (float) (200 + 300 * 0.7 * i + 170), 100 + 150.f*1.5 + 50 + 450.f * (i / 6));
+            window.draw(numberText);
         } else {
             auto rentCardSprite = new sf::Sprite(cardsRentSprite[1]);
             drawRentUtilityCard(window, fields[i], *rentCardSprite, 200 + 300 * 0.7 * i + 100, 100 + 450 * (i / 6), 0.5f, 0.5f, font2);
+            sf::Text numberText;
+            std::string number = std::to_string(i+1);
+            set_text(numberText, font2, number, 30, sf::Color::Black, sf::Text::Style::Regular, (float) (200 + 300 * 0.7 * i + 170), 100 + 150.f*1.5 + 50 + 450.f * (i / 6));
+            window.draw(numberText);
         }
     }
 }

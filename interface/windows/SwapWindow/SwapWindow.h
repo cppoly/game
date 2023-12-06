@@ -5,6 +5,8 @@
 #include "../../../sources/game.h"
 #include "../../../sources/player.h"
 #include "../../text/text.h"
+#include "../MyFieldsWindow/MyFieldsWindow.h"
+#include "../../input/input.hpp"
 
 class SwapWindow {
 public:
@@ -21,10 +23,24 @@ public:
 private:
     Game game;
     int indexPlayer;
+    MyFieldsWindow fieldsCurrPage;
+    MyFieldsWindow fieldsPlayer2Page;
+
     bool isActiveLargeMode = false;
     bool isActiveTradeMode = false;
+    bool isActiveFields1Mode = false;
+    bool isActiveFields2Mode = false;
+
     Player* currPlayer;
     Player* player2;
+
+    // Input
+
+    sdx::TextBox::Text fieldNumber1 = sdx::TextBox::Text("", 100, 100);
+    sdx::TextBox::Text fieldNumber2 = sdx::TextBox::Text("", 100, 100);
+    sdx::TextBox input1;
+    sdx::TextBox input2;
+
     // Fonts
 
     sf::Font font1;
@@ -44,6 +60,10 @@ private:
 
     sf::Texture buttonSwapTexture;
     sf::Sprite buttonSwapSprite;
+
+    sf::Texture fieldsTexture;
+    sf::Sprite fields1Sprite;
+    sf::Sprite fields2Sprite;
 
     sf::Sprite playersLargeSprite;
     sf::Sprite activePlayerSprite;

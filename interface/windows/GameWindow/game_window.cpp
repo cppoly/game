@@ -152,7 +152,7 @@ bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
         if (buyPage.handleEvent(event, window)) {
             game.buy_field();
             isActiveBuyMode = false;
-            myFieldsPage.setGame(game);
+            myFieldsPage.setGame(game, game.get_cur_player_id());
         }
     }
     if (isActiveMyFieldsMode) {
@@ -193,7 +193,7 @@ void GameWindow::onStartGame() {
     startGameButtonSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
     isGameStarted = true;
     game.start_game();
-    myFieldsPage.setGame(game);
+    myFieldsPage.setGame(game, game.get_cur_player_id());
     swapPage.setGame(game);
 }
 
@@ -201,7 +201,7 @@ void GameWindow::onCompleteTurn() {
     if (game.get_is_player_roll_dice() && !isActiveMyFieldsMode) {
         completeTurnSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
         int id = game.next_turn();
-        myFieldsPage.setGame(game);
+        myFieldsPage.setGame(game, game.get_cur_player_id());
         swapPage.setGame(game);
         isRollDice = false;
         isActiveBuyMode = false;

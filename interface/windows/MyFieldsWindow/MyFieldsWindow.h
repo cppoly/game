@@ -15,11 +15,11 @@ public:
 
     bool handleEvent(sf::Event &event, sf::RenderWindow &window);
 
-    void setGame(Game& _game);
+    void setGame(Game& _game, size_t index);
 
 private:
     Game game;
-
+    size_t indexPlayer;
     // Fonts
 
     sf::Font font1;
