@@ -3,7 +3,7 @@
 #include <iostream>
 #include "SFML/Graphics.hpp"
 #include "../../../sources/game.h"
-#include "../../input/input.hpp"
+#include "../../input/input.h"
 #include "../../text/text.h"
 
 class AuctionWindow {
