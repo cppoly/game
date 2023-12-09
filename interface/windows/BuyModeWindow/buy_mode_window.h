@@ -14,7 +14,7 @@ public:
 
     void draw(sf::RenderWindow &window, sf::Event& event);
 
-    bool handleEvent(sf::Event &event, sf::RenderWindow &window);
+    int handleEvent(sf::Event &event, sf::RenderWindow &window);
 
     void setGame(Game& _game);
 

@@ -74,12 +74,14 @@ void BuyModeWindow::setGame(Game &_game) {
     game = _game;
 }
 
-bool BuyModeWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
+int BuyModeWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
     auto point = window.mapPixelToCoords(sf::Mouse::getPosition(window));
     if (event.type == sf::Event::MouseButtonPressed) {
         if (event.mouseButton.button == sf::Mouse::Left) {
             if (buyButtonSprite.getGlobalBounds().contains(point)) {
-                return true;
+                return 1;
+            } else if (auctionButtonSprite.getGlobalBounds().contains(point)) {
+                return 2;
             }
         }
     } else if (event.type == sf::Event::MouseMoved) {
@@ -91,7 +93,7 @@ bool BuyModeWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
         ? auctionButtonSprite.setTextureRect({360 * 2, 0, 360, 109})
         : auctionButtonSprite.setTextureRect({0, 0, 360, 109});
     }
-    return false;
+    return 0;
 }
 
 void BuyModeWindow::draw(sf::RenderWindow &window, sf::Event &event) {

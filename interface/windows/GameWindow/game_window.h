@@ -13,6 +13,8 @@
 #include "../PayWindow/PayWindow.h"
 #include "../DrawCardWindow/DrawCardWindow.h"
 #include "../SwapWindow/SwapWindow.h"
+#include "../AuctionWindow/AuctionWindow.h"
+
 
 class GameWindow {
 public:
@@ -48,12 +50,14 @@ private:
     PayWindow payPage;
     DrawCardWindow drawCardPage;
     SwapWindow swapPage;
+    AuctionWindow auctionPage;
 
     bool isGameStarted = false;
     bool isRollDice = false;
     bool isActiveMyFieldsMode = false;
     bool isActiveZoomMode = false;
     bool isActiveSwapMode = false;
+    bool isActiveAuctionMode = false;
 
     bool isActiveBuyMode = false;
     bool isActiveDrawCardMode = false;

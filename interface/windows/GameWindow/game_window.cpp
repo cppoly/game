@@ -22,6 +22,7 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
     payPage.loadBuyModeWindow(window);
     drawCardPage.loadBuyModeWindow(window);
     swapPage.loadBuyModeWindow(window);
+    auctionPage.loadBuyModeWindow(window);
 
     // Background
 
@@ -149,10 +150,18 @@ bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
         }
     }
     if (isActiveBuyMode) {
-        if (buyPage.handleEvent(event, window)) {
+        if (buyPage.handleEvent(event, window) == 1) {
             game.buy_field();
             isActiveBuyMode = false;
             myFieldsPage.setGame(game, game.get_cur_player_id());
+        } else if (buyPage.handleEvent(event, window) == 2) {
+            isActiveAuctionMode = true;
+            auctionPage.setGame(game);
+        }
+    }
+    if (isActiveAuctionMode) {
+        if (auctionPage.handleEvent(event, window)) {
+            isActiveAuctionMode = false;
         }
     }
     if (isActiveMyFieldsMode) {
@@ -305,6 +314,11 @@ void GameWindow::draw(sf::RenderWindow &window, sf::Event &event) {
             backgroundImageSprite.setColor(sf::Color(255, 255, 255, 60));
             playingFieldSprite.setColor(sf::Color(255, 255, 255, 60));
             swapPage.draw(window, event);
+        } else if (isActiveAuctionMode) {
+            backgroundImageSprite.setColor(sf::Color(255, 255, 255, 60));
+            playingFieldSprite.setColor(sf::Color(255, 255, 255, 60));
+
+            auctionPage.draw(window, event);
         } else {
             drawPlayerInformation(window);
             if (isActiveBuyMode) {
