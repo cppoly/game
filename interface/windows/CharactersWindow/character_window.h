@@ -5,7 +5,7 @@
 #include <SFML/Window.hpp>
 #include "../../../sources/game.h"
 #include <vector>
-#include "../../input/input.hpp"
+#include "../../input/input.h"
 #include "../../../sources/game.h"
 
 class CharacterWindow {
