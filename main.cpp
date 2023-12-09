@@ -22,19 +22,23 @@ int main() {
 
     // Main Screen
 
-    auto mainWindow = MainWindow(window);
+    MainWindow mainWindow;
+    mainWindow.loadMainWindow(window);
 
     // Settings
 
-    auto settingsWindow = SettingsWindow(window);
+    SettingsWindow settingsWindow;
+    settingsWindow.loadSettingsWindow(window);
 
     // Character
 
-    auto characterWindow = CharacterWindow(window);
+    CharacterWindow characterWindow;
+    characterWindow.loadCharacterWindow(window);
 
     // Game
 
-    auto gameWindow = GameWindow(window);
+    GameWindow gameWindow;
+    gameWindow.loadGameWindow(window);
 
     while (window.isOpen()) {
         sf::Event event{};
@@ -68,6 +72,10 @@ int main() {
                 if (gameWindow.handleEvent(event, window)) {
                     isActiveGame = false;
                     isActiveMainScreen = true;
+                    mainWindow.loadMainWindow(window);
+                    settingsWindow.loadSettingsWindow(window);
+                    characterWindow.loadCharacterWindow(window);
+                    gameWindow.loadGameWindow(window);
                 }
             }
         }

@@ -2,7 +2,21 @@
 
 #include "../../text/text.h"
 
-SettingsWindow::SettingsWindow(sf::RenderWindow &window) {
+void SettingsWindow::loadSettingsWindow(sf::RenderWindow &window) {
+    money_for_game_start = 1500;
+    money_for_win = 0;
+    money_per_loop = 200;
+    bonus_for_visit_start = 0;
+    jail_price = 50;
+    seconds_per_turn = 0;
+    textBox1.clear();
+    textBox2.clear();
+    textBox3.clear();
+    textBox4.clear();
+    textBox5.clear();
+    textBox6.clear();
+
+
     if (!font1.loadFromFile("assets/fonts/big-shot.ttf") || !font2.loadFromFile("assets/fonts/Bionicle.ttf")) {
         throw std::runtime_error("Can't load fonts");
     }

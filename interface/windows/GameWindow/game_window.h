@@ -18,7 +18,9 @@
 
 class GameWindow {
 public:
-    explicit GameWindow(sf::RenderWindow &window);
+    GameWindow() = default;
+
+    void loadGameWindow(sf::RenderWindow& window);
 
     void draw(sf::RenderWindow &window, sf::Event& event);
 
@@ -97,6 +99,9 @@ private:
 
     sf::Texture swapButtonTexture;
     sf::Sprite swapButtonSprite;
+
+    sf::Texture giveUpButtonTexture;
+    sf::Sprite giveUpButtonSprite;
 
     // Dices
 

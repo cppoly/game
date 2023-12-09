@@ -1,6 +1,19 @@
 #include "game_window.h"
 
-GameWindow::GameWindow(sf::RenderWindow &window) {
+void GameWindow::loadGameWindow(sf::RenderWindow &window) {
+    isGameStarted = false;
+    isRollDice = false;
+    isActiveMyFieldsMode = false;
+    isActiveZoomMode = false;
+    isActiveSwapMode = false;
+    isActiveAuctionMode = false;
+
+    isActiveBuyMode = false;
+    isActiveDrawCardMode = false;
+    isActivePayPlayerMode = false;
+    isActivePayBankMode = false;
+    isActiveGoToJail = false;
+
     if (!backgroundImageTexture.loadFromFile("assets/sprite/BackgroundImage/playing_field.png") ||
         !playingFieldTexture.loadFromFile("assets/sprite/BackgroundImage/playingField.png") ||
         !startGameButtonTexture.loadFromFile("assets/sprite/Buttons/buttonStartGame.png") ||
@@ -13,6 +26,8 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
         !font2.loadFromFile("assets/fonts/big-shot.ttf") ||
         !myFieldsButtonTexture.loadFromFile("assets/sprite/Buttons/buttonMyFields.png") ||
         !swapButtonTexture.loadFromFile("assets/sprite/Buttons/buttonSwap.png") ||
+        !swapButtonTexture.loadFromFile("assets/sprite/Buttons/buttonSwap.png") ||
+        !giveUpButtonTexture.loadFromFile("assets/sprite/Buttons/buttonGiveUp.png") ||
         !loupeButtonTexture.loadFromFile("assets/sprite/Buttons/loupeButton.png")) {
         throw std::runtime_error("Can't load texture for GameWindow");
     }
@@ -46,6 +61,12 @@ GameWindow::GameWindow(sf::RenderWindow &window) {
     completeTurnSprite.setOrigin(360, 0);
     completeTurnSprite.setPosition((float) window.getSize().x - 50, 100);
     completeTurnSprite.setScale(0.8f, 0.8f);
+
+    giveUpButtonSprite = sf::Sprite(giveUpButtonTexture);
+    giveUpButtonSprite.setTextureRect({0, 0, 360, 109});
+    giveUpButtonSprite.setOrigin(360, 0);
+    giveUpButtonSprite.setPosition((float) window.getSize().x - 50, 300);
+    giveUpButtonSprite.setScale(0.8, 0.8);
 
 
     rollDiceButtonSprite = sf::Sprite(rollDiceButtonTexture);
@@ -88,6 +109,22 @@ bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
                     onStartGame();
                 }
             }
+            if (giveUpButtonSprite.getGlobalBounds().contains(point)) {
+                if (game.get_players().size() == 2) {
+                    return true;
+                }
+                game.give_up();
+                completeTurnSprite.setTextureRect(sf::IntRect(360, 0, 360, 109));
+                int id = game.next_turn();
+                myFieldsPage.setGame(game, game.get_cur_player_id());
+                swapPage.setGame(game);
+                isRollDice = false;
+                isActiveBuyMode = false;
+                isActiveDrawCardMode = false;
+                isActiveGoToJail = false;
+                isActivePayBankMode = false;
+                isActivePayPlayerMode = false;
+            }
             if (myFieldsButtonSprite.getGlobalBounds().contains(point)) {
                 if (!isActiveMyFieldsMode) {
                     isActiveMyFieldsMode = true;
@@ -120,6 +157,10 @@ bool GameWindow::handleEvent(sf::Event &event, sf::RenderWindow &window) {
         swapButtonSprite.getGlobalBounds().contains(point)
         ? swapButtonSprite.setTextureRect({360 * 2, 0, 360, 109})
         : swapButtonSprite.setTextureRect({0, 0, 360, 109});
+
+        giveUpButtonSprite.getGlobalBounds().contains(point)
+        ? giveUpButtonSprite.setTextureRect({360 * 2, 0, 360, 109})
+        : giveUpButtonSprite.setTextureRect({0, 0, 360, 109});
 
         if (completeTurnSprite.getGlobalBounds().contains(point)) {
             game.get_is_player_roll_dice()
@@ -349,6 +390,7 @@ void GameWindow::draw(sf::RenderWindow &window, sf::Event &event) {
                 drawPlayers(window);
                 window.draw(myFieldsButtonSprite);
                 window.draw(swapButtonSprite);
+                window.draw(giveUpButtonSprite);
             }
         }
     }

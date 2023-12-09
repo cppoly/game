@@ -2,7 +2,14 @@
 #include <algorithm>
 #include "../../text/text.h"
 
-CharacterWindow::CharacterWindow(sf::RenderWindow &window) {
+void CharacterWindow::loadCharacterWindow(sf::RenderWindow &window) {
+    addedPlayersSprite.clear();
+    players.clear();
+    disabledPlayersIndex.clear();
+    addedPlayersSprite.clear();
+    playersCount = 0;
+    isActiveSelectCharacterMode = false;
+    indexActivePlayer = 0;
 
     playersTexture = std::vector<sf::Texture>{player1Texture, player2Texture, player3Texture,
                                               player4Texture, player5Texture, player6Texture};

@@ -6,7 +6,9 @@
 
 class MainWindow {
 public:
-    MainWindow(sf::RenderWindow &window);
+    MainWindow() = default;
+
+    void loadMainWindow(sf::RenderWindow& window);
 
     void draw(sf::RenderWindow &window);
 

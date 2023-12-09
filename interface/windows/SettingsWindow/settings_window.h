@@ -8,7 +8,9 @@
 
 class SettingsWindow {
 public:
-    SettingsWindow(sf::RenderWindow &window);
+    SettingsWindow() = default;
+
+    void loadSettingsWindow(sf::RenderWindow& window);
 
     void draw(sf::RenderWindow &window);
 

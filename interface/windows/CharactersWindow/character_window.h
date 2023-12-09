@@ -10,7 +10,9 @@
 
 class CharacterWindow {
 public:
-    CharacterWindow(sf::RenderWindow &window);
+    CharacterWindow() = default;
+
+    void loadCharacterWindow(sf::RenderWindow& window);
 
     void draw(sf::RenderWindow &window);
 
