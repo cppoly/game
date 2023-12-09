@@ -50,9 +50,11 @@ int main() {
             }
 
             if (isActiveMainScreen) {
-                if (mainWindow.handleEvent(event, window)) {
+                if (mainWindow.handleEvent(event, window) == 1) {
                     isActiveMainScreen = false;
                     isActiveSettings = true;
+                } else if (mainWindow.handleEvent(event, window) == 2) {
+                    window.close();
                 }
             } else if (isActiveSettings) {
                 if (settingsWindow.handleEvent(event, window)) {

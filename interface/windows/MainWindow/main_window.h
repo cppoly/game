@@ -12,7 +12,7 @@ public:
 
     void draw(sf::RenderWindow &window);
 
-    bool handleEvent(sf::Event &event, sf::RenderWindow &window);
+    int handleEvent(sf::Event &event, sf::RenderWindow &window);
 
 private:
     sf::Texture mainScreenTexture;
@@ -21,4 +21,6 @@ private:
     sf::Texture buttonStartGameTexture;
     sf::Sprite buttonStartGameSprite;
 
+    sf::Texture buttonExitTexture;
+    sf::Sprite buttonExitSprite;
 };
