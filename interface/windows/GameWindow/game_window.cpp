@@ -321,7 +321,15 @@ void GameWindow::zoomCurrPlayer(sf::RenderWindow &window) {
 
     loupeButtonSprite.setPosition(view.getCenter().x - 300, view.getCenter().y - 160);
 
-    playingFieldSprite.setRotation((float) -90 * (currPosition / 11));
+    if (currPosition <= 10) {
+        playingFieldSprite.setRotation(0);
+    } else if (currPosition <= 20) {
+        playingFieldSprite.setRotation(-90);
+    } else if (currPosition <= 30) {
+        playingFieldSprite.setRotation(180);
+    } else {
+        playingFieldSprite.setRotation(90);
+    }
     window.setView(view);
     window.draw(loupeButtonSprite);
     window.draw(currPlayerSprite);

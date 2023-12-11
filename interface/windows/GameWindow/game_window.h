@@ -103,6 +103,9 @@ private:
     sf::Texture giveUpButtonTexture;
     sf::Sprite giveUpButtonSprite;
 
+    sf::Texture mortgageButtonTexture;
+    sf::Sprite mortgageButtonSprite;
+
     // Dices
 
     sf::Texture dice1Texture;
